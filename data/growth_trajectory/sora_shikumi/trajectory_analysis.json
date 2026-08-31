@@ -1,0 +1,2861 @@
+{
+  "generated_at_utc": "2026-08-31T16:54:05.262554+00:00",
+  "username": "sora_shikumi",
+  "crawl": {
+    "username": "sora_shikumi",
+    "profile_url": "https://www.threads.com/@sora_shikumi",
+    "user_id": "33456828526",
+    "requested": 1000,
+    "retrieved": 492,
+    "provider_count": 31,
+    "pages": [
+      {
+        "page": 1,
+        "edges": 24,
+        "new": 24,
+        "total": 24,
+        "has_next_page": true
+      },
+      {
+        "page": 2,
+        "edges": 24,
+        "new": 24,
+        "total": 48,
+        "has_next_page": true
+      },
+      {
+        "page": 3,
+        "edges": 24,
+        "new": 24,
+        "total": 72,
+        "has_next_page": true
+      },
+      {
+        "page": 4,
+        "edges": 24,
+        "new": 24,
+        "total": 96,
+        "has_next_page": true
+      },
+      {
+        "page": 5,
+        "edges": 24,
+        "new": 24,
+        "total": 120,
+        "has_next_page": true
+      },
+      {
+        "page": 6,
+        "edges": 24,
+        "new": 24,
+        "total": 144,
+        "has_next_page": true
+      },
+      {
+        "page": 7,
+        "edges": 24,
+        "new": 24,
+        "total": 168,
+        "has_next_page": true
+      },
+      {
+        "page": 8,
+        "edges": 24,
+        "new": 24,
+        "total": 192,
+        "has_next_page": true
+      },
+      {
+        "page": 9,
+        "edges": 24,
+        "new": 24,
+        "total": 216,
+        "has_next_page": true
+      },
+      {
+        "page": 10,
+        "edges": 24,
+        "new": 24,
+        "total": 240,
+        "has_next_page": true
+      },
+      {
+        "page": 11,
+        "edges": 24,
+        "new": 24,
+        "total": 264,
+        "has_next_page": true
+      },
+      {
+        "page": 12,
+        "edges": 24,
+        "new": 24,
+        "total": 288,
+        "has_next_page": true
+      },
+      {
+        "page": 13,
+        "edges": 24,
+        "new": 24,
+        "total": 312,
+        "has_next_page": true
+      },
+      {
+        "page": 14,
+        "edges": 24,
+        "new": 24,
+        "total": 336,
+        "has_next_page": true
+      },
+      {
+        "page": 15,
+        "edges": 24,
+        "new": 24,
+        "total": 360,
+        "has_next_page": true
+      },
+      {
+        "page": 16,
+        "edges": 24,
+        "new": 24,
+        "total": 384,
+        "has_next_page": true
+      },
+      {
+        "page": 17,
+        "edges": 24,
+        "new": 24,
+        "total": 408,
+        "has_next_page": true
+      },
+      {
+        "page": 18,
+        "edges": 24,
+        "new": 24,
+        "total": 432,
+        "has_next_page": true
+      },
+      {
+        "page": 19,
+        "edges": 24,
+        "new": 24,
+        "total": 456,
+        "has_next_page": true
+      },
+      {
+        "page": 20,
+        "edges": 24,
+        "new": 24,
+        "total": 480,
+        "has_next_page": true
+      },
+      {
+        "page": 21,
+        "edges": 12,
+        "new": 12,
+        "total": 492,
+        "has_next_page": false
+      }
+    ],
+    "stop_reason": "no_next_cursor"
+  },
+  "valid_count": 492,
+  "overall": {
+    "count": 492,
+    "date_range_utc": [
+      "2026-06-01T10:23:55+00:00",
+      "2026-08-31T13:00:00+00:00"
+    ],
+    "engagement_mean": 30.02,
+    "engagement_median": 14.0,
+    "likes_median": 10.0,
+    "feature_rates": {
+      "spiritual": 0.866,
+      "money": 0.384,
+      "science": 0.541,
+      "daily_scene": 0.199,
+      "body_feeling": 0.547,
+      "direct_reader": 0.494,
+      "first_person": 0.874,
+      "immediate_action": 0.323,
+      "offer_cta": 0.569,
+      "question": 0.211,
+      "numbers": 0.415,
+      "quotes": 0.99,
+      "contrast": 0.941,
+      "causal": 0.415,
+      "personal_story": 0.331,
+      "negation_reframe": 0.551,
+      "aphorism": 0.99,
+      "bullet": 0.075,
+      "arrow": 0.207
+    },
+    "style": {
+      "chars": 451.321,
+      "line_count": 12.974,
+      "line_len_mean": 47.079,
+      "sentence_len_mean": 31.178,
+      "short_line_rate": 0.393
+    }
+  },
+  "oldest_50": {
+    "count": 50,
+    "date_range_utc": [
+      "2026-06-01T10:23:55+00:00",
+      "2026-06-11T13:01:29+00:00"
+    ],
+    "engagement_mean": 39.44,
+    "engagement_median": 11.0,
+    "likes_median": 8.5,
+    "feature_rates": {
+      "spiritual": 0.72,
+      "money": 0.46,
+      "science": 0.8,
+      "daily_scene": 0.24,
+      "body_feeling": 0.58,
+      "direct_reader": 0.42,
+      "first_person": 0.98,
+      "immediate_action": 0.22,
+      "offer_cta": 0.16,
+      "question": 0.16,
+      "numbers": 0.18,
+      "quotes": 1.0,
+      "contrast": 0.9,
+      "causal": 0.36,
+      "personal_story": 0.4,
+      "negation_reframe": 0.6,
+      "aphorism": 0.98,
+      "bullet": 0.04,
+      "arrow": 0.1
+    },
+    "style": {
+      "chars": 453.92,
+      "line_count": 9.28,
+      "line_len_mean": 74.534,
+      "sentence_len_mean": 28.907,
+      "short_line_rate": 0.32
+    }
+  },
+  "newest_50": {
+    "count": 50,
+    "date_range_utc": [
+      "2026-08-23T12:20:53+00:00",
+      "2026-08-31T13:00:00+00:00"
+    ],
+    "engagement_mean": 19.76,
+    "engagement_median": 13.0,
+    "likes_median": 7.0,
+    "feature_rates": {
+      "spiritual": 0.9,
+      "money": 0.42,
+      "science": 0.26,
+      "daily_scene": 0.12,
+      "body_feeling": 0.46,
+      "direct_reader": 0.5,
+      "first_person": 0.68,
+      "immediate_action": 0.26,
+      "offer_cta": 0.74,
+      "question": 0.4,
+      "numbers": 0.48,
+      "quotes": 0.98,
+      "contrast": 0.92,
+      "causal": 0.38,
+      "personal_story": 0.26,
+      "negation_reframe": 0.46,
+      "aphorism": 1.0,
+      "bullet": 0.02,
+      "arrow": 0.18
+    },
+    "style": {
+      "chars": 406.52,
+      "line_count": 15.98,
+      "line_len_mean": 27.844,
+      "sentence_len_mean": 28.121,
+      "short_line_rate": 0.533
+    }
+  },
+  "chunks_50_oldest_to_newest": [
+    {
+      "range": "1-50_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-01T10:23:55+00:00",
+          "2026-06-11T13:01:29+00:00"
+        ],
+        "engagement_mean": 39.44,
+        "engagement_median": 11.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.72,
+          "money": 0.46,
+          "science": 0.8,
+          "daily_scene": 0.24,
+          "body_feeling": 0.58,
+          "direct_reader": 0.42,
+          "first_person": 0.98,
+          "immediate_action": 0.22,
+          "offer_cta": 0.16,
+          "question": 0.16,
+          "numbers": 0.18,
+          "quotes": 1.0,
+          "contrast": 0.9,
+          "causal": 0.36,
+          "personal_story": 0.4,
+          "negation_reframe": 0.6,
+          "aphorism": 0.98,
+          "bullet": 0.04,
+          "arrow": 0.1
+        },
+        "style": {
+          "chars": 453.92,
+          "line_count": 9.28,
+          "line_len_mean": 74.534,
+          "sentence_len_mean": 28.907,
+          "short_line_rate": 0.32
+        }
+      }
+    },
+    {
+      "range": "51-100_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-11T23:30:40+00:00",
+          "2026-06-20T03:30:14+00:00"
+        ],
+        "engagement_mean": 14,
+        "engagement_median": 12.0,
+        "likes_median": 9.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.3,
+          "science": 0.84,
+          "daily_scene": 0.2,
+          "body_feeling": 0.52,
+          "direct_reader": 0.54,
+          "first_person": 0.98,
+          "immediate_action": 0.5,
+          "offer_cta": 0.2,
+          "question": 0.12,
+          "numbers": 0.26,
+          "quotes": 0.96,
+          "contrast": 0.92,
+          "causal": 0.52,
+          "personal_story": 0.28,
+          "negation_reframe": 0.68,
+          "aphorism": 1.0,
+          "bullet": 0.12,
+          "arrow": 0.22
+        },
+        "style": {
+          "chars": 497.14,
+          "line_count": 10.18,
+          "line_len_mean": 57.854,
+          "sentence_len_mean": 30.381,
+          "short_line_rate": 0.366
+        }
+      }
+    },
+    {
+      "range": "101-150_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-20T06:54:15+00:00",
+          "2026-06-30T11:50:53+00:00"
+        ],
+        "engagement_mean": 38.16,
+        "engagement_median": 15.0,
+        "likes_median": 12.5,
+        "feature_rates": {
+          "spiritual": 0.86,
+          "money": 0.32,
+          "science": 0.48,
+          "daily_scene": 0.2,
+          "body_feeling": 0.56,
+          "direct_reader": 0.4,
+          "first_person": 0.98,
+          "immediate_action": 0.44,
+          "offer_cta": 0.18,
+          "question": 0.1,
+          "numbers": 0.14,
+          "quotes": 0.98,
+          "contrast": 0.98,
+          "causal": 0.32,
+          "personal_story": 0.4,
+          "negation_reframe": 0.64,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 459.62,
+          "line_count": 7.42,
+          "line_len_mean": 84.307,
+          "sentence_len_mean": 28.346,
+          "short_line_rate": 0.266
+        }
+      }
+    },
+    {
+      "range": "151-200_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-30T13:00:12+00:00",
+          "2026-07-09T06:00:17+00:00"
+        ],
+        "engagement_mean": 35.48,
+        "engagement_median": 13.0,
+        "likes_median": 10.0,
+        "feature_rates": {
+          "spiritual": 0.62,
+          "money": 0.16,
+          "science": 0.48,
+          "daily_scene": 0.12,
+          "body_feeling": 0.72,
+          "direct_reader": 0.66,
+          "first_person": 0.98,
+          "immediate_action": 0.14,
+          "offer_cta": 0.42,
+          "question": 0.16,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.34,
+          "personal_story": 0.28,
+          "negation_reframe": 0.56,
+          "aphorism": 1.0,
+          "bullet": 0.1,
+          "arrow": 0.5
+        },
+        "style": {
+          "chars": 399.38,
+          "line_count": 10.54,
+          "line_len_mean": 45.873,
+          "sentence_len_mean": 29.838,
+          "short_line_rate": 0.323
+        }
+      }
+    },
+    {
+      "range": "201-250_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-09T09:00:18+00:00",
+          "2026-07-19T11:28:38+00:00"
+        ],
+        "engagement_mean": 60.14,
+        "engagement_median": 22.5,
+        "likes_median": 18.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.76,
+          "science": 0.38,
+          "daily_scene": 0.1,
+          "body_feeling": 0.58,
+          "direct_reader": 0.48,
+          "first_person": 1.0,
+          "immediate_action": 0.26,
+          "offer_cta": 0.92,
+          "question": 0.06,
+          "numbers": 0.46,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.5,
+          "personal_story": 0.2,
+          "negation_reframe": 0.46,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.3
+        },
+        "style": {
+          "chars": 507.32,
+          "line_count": 11.1,
+          "line_len_mean": 51.709,
+          "sentence_len_mean": 37.053,
+          "short_line_rate": 0.239
+        }
+      }
+    },
+    {
+      "range": "251-300_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-19T13:08:53+00:00",
+          "2026-07-29T11:00:49+00:00"
+        ],
+        "engagement_mean": 30.02,
+        "engagement_median": 17.0,
+        "likes_median": 12.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.44,
+          "science": 0.74,
+          "daily_scene": 0.3,
+          "body_feeling": 0.66,
+          "direct_reader": 0.5,
+          "first_person": 0.92,
+          "immediate_action": 0.42,
+          "offer_cta": 0.78,
+          "question": 0.24,
+          "numbers": 0.52,
+          "quotes": 1.0,
+          "contrast": 0.96,
+          "causal": 0.62,
+          "personal_story": 0.34,
+          "negation_reframe": 0.42,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.38
+        },
+        "style": {
+          "chars": 503.48,
+          "line_count": 15.06,
+          "line_len_mean": 39.968,
+          "sentence_len_mean": 36.017,
+          "short_line_rate": 0.311
+        }
+      }
+    },
+    {
+      "range": "301-350_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-29T13:19:17+00:00",
+          "2026-08-07T06:00:54+00:00"
+        ],
+        "engagement_mean": 21.7,
+        "engagement_median": 13.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.42,
+          "science": 0.54,
+          "daily_scene": 0.18,
+          "body_feeling": 0.44,
+          "direct_reader": 0.38,
+          "first_person": 0.84,
+          "immediate_action": 0.32,
+          "offer_cta": 0.72,
+          "question": 0.36,
+          "numbers": 0.54,
+          "quotes": 1.0,
+          "contrast": 0.94,
+          "causal": 0.38,
+          "personal_story": 0.46,
+          "negation_reframe": 0.52,
+          "aphorism": 0.98,
+          "bullet": 0.1,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 420.96,
+          "line_count": 20.42,
+          "line_len_mean": 22.202,
+          "sentence_len_mean": 32.189,
+          "short_line_rate": 0.627
+        }
+      }
+    },
+    {
+      "range": "351-400_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-07T13:27:01+00:00",
+          "2026-08-16T09:00:31+00:00"
+        ],
+        "engagement_mean": 24.28,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.18,
+          "science": 0.4,
+          "daily_scene": 0.3,
+          "body_feeling": 0.42,
+          "direct_reader": 0.62,
+          "first_person": 0.62,
+          "immediate_action": 0.3,
+          "offer_cta": 0.92,
+          "question": 0.2,
+          "numbers": 0.66,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.28,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.96,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 442.28,
+          "line_count": 16.36,
+          "line_len_mean": 31.765,
+          "sentence_len_mean": 32.596,
+          "short_line_rate": 0.49
+        }
+      }
+    },
+    {
+      "range": "401-450_oldest_to_newest",
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-16T10:59:59+00:00",
+          "2026-08-24T13:00:03+00:00"
+        ],
+        "engagement_mean": 19.68,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.4,
+          "science": 0.4,
+          "daily_scene": 0.22,
+          "body_feeling": 0.5,
+          "direct_reader": 0.48,
+          "first_person": 0.74,
+          "immediate_action": 0.32,
+          "offer_cta": 0.66,
+          "question": 0.34,
+          "numbers": 0.6,
+          "quotes": 0.96,
+          "contrast": 0.84,
+          "causal": 0.44,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.98,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 401.82,
+          "line_count": 14.26,
+          "line_len_mean": 29.756,
+          "sentence_len_mean": 27.553,
+          "short_line_rate": 0.528
+        }
+      }
+    },
+    {
+      "range": "451-492_oldest_to_newest",
+      "summary": {
+        "count": 42,
+        "date_range_utc": [
+          "2026-08-24T23:30:50+00:00",
+          "2026-08-31T13:00:00+00:00"
+        ],
+        "engagement_mean": 14.881,
+        "engagement_median": 12.5,
+        "likes_median": 7.0,
+        "feature_rates": {
+          "spiritual": 0.881,
+          "money": 0.405,
+          "science": 0.31,
+          "daily_scene": 0.119,
+          "body_feeling": 0.476,
+          "direct_reader": 0.452,
+          "first_person": 0.667,
+          "immediate_action": 0.31,
+          "offer_cta": 0.762,
+          "question": 0.405,
+          "numbers": 0.476,
+          "quotes": 1.0,
+          "contrast": 0.952,
+          "causal": 0.381,
+          "personal_story": 0.262,
+          "negation_reframe": 0.452,
+          "aphorism": 1.0,
+          "bullet": 0.024,
+          "arrow": 0.214
+        },
+        "style": {
+          "chars": 422.714,
+          "line_count": 15.524,
+          "line_len_mean": 30.106,
+          "sentence_len_mean": 28.473,
+          "short_line_rate": 0.473
+        }
+      }
+    }
+  ],
+  "change_points_window25": [
+    {
+      "split_index": 26,
+      "datetime_utc": "2026-06-07T11:01:17+00:00",
+      "style_distance": 0.2118,
+      "engagement_before": 8,
+      "engagement_after": 21,
+      "engagement_log_shift": 0.894,
+      "score": 0.319,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-01T10:23:55+00:00",
+          "2026-06-07T09:01:48+00:00"
+        ],
+        "engagement_mean": 30.48,
+        "engagement_median": 8,
+        "likes_median": 4,
+        "feature_rates": {
+          "spiritual": 0.52,
+          "money": 0.32,
+          "science": 0.72,
+          "daily_scene": 0.32,
+          "body_feeling": 0.56,
+          "direct_reader": 0.52,
+          "first_person": 0.96,
+          "immediate_action": 0.16,
+          "offer_cta": 0.12,
+          "question": 0.24,
+          "numbers": 0.2,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.44,
+          "personal_story": 0.44,
+          "negation_reframe": 0.64,
+          "aphorism": 1.0,
+          "bullet": 0.0,
+          "arrow": 0.0
+        },
+        "style": {
+          "chars": 401.48,
+          "line_count": 7.44,
+          "line_len_mean": 94.975,
+          "sentence_len_mean": 28.925,
+          "short_line_rate": 0.192
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-07T11:01:17+00:00",
+          "2026-06-11T13:01:29+00:00"
+        ],
+        "engagement_mean": 48.4,
+        "engagement_median": 21,
+        "likes_median": 19,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.6,
+          "science": 0.88,
+          "daily_scene": 0.16,
+          "body_feeling": 0.6,
+          "direct_reader": 0.32,
+          "first_person": 1.0,
+          "immediate_action": 0.28,
+          "offer_cta": 0.2,
+          "question": 0.08,
+          "numbers": 0.16,
+          "quotes": 1.0,
+          "contrast": 0.88,
+          "causal": 0.28,
+          "personal_story": 0.36,
+          "negation_reframe": 0.56,
+          "aphorism": 0.96,
+          "bullet": 0.08,
+          "arrow": 0.2
+        },
+        "style": {
+          "chars": 506.36,
+          "line_count": 11.12,
+          "line_len_mean": 54.093,
+          "sentence_len_mean": 28.889,
+          "short_line_rate": 0.448
+        }
+      }
+    },
+    {
+      "split_index": 57,
+      "datetime_utc": "2026-06-12T13:01:24+00:00",
+      "style_distance": 0.169,
+      "engagement_before": 18,
+      "engagement_after": 12,
+      "engagement_log_shift": -0.379,
+      "score": 0.2145,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-08T09:00:42+00:00",
+          "2026-06-12T11:50:42+00:00"
+        ],
+        "engagement_mean": 37.12,
+        "engagement_median": 18,
+        "likes_median": 13,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.48,
+          "science": 0.84,
+          "daily_scene": 0.08,
+          "body_feeling": 0.52,
+          "direct_reader": 0.28,
+          "first_person": 1.0,
+          "immediate_action": 0.4,
+          "offer_cta": 0.16,
+          "question": 0.08,
+          "numbers": 0.16,
+          "quotes": 1.0,
+          "contrast": 0.88,
+          "causal": 0.16,
+          "personal_story": 0.44,
+          "negation_reframe": 0.6,
+          "aphorism": 0.96,
+          "bullet": 0.16,
+          "arrow": 0.24
+        },
+        "style": {
+          "chars": 516.84,
+          "line_count": 11.16,
+          "line_len_mean": 55.097,
+          "sentence_len_mean": 29.503,
+          "short_line_rate": 0.458
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-12T13:01:24+00:00",
+          "2026-06-16T06:00:52+00:00"
+        ],
+        "engagement_mean": 14.16,
+        "engagement_median": 12,
+        "likes_median": 10,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.44,
+          "science": 0.88,
+          "daily_scene": 0.24,
+          "body_feeling": 0.48,
+          "direct_reader": 0.48,
+          "first_person": 0.96,
+          "immediate_action": 0.48,
+          "offer_cta": 0.24,
+          "question": 0.2,
+          "numbers": 0.32,
+          "quotes": 0.92,
+          "contrast": 0.88,
+          "causal": 0.84,
+          "personal_story": 0.36,
+          "negation_reframe": 0.52,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.12
+        },
+        "style": {
+          "chars": 478.72,
+          "line_count": 9.24,
+          "line_len_mean": 65.012,
+          "sentence_len_mean": 28.727,
+          "short_line_rate": 0.339
+        }
+      }
+    },
+    {
+      "split_index": 108,
+      "datetime_utc": "2026-06-23T06:02:27+00:00",
+      "style_distance": 0.2108,
+      "engagement_before": 14,
+      "engagement_after": 17,
+      "engagement_log_shift": 0.182,
+      "score": 0.2327,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-16T11:01:07+00:00",
+          "2026-06-22T11:01:14+00:00"
+        ],
+        "engagement_mean": 29.04,
+        "engagement_median": 14,
+        "likes_median": 10,
+        "feature_rates": {
+          "spiritual": 0.88,
+          "money": 0.08,
+          "science": 0.84,
+          "daily_scene": 0.28,
+          "body_feeling": 0.64,
+          "direct_reader": 0.56,
+          "first_person": 1.0,
+          "immediate_action": 0.52,
+          "offer_cta": 0.16,
+          "question": 0.0,
+          "numbers": 0.2,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.32,
+          "personal_story": 0.2,
+          "negation_reframe": 0.76,
+          "aphorism": 1.0,
+          "bullet": 0.12,
+          "arrow": 0.24
+        },
+        "style": {
+          "chars": 501.4,
+          "line_count": 10.32,
+          "line_len_mean": 52.911,
+          "sentence_len_mean": 33.333,
+          "short_line_rate": 0.359
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-23T06:02:27+00:00",
+          "2026-06-27T11:01:40+00:00"
+        ],
+        "engagement_mean": 37.68,
+        "engagement_median": 17,
+        "likes_median": 12,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.56,
+          "science": 0.44,
+          "daily_scene": 0.12,
+          "body_feeling": 0.48,
+          "direct_reader": 0.4,
+          "first_person": 0.96,
+          "immediate_action": 0.4,
+          "offer_cta": 0.24,
+          "question": 0.2,
+          "numbers": 0.2,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.36,
+          "personal_story": 0.36,
+          "negation_reframe": 0.56,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.16
+        },
+        "style": {
+          "chars": 466.04,
+          "line_count": 7.16,
+          "line_len_mean": 91.072,
+          "sentence_len_mean": 26.771,
+          "short_line_rate": 0.247
+        }
+      }
+    },
+    {
+      "split_index": 134,
+      "datetime_utc": "2026-06-27T13:31:18+00:00",
+      "style_distance": 0.1489,
+      "engagement_before": 17,
+      "engagement_after": 11,
+      "engagement_log_shift": -0.405,
+      "score": 0.1975,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-23T09:00:57+00:00",
+          "2026-06-27T12:30:50+00:00"
+        ],
+        "engagement_mean": 38.4,
+        "engagement_median": 17,
+        "likes_median": 14,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.52,
+          "science": 0.4,
+          "daily_scene": 0.12,
+          "body_feeling": 0.48,
+          "direct_reader": 0.44,
+          "first_person": 0.96,
+          "immediate_action": 0.4,
+          "offer_cta": 0.24,
+          "question": 0.2,
+          "numbers": 0.16,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.36,
+          "personal_story": 0.32,
+          "negation_reframe": 0.6,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.16
+        },
+        "style": {
+          "chars": 464.76,
+          "line_count": 7.08,
+          "line_len_mean": 91.918,
+          "sentence_len_mean": 26.46,
+          "short_line_rate": 0.247
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-27T13:31:18+00:00",
+          "2026-07-01T13:30:09+00:00"
+        ],
+        "engagement_mean": 22.32,
+        "engagement_median": 11,
+        "likes_median": 9,
+        "feature_rates": {
+          "spiritual": 0.64,
+          "money": 0.08,
+          "science": 0.44,
+          "daily_scene": 0.16,
+          "body_feeling": 0.6,
+          "direct_reader": 0.36,
+          "first_person": 1.0,
+          "immediate_action": 0.36,
+          "offer_cta": 0.08,
+          "question": 0.04,
+          "numbers": 0.12,
+          "quotes": 0.96,
+          "contrast": 1.0,
+          "causal": 0.08,
+          "personal_story": 0.44,
+          "negation_reframe": 0.76,
+          "aphorism": 1.0,
+          "bullet": 0.0,
+          "arrow": 0.08
+        },
+        "style": {
+          "chars": 418.8,
+          "line_count": 6.8,
+          "line_len_mean": 80.139,
+          "sentence_len_mean": 27.046,
+          "short_line_rate": 0.247
+        }
+      }
+    },
+    {
+      "split_index": 159,
+      "datetime_utc": "2026-07-01T23:30:41+00:00",
+      "style_distance": 0.2701,
+      "engagement_before": 11,
+      "engagement_after": 15,
+      "engagement_log_shift": 0.288,
+      "score": 0.3047,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-06-27T13:31:18+00:00",
+          "2026-07-01T13:30:09+00:00"
+        ],
+        "engagement_mean": 22.32,
+        "engagement_median": 11,
+        "likes_median": 9,
+        "feature_rates": {
+          "spiritual": 0.64,
+          "money": 0.08,
+          "science": 0.44,
+          "daily_scene": 0.16,
+          "body_feeling": 0.6,
+          "direct_reader": 0.36,
+          "first_person": 1.0,
+          "immediate_action": 0.36,
+          "offer_cta": 0.08,
+          "question": 0.04,
+          "numbers": 0.12,
+          "quotes": 0.96,
+          "contrast": 1.0,
+          "causal": 0.08,
+          "personal_story": 0.44,
+          "negation_reframe": 0.76,
+          "aphorism": 1.0,
+          "bullet": 0.0,
+          "arrow": 0.08
+        },
+        "style": {
+          "chars": 418.8,
+          "line_count": 6.8,
+          "line_len_mean": 80.139,
+          "sentence_len_mean": 27.046,
+          "short_line_rate": 0.247
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-01T23:30:41+00:00",
+          "2026-07-05T23:30:40+00:00"
+        ],
+        "engagement_mean": 36.64,
+        "engagement_median": 15,
+        "likes_median": 11,
+        "feature_rates": {
+          "spiritual": 0.56,
+          "money": 0.04,
+          "science": 0.52,
+          "daily_scene": 0.12,
+          "body_feeling": 0.84,
+          "direct_reader": 0.84,
+          "first_person": 1.0,
+          "immediate_action": 0.08,
+          "offer_cta": 0.2,
+          "question": 0.28,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.36,
+          "personal_story": 0.2,
+          "negation_reframe": 0.56,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.8
+        },
+        "style": {
+          "chars": 391,
+          "line_count": 10.92,
+          "line_len_mean": 37.723,
+          "sentence_len_mean": 31.534,
+          "short_line_rate": 0.325
+        }
+      }
+    },
+    {
+      "split_index": 187,
+      "datetime_utc": "2026-07-06T10:59:57+00:00",
+      "style_distance": 0.214,
+      "engagement_before": 15,
+      "engagement_after": 14,
+      "engagement_log_shift": -0.065,
+      "score": 0.2218,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-02T09:01:03+00:00",
+          "2026-07-06T08:59:38+00:00"
+        ],
+        "engagement_mean": 24.44,
+        "engagement_median": 15,
+        "likes_median": 13,
+        "feature_rates": {
+          "spiritual": 0.6,
+          "money": 0.04,
+          "science": 0.6,
+          "daily_scene": 0.08,
+          "body_feeling": 0.84,
+          "direct_reader": 0.84,
+          "first_person": 1.0,
+          "immediate_action": 0.12,
+          "offer_cta": 0.32,
+          "question": 0.28,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.4,
+          "personal_story": 0.24,
+          "negation_reframe": 0.48,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.76
+        },
+        "style": {
+          "chars": 402,
+          "line_count": 11.2,
+          "line_len_mean": 37.607,
+          "sentence_len_mean": 32.658,
+          "short_line_rate": 0.307
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-06T10:59:57+00:00",
+          "2026-07-11T12:01:07+00:00"
+        ],
+        "engagement_mean": 41.12,
+        "engagement_median": 14,
+        "likes_median": 10,
+        "feature_rates": {
+          "spiritual": 0.84,
+          "money": 0.44,
+          "science": 0.32,
+          "daily_scene": 0.16,
+          "body_feeling": 0.48,
+          "direct_reader": 0.64,
+          "first_person": 0.96,
+          "immediate_action": 0.16,
+          "offer_cta": 0.88,
+          "question": 0.0,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.44,
+          "personal_story": 0.28,
+          "negation_reframe": 0.6,
+          "aphorism": 1.0,
+          "bullet": 0.2,
+          "arrow": 0.36
+        },
+        "style": {
+          "chars": 429.92,
+          "line_count": 10.76,
+          "line_len_mean": 48.874,
+          "sentence_len_mean": 29.909,
+          "short_line_rate": 0.3
+        }
+      }
+    },
+    {
+      "split_index": 217,
+      "datetime_utc": "2026-07-12T23:30:22+00:00",
+      "style_distance": 0.2114,
+      "engagement_before": 15,
+      "engagement_after": 27,
+      "engagement_log_shift": 0.56,
+      "score": 0.2785,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-07T23:30:03+00:00",
+          "2026-07-12T13:45:16+00:00"
+        ],
+        "engagement_mean": 43.68,
+        "engagement_median": 15,
+        "likes_median": 12,
+        "feature_rates": {
+          "spiritual": 0.88,
+          "money": 0.4,
+          "science": 0.28,
+          "daily_scene": 0.16,
+          "body_feeling": 0.52,
+          "direct_reader": 0.64,
+          "first_person": 0.96,
+          "immediate_action": 0.2,
+          "offer_cta": 0.88,
+          "question": 0.0,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.4,
+          "personal_story": 0.2,
+          "negation_reframe": 0.64,
+          "aphorism": 1.0,
+          "bullet": 0.16,
+          "arrow": 0.4
+        },
+        "style": {
+          "chars": 443.76,
+          "line_count": 10.2,
+          "line_len_mean": 48.229,
+          "sentence_len_mean": 31.222,
+          "short_line_rate": 0.243
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-12T23:30:22+00:00",
+          "2026-07-17T13:01:56+00:00"
+        ],
+        "engagement_mean": 68.72,
+        "engagement_median": 27,
+        "likes_median": 22,
+        "feature_rates": {
+          "spiritual": 1.0,
+          "money": 1.0,
+          "science": 0.48,
+          "daily_scene": 0.08,
+          "body_feeling": 0.72,
+          "direct_reader": 0.24,
+          "first_person": 1.0,
+          "immediate_action": 0.32,
+          "offer_cta": 1.0,
+          "question": 0.04,
+          "numbers": 0.56,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.52,
+          "personal_story": 0.2,
+          "negation_reframe": 0.2,
+          "aphorism": 1.0,
+          "bullet": 0.04,
+          "arrow": 0.16
+        },
+        "style": {
+          "chars": 539.84,
+          "line_count": 10.84,
+          "line_len_mean": 58.706,
+          "sentence_len_mean": 40.4,
+          "short_line_rate": 0.222
+        }
+      }
+    },
+    {
+      "split_index": 261,
+      "datetime_utc": "2026-07-22T12:42:57+00:00",
+      "style_distance": 0.209,
+      "engagement_before": 32,
+      "engagement_after": 14,
+      "engagement_log_shift": -0.788,
+      "score": 0.3036,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-16T23:30:11+00:00",
+          "2026-07-22T04:09:40+00:00"
+        ],
+        "engagement_mean": 68.6,
+        "engagement_median": 32,
+        "likes_median": 24,
+        "feature_rates": {
+          "spiritual": 0.96,
+          "money": 0.92,
+          "science": 0.4,
+          "daily_scene": 0.16,
+          "body_feeling": 0.64,
+          "direct_reader": 0.48,
+          "first_person": 0.96,
+          "immediate_action": 0.32,
+          "offer_cta": 0.84,
+          "question": 0.16,
+          "numbers": 0.44,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.48,
+          "personal_story": 0.24,
+          "negation_reframe": 0.48,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.24
+        },
+        "style": {
+          "chars": 515.4,
+          "line_count": 12.48,
+          "line_len_mean": 47.187,
+          "sentence_len_mean": 41.023,
+          "short_line_rate": 0.298
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-22T12:42:57+00:00",
+          "2026-07-26T12:00:42+00:00"
+        ],
+        "engagement_mean": 18.04,
+        "engagement_median": 14,
+        "likes_median": 10,
+        "feature_rates": {
+          "spiritual": 0.84,
+          "money": 0.24,
+          "science": 0.76,
+          "daily_scene": 0.32,
+          "body_feeling": 0.64,
+          "direct_reader": 0.48,
+          "first_person": 0.92,
+          "immediate_action": 0.44,
+          "offer_cta": 0.68,
+          "question": 0.28,
+          "numbers": 0.52,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.52,
+          "personal_story": 0.4,
+          "negation_reframe": 0.32,
+          "aphorism": 1.0,
+          "bullet": 0.04,
+          "arrow": 0.68
+        },
+        "style": {
+          "chars": 462.84,
+          "line_count": 16.52,
+          "line_len_mean": 35.612,
+          "sentence_len_mean": 34.868,
+          "short_line_rate": 0.368
+        }
+      }
+    },
+    {
+      "split_index": 308,
+      "datetime_utc": "2026-07-30T23:30:48+00:00",
+      "style_distance": 0.2715,
+      "engagement_before": 17,
+      "engagement_after": 12,
+      "engagement_log_shift": -0.325,
+      "score": 0.3105,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-26T00:00:08+00:00",
+          "2026-07-30T14:10:15+00:00"
+        ],
+        "engagement_mean": 29.16,
+        "engagement_median": 17,
+        "likes_median": 12,
+        "feature_rates": {
+          "spiritual": 1.0,
+          "money": 0.36,
+          "science": 0.92,
+          "daily_scene": 0.24,
+          "body_feeling": 0.52,
+          "direct_reader": 0.56,
+          "first_person": 0.84,
+          "immediate_action": 0.4,
+          "offer_cta": 0.68,
+          "question": 0.24,
+          "numbers": 0.6,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.88,
+          "personal_story": 0.2,
+          "negation_reframe": 0.68,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 498.08,
+          "line_count": 15.04,
+          "line_len_mean": 35.967,
+          "sentence_len_mean": 31.56,
+          "short_line_rate": 0.339
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-07-30T23:30:48+00:00",
+          "2026-08-04T09:00:02+00:00"
+        ],
+        "engagement_mean": 13.8,
+        "engagement_median": 12,
+        "likes_median": 8,
+        "feature_rates": {
+          "spiritual": 0.88,
+          "money": 0.44,
+          "science": 0.4,
+          "daily_scene": 0.2,
+          "body_feeling": 0.52,
+          "direct_reader": 0.36,
+          "first_person": 0.96,
+          "immediate_action": 0.4,
+          "offer_cta": 0.84,
+          "question": 0.36,
+          "numbers": 0.4,
+          "quotes": 1.0,
+          "contrast": 0.96,
+          "causal": 0.16,
+          "personal_story": 0.64,
+          "negation_reframe": 0.4,
+          "aphorism": 1.0,
+          "bullet": 0.16,
+          "arrow": 0.16
+        },
+        "style": {
+          "chars": 434.44,
+          "line_count": 24.52,
+          "line_len_mean": 16.409,
+          "sentence_len_mean": 31.832,
+          "short_line_rate": 0.765
+        }
+      }
+    },
+    {
+      "split_index": 426,
+      "datetime_utc": "2026-08-20T23:30:05+00:00",
+      "style_distance": 0.2167,
+      "engagement_before": 14,
+      "engagement_after": 13,
+      "engagement_log_shift": -0.069,
+      "score": 0.225,
+      "before": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-08-16T10:59:59+00:00",
+          "2026-08-20T13:22:05+00:00"
+        ],
+        "engagement_mean": 16.48,
+        "engagement_median": 14,
+        "likes_median": 9,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.4,
+          "science": 0.44,
+          "daily_scene": 0.36,
+          "body_feeling": 0.56,
+          "direct_reader": 0.48,
+          "first_person": 0.84,
+          "immediate_action": 0.6,
+          "offer_cta": 0.76,
+          "question": 0.28,
+          "numbers": 0.68,
+          "quotes": 1.0,
+          "contrast": 0.88,
+          "causal": 0.52,
+          "personal_story": 0.44,
+          "negation_reframe": 0.6,
+          "aphorism": 1.0,
+          "bullet": 0.16,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 477.04,
+          "line_count": 12.8,
+          "line_len_mean": 40.143,
+          "sentence_len_mean": 28.919,
+          "short_line_rate": 0.276
+        }
+      },
+      "after": {
+        "count": 25,
+        "date_range_utc": [
+          "2026-08-20T23:30:05+00:00",
+          "2026-08-24T13:00:03+00:00"
+        ],
+        "engagement_mean": 22.88,
+        "engagement_median": 13,
+        "likes_median": 7,
+        "feature_rates": {
+          "spiritual": 0.96,
+          "money": 0.4,
+          "science": 0.36,
+          "daily_scene": 0.08,
+          "body_feeling": 0.44,
+          "direct_reader": 0.48,
+          "first_person": 0.64,
+          "immediate_action": 0.04,
+          "offer_cta": 0.56,
+          "question": 0.4,
+          "numbers": 0.52,
+          "quotes": 0.92,
+          "contrast": 0.8,
+          "causal": 0.36,
+          "personal_story": 0.24,
+          "negation_reframe": 0.56,
+          "aphorism": 0.96,
+          "bullet": 0.0,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 326.6,
+          "line_count": 15.72,
+          "line_len_mean": 19.368,
+          "sentence_len_mean": 26.186,
+          "short_line_rate": 0.779
+        }
+      }
+    }
+  ],
+  "reference_summaries": {
+    "osabori_space_human_300": {
+      "count": 300,
+      "date_range_utc": [
+        "2026-03-10T10:08:49+00:00",
+        "2026-02-27T23:47:49+00:00"
+      ],
+      "engagement_mean": 53.32,
+      "engagement_median": 39.0,
+      "likes_median": 34.0,
+      "feature_rates": {
+        "spiritual": 0.937,
+        "money": 0.587,
+        "science": 0.34,
+        "daily_scene": 0.397,
+        "body_feeling": 0.463,
+        "direct_reader": 0.24,
+        "first_person": 0.43,
+        "immediate_action": 0.48,
+        "offer_cta": 0.287,
+        "question": 0.49,
+        "numbers": 0.69,
+        "quotes": 0.963,
+        "contrast": 0.667,
+        "causal": 0.157,
+        "personal_story": 0.167,
+        "negation_reframe": 0.02,
+        "aphorism": 0.92,
+        "bullet": 0.2,
+        "arrow": 0.25
+      },
+      "style": {
+        "chars": 317.767,
+        "line_count": 9.39,
+        "line_len_mean": 40.383,
+        "sentence_len_mean": 31.466,
+        "short_line_rate": 0.204
+      }
+    },
+    "dara_historical300": {
+      "count": 300,
+      "date_range_utc": [
+        "2026-08-26T10:57:29+00:00",
+        "2026-05-17T21:14:44+00:00"
+      ],
+      "engagement_mean": 9.38,
+      "engagement_median": 3.0,
+      "likes_median": 2.0,
+      "feature_rates": {
+        "spiritual": 0.647,
+        "money": 0.367,
+        "science": 0.113,
+        "daily_scene": 0.297,
+        "body_feeling": 0.43,
+        "direct_reader": 0.457,
+        "first_person": 0.573,
+        "immediate_action": 0.2,
+        "offer_cta": 0.32,
+        "question": 0.193,
+        "numbers": 0.493,
+        "quotes": 0.343,
+        "contrast": 0.563,
+        "causal": 0.367,
+        "personal_story": 0.22,
+        "negation_reframe": 0.08,
+        "aphorism": 0.75,
+        "bullet": 0.22,
+        "arrow": 0.047
+      },
+      "style": {
+        "chars": 217.053,
+        "line_count": 10.15,
+        "line_len_mean": 22.573,
+        "sentence_len_mean": 41.128,
+        "short_line_rate": 0.521
+      }
+    }
+  },
+  "similarity_to_osabori_by_50": [
+    {
+      "range": "1-50_oldest_to_newest",
+      "cosine_similarity": 0.8833,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-01T10:23:55+00:00",
+          "2026-06-11T13:01:29+00:00"
+        ],
+        "engagement_mean": 39.44,
+        "engagement_median": 11.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.72,
+          "money": 0.46,
+          "science": 0.8,
+          "daily_scene": 0.24,
+          "body_feeling": 0.58,
+          "direct_reader": 0.42,
+          "first_person": 0.98,
+          "immediate_action": 0.22,
+          "offer_cta": 0.16,
+          "question": 0.16,
+          "numbers": 0.18,
+          "quotes": 1.0,
+          "contrast": 0.9,
+          "causal": 0.36,
+          "personal_story": 0.4,
+          "negation_reframe": 0.6,
+          "aphorism": 0.98,
+          "bullet": 0.04,
+          "arrow": 0.1
+        },
+        "style": {
+          "chars": 453.92,
+          "line_count": 9.28,
+          "line_len_mean": 74.534,
+          "sentence_len_mean": 28.907,
+          "short_line_rate": 0.32
+        }
+      }
+    },
+    {
+      "range": "51-100_oldest_to_newest",
+      "cosine_similarity": 0.8933,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-11T23:30:40+00:00",
+          "2026-06-20T03:30:14+00:00"
+        ],
+        "engagement_mean": 14,
+        "engagement_median": 12.0,
+        "likes_median": 9.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.3,
+          "science": 0.84,
+          "daily_scene": 0.2,
+          "body_feeling": 0.52,
+          "direct_reader": 0.54,
+          "first_person": 0.98,
+          "immediate_action": 0.5,
+          "offer_cta": 0.2,
+          "question": 0.12,
+          "numbers": 0.26,
+          "quotes": 0.96,
+          "contrast": 0.92,
+          "causal": 0.52,
+          "personal_story": 0.28,
+          "negation_reframe": 0.68,
+          "aphorism": 1.0,
+          "bullet": 0.12,
+          "arrow": 0.22
+        },
+        "style": {
+          "chars": 497.14,
+          "line_count": 10.18,
+          "line_len_mean": 57.854,
+          "sentence_len_mean": 30.381,
+          "short_line_rate": 0.366
+        }
+      }
+    },
+    {
+      "range": "101-150_oldest_to_newest",
+      "cosine_similarity": 0.8805,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-20T06:54:15+00:00",
+          "2026-06-30T11:50:53+00:00"
+        ],
+        "engagement_mean": 38.16,
+        "engagement_median": 15.0,
+        "likes_median": 12.5,
+        "feature_rates": {
+          "spiritual": 0.86,
+          "money": 0.32,
+          "science": 0.48,
+          "daily_scene": 0.2,
+          "body_feeling": 0.56,
+          "direct_reader": 0.4,
+          "first_person": 0.98,
+          "immediate_action": 0.44,
+          "offer_cta": 0.18,
+          "question": 0.1,
+          "numbers": 0.14,
+          "quotes": 0.98,
+          "contrast": 0.98,
+          "causal": 0.32,
+          "personal_story": 0.4,
+          "negation_reframe": 0.64,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 459.62,
+          "line_count": 7.42,
+          "line_len_mean": 84.307,
+          "sentence_len_mean": 28.346,
+          "short_line_rate": 0.266
+        }
+      }
+    },
+    {
+      "range": "151-200_oldest_to_newest",
+      "cosine_similarity": 0.8808,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-30T13:00:12+00:00",
+          "2026-07-09T06:00:17+00:00"
+        ],
+        "engagement_mean": 35.48,
+        "engagement_median": 13.0,
+        "likes_median": 10.0,
+        "feature_rates": {
+          "spiritual": 0.62,
+          "money": 0.16,
+          "science": 0.48,
+          "daily_scene": 0.12,
+          "body_feeling": 0.72,
+          "direct_reader": 0.66,
+          "first_person": 0.98,
+          "immediate_action": 0.14,
+          "offer_cta": 0.42,
+          "question": 0.16,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.34,
+          "personal_story": 0.28,
+          "negation_reframe": 0.56,
+          "aphorism": 1.0,
+          "bullet": 0.1,
+          "arrow": 0.5
+        },
+        "style": {
+          "chars": 399.38,
+          "line_count": 10.54,
+          "line_len_mean": 45.873,
+          "sentence_len_mean": 29.838,
+          "short_line_rate": 0.323
+        }
+      }
+    },
+    {
+      "range": "201-250_oldest_to_newest",
+      "cosine_similarity": 0.9122,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-09T09:00:18+00:00",
+          "2026-07-19T11:28:38+00:00"
+        ],
+        "engagement_mean": 60.14,
+        "engagement_median": 22.5,
+        "likes_median": 18.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.76,
+          "science": 0.38,
+          "daily_scene": 0.1,
+          "body_feeling": 0.58,
+          "direct_reader": 0.48,
+          "first_person": 1.0,
+          "immediate_action": 0.26,
+          "offer_cta": 0.92,
+          "question": 0.06,
+          "numbers": 0.46,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.5,
+          "personal_story": 0.2,
+          "negation_reframe": 0.46,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.3
+        },
+        "style": {
+          "chars": 507.32,
+          "line_count": 11.1,
+          "line_len_mean": 51.709,
+          "sentence_len_mean": 37.053,
+          "short_line_rate": 0.239
+        }
+      }
+    },
+    {
+      "range": "251-300_oldest_to_newest",
+      "cosine_similarity": 0.9264,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-19T13:08:53+00:00",
+          "2026-07-29T11:00:49+00:00"
+        ],
+        "engagement_mean": 30.02,
+        "engagement_median": 17.0,
+        "likes_median": 12.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.44,
+          "science": 0.74,
+          "daily_scene": 0.3,
+          "body_feeling": 0.66,
+          "direct_reader": 0.5,
+          "first_person": 0.92,
+          "immediate_action": 0.42,
+          "offer_cta": 0.78,
+          "question": 0.24,
+          "numbers": 0.52,
+          "quotes": 1.0,
+          "contrast": 0.96,
+          "causal": 0.62,
+          "personal_story": 0.34,
+          "negation_reframe": 0.42,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.38
+        },
+        "style": {
+          "chars": 503.48,
+          "line_count": 15.06,
+          "line_len_mean": 39.968,
+          "sentence_len_mean": 36.017,
+          "short_line_rate": 0.311
+        }
+      }
+    },
+    {
+      "range": "301-350_oldest_to_newest",
+      "cosine_similarity": 0.9097,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-29T13:19:17+00:00",
+          "2026-08-07T06:00:54+00:00"
+        ],
+        "engagement_mean": 21.7,
+        "engagement_median": 13.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.42,
+          "science": 0.54,
+          "daily_scene": 0.18,
+          "body_feeling": 0.44,
+          "direct_reader": 0.38,
+          "first_person": 0.84,
+          "immediate_action": 0.32,
+          "offer_cta": 0.72,
+          "question": 0.36,
+          "numbers": 0.54,
+          "quotes": 1.0,
+          "contrast": 0.94,
+          "causal": 0.38,
+          "personal_story": 0.46,
+          "negation_reframe": 0.52,
+          "aphorism": 0.98,
+          "bullet": 0.1,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 420.96,
+          "line_count": 20.42,
+          "line_len_mean": 22.202,
+          "sentence_len_mean": 32.189,
+          "short_line_rate": 0.627
+        }
+      }
+    },
+    {
+      "range": "351-400_oldest_to_newest",
+      "cosine_similarity": 0.9045,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-07T13:27:01+00:00",
+          "2026-08-16T09:00:31+00:00"
+        ],
+        "engagement_mean": 24.28,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.18,
+          "science": 0.4,
+          "daily_scene": 0.3,
+          "body_feeling": 0.42,
+          "direct_reader": 0.62,
+          "first_person": 0.62,
+          "immediate_action": 0.3,
+          "offer_cta": 0.92,
+          "question": 0.2,
+          "numbers": 0.66,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.28,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.96,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 442.28,
+          "line_count": 16.36,
+          "line_len_mean": 31.765,
+          "sentence_len_mean": 32.596,
+          "short_line_rate": 0.49
+        }
+      }
+    },
+    {
+      "range": "401-450_oldest_to_newest",
+      "cosine_similarity": 0.9284,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-16T10:59:59+00:00",
+          "2026-08-24T13:00:03+00:00"
+        ],
+        "engagement_mean": 19.68,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.4,
+          "science": 0.4,
+          "daily_scene": 0.22,
+          "body_feeling": 0.5,
+          "direct_reader": 0.48,
+          "first_person": 0.74,
+          "immediate_action": 0.32,
+          "offer_cta": 0.66,
+          "question": 0.34,
+          "numbers": 0.6,
+          "quotes": 0.96,
+          "contrast": 0.84,
+          "causal": 0.44,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.98,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 401.82,
+          "line_count": 14.26,
+          "line_len_mean": 29.756,
+          "sentence_len_mean": 27.553,
+          "short_line_rate": 0.528
+        }
+      }
+    },
+    {
+      "range": "451-492_oldest_to_newest",
+      "cosine_similarity": 0.9299,
+      "summary": {
+        "count": 42,
+        "date_range_utc": [
+          "2026-08-24T23:30:50+00:00",
+          "2026-08-31T13:00:00+00:00"
+        ],
+        "engagement_mean": 14.881,
+        "engagement_median": 12.5,
+        "likes_median": 7.0,
+        "feature_rates": {
+          "spiritual": 0.881,
+          "money": 0.405,
+          "science": 0.31,
+          "daily_scene": 0.119,
+          "body_feeling": 0.476,
+          "direct_reader": 0.452,
+          "first_person": 0.667,
+          "immediate_action": 0.31,
+          "offer_cta": 0.762,
+          "question": 0.405,
+          "numbers": 0.476,
+          "quotes": 1.0,
+          "contrast": 0.952,
+          "causal": 0.381,
+          "personal_story": 0.262,
+          "negation_reframe": 0.452,
+          "aphorism": 1.0,
+          "bullet": 0.024,
+          "arrow": 0.214
+        },
+        "style": {
+          "chars": 422.714,
+          "line_count": 15.524,
+          "line_len_mean": 30.106,
+          "sentence_len_mean": 28.473,
+          "short_line_rate": 0.473
+        }
+      }
+    }
+  ],
+  "similarity_to_dara_by_50": [
+    {
+      "range": "1-50_oldest_to_newest",
+      "cosine_similarity": 0.8579,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-01T10:23:55+00:00",
+          "2026-06-11T13:01:29+00:00"
+        ],
+        "engagement_mean": 39.44,
+        "engagement_median": 11.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.72,
+          "money": 0.46,
+          "science": 0.8,
+          "daily_scene": 0.24,
+          "body_feeling": 0.58,
+          "direct_reader": 0.42,
+          "first_person": 0.98,
+          "immediate_action": 0.22,
+          "offer_cta": 0.16,
+          "question": 0.16,
+          "numbers": 0.18,
+          "quotes": 1.0,
+          "contrast": 0.9,
+          "causal": 0.36,
+          "personal_story": 0.4,
+          "negation_reframe": 0.6,
+          "aphorism": 0.98,
+          "bullet": 0.04,
+          "arrow": 0.1
+        },
+        "style": {
+          "chars": 453.92,
+          "line_count": 9.28,
+          "line_len_mean": 74.534,
+          "sentence_len_mean": 28.907,
+          "short_line_rate": 0.32
+        }
+      }
+    },
+    {
+      "range": "51-100_oldest_to_newest",
+      "cosine_similarity": 0.8806,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-11T23:30:40+00:00",
+          "2026-06-20T03:30:14+00:00"
+        ],
+        "engagement_mean": 14,
+        "engagement_median": 12.0,
+        "likes_median": 9.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.3,
+          "science": 0.84,
+          "daily_scene": 0.2,
+          "body_feeling": 0.52,
+          "direct_reader": 0.54,
+          "first_person": 0.98,
+          "immediate_action": 0.5,
+          "offer_cta": 0.2,
+          "question": 0.12,
+          "numbers": 0.26,
+          "quotes": 0.96,
+          "contrast": 0.92,
+          "causal": 0.52,
+          "personal_story": 0.28,
+          "negation_reframe": 0.68,
+          "aphorism": 1.0,
+          "bullet": 0.12,
+          "arrow": 0.22
+        },
+        "style": {
+          "chars": 497.14,
+          "line_count": 10.18,
+          "line_len_mean": 57.854,
+          "sentence_len_mean": 30.381,
+          "short_line_rate": 0.366
+        }
+      }
+    },
+    {
+      "range": "101-150_oldest_to_newest",
+      "cosine_similarity": 0.8491,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-20T06:54:15+00:00",
+          "2026-06-30T11:50:53+00:00"
+        ],
+        "engagement_mean": 38.16,
+        "engagement_median": 15.0,
+        "likes_median": 12.5,
+        "feature_rates": {
+          "spiritual": 0.86,
+          "money": 0.32,
+          "science": 0.48,
+          "daily_scene": 0.2,
+          "body_feeling": 0.56,
+          "direct_reader": 0.4,
+          "first_person": 0.98,
+          "immediate_action": 0.44,
+          "offer_cta": 0.18,
+          "question": 0.1,
+          "numbers": 0.14,
+          "quotes": 0.98,
+          "contrast": 0.98,
+          "causal": 0.32,
+          "personal_story": 0.4,
+          "negation_reframe": 0.64,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 459.62,
+          "line_count": 7.42,
+          "line_len_mean": 84.307,
+          "sentence_len_mean": 28.346,
+          "short_line_rate": 0.266
+        }
+      }
+    },
+    {
+      "range": "151-200_oldest_to_newest",
+      "cosine_similarity": 0.891,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-06-30T13:00:12+00:00",
+          "2026-07-09T06:00:17+00:00"
+        ],
+        "engagement_mean": 35.48,
+        "engagement_median": 13.0,
+        "likes_median": 10.0,
+        "feature_rates": {
+          "spiritual": 0.62,
+          "money": 0.16,
+          "science": 0.48,
+          "daily_scene": 0.12,
+          "body_feeling": 0.72,
+          "direct_reader": 0.66,
+          "first_person": 0.98,
+          "immediate_action": 0.14,
+          "offer_cta": 0.42,
+          "question": 0.16,
+          "numbers": 0.32,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.34,
+          "personal_story": 0.28,
+          "negation_reframe": 0.56,
+          "aphorism": 1.0,
+          "bullet": 0.1,
+          "arrow": 0.5
+        },
+        "style": {
+          "chars": 399.38,
+          "line_count": 10.54,
+          "line_len_mean": 45.873,
+          "sentence_len_mean": 29.838,
+          "short_line_rate": 0.323
+        }
+      }
+    },
+    {
+      "range": "201-250_oldest_to_newest",
+      "cosine_similarity": 0.9103,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-09T09:00:18+00:00",
+          "2026-07-19T11:28:38+00:00"
+        ],
+        "engagement_mean": 60.14,
+        "engagement_median": 22.5,
+        "likes_median": 18.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.76,
+          "science": 0.38,
+          "daily_scene": 0.1,
+          "body_feeling": 0.58,
+          "direct_reader": 0.48,
+          "first_person": 1.0,
+          "immediate_action": 0.26,
+          "offer_cta": 0.92,
+          "question": 0.06,
+          "numbers": 0.46,
+          "quotes": 1.0,
+          "contrast": 1.0,
+          "causal": 0.5,
+          "personal_story": 0.2,
+          "negation_reframe": 0.46,
+          "aphorism": 1.0,
+          "bullet": 0.08,
+          "arrow": 0.3
+        },
+        "style": {
+          "chars": 507.32,
+          "line_count": 11.1,
+          "line_len_mean": 51.709,
+          "sentence_len_mean": 37.053,
+          "short_line_rate": 0.239
+        }
+      }
+    },
+    {
+      "range": "251-300_oldest_to_newest",
+      "cosine_similarity": 0.9231,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-19T13:08:53+00:00",
+          "2026-07-29T11:00:49+00:00"
+        ],
+        "engagement_mean": 30.02,
+        "engagement_median": 17.0,
+        "likes_median": 12.0,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.44,
+          "science": 0.74,
+          "daily_scene": 0.3,
+          "body_feeling": 0.66,
+          "direct_reader": 0.5,
+          "first_person": 0.92,
+          "immediate_action": 0.42,
+          "offer_cta": 0.78,
+          "question": 0.24,
+          "numbers": 0.52,
+          "quotes": 1.0,
+          "contrast": 0.96,
+          "causal": 0.62,
+          "personal_story": 0.34,
+          "negation_reframe": 0.42,
+          "aphorism": 1.0,
+          "bullet": 0.06,
+          "arrow": 0.38
+        },
+        "style": {
+          "chars": 503.48,
+          "line_count": 15.06,
+          "line_len_mean": 39.968,
+          "sentence_len_mean": 36.017,
+          "short_line_rate": 0.311
+        }
+      }
+    },
+    {
+      "range": "301-350_oldest_to_newest",
+      "cosine_similarity": 0.9308,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-07-29T13:19:17+00:00",
+          "2026-08-07T06:00:54+00:00"
+        ],
+        "engagement_mean": 21.7,
+        "engagement_median": 13.0,
+        "likes_median": 8.5,
+        "feature_rates": {
+          "spiritual": 0.92,
+          "money": 0.42,
+          "science": 0.54,
+          "daily_scene": 0.18,
+          "body_feeling": 0.44,
+          "direct_reader": 0.38,
+          "first_person": 0.84,
+          "immediate_action": 0.32,
+          "offer_cta": 0.72,
+          "question": 0.36,
+          "numbers": 0.54,
+          "quotes": 1.0,
+          "contrast": 0.94,
+          "causal": 0.38,
+          "personal_story": 0.46,
+          "negation_reframe": 0.52,
+          "aphorism": 0.98,
+          "bullet": 0.1,
+          "arrow": 0.14
+        },
+        "style": {
+          "chars": 420.96,
+          "line_count": 20.42,
+          "line_len_mean": 22.202,
+          "sentence_len_mean": 32.189,
+          "short_line_rate": 0.627
+        }
+      }
+    },
+    {
+      "range": "351-400_oldest_to_newest",
+      "cosine_similarity": 0.9224,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-07T13:27:01+00:00",
+          "2026-08-16T09:00:31+00:00"
+        ],
+        "engagement_mean": 24.28,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.18,
+          "science": 0.4,
+          "daily_scene": 0.3,
+          "body_feeling": 0.42,
+          "direct_reader": 0.62,
+          "first_person": 0.62,
+          "immediate_action": 0.3,
+          "offer_cta": 0.92,
+          "question": 0.2,
+          "numbers": 0.66,
+          "quotes": 1.0,
+          "contrast": 0.92,
+          "causal": 0.28,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.96,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 442.28,
+          "line_count": 16.36,
+          "line_len_mean": 31.765,
+          "sentence_len_mean": 32.596,
+          "short_line_rate": 0.49
+        }
+      }
+    },
+    {
+      "range": "401-450_oldest_to_newest",
+      "cosine_similarity": 0.9426,
+      "summary": {
+        "count": 50,
+        "date_range_utc": [
+          "2026-08-16T10:59:59+00:00",
+          "2026-08-24T13:00:03+00:00"
+        ],
+        "engagement_mean": 19.68,
+        "engagement_median": 14.0,
+        "likes_median": 8.0,
+        "feature_rates": {
+          "spiritual": 0.94,
+          "money": 0.4,
+          "science": 0.4,
+          "daily_scene": 0.22,
+          "body_feeling": 0.5,
+          "direct_reader": 0.48,
+          "first_person": 0.74,
+          "immediate_action": 0.32,
+          "offer_cta": 0.66,
+          "question": 0.34,
+          "numbers": 0.6,
+          "quotes": 0.96,
+          "contrast": 0.84,
+          "causal": 0.44,
+          "personal_story": 0.34,
+          "negation_reframe": 0.58,
+          "aphorism": 0.98,
+          "bullet": 0.08,
+          "arrow": 0.04
+        },
+        "style": {
+          "chars": 401.82,
+          "line_count": 14.26,
+          "line_len_mean": 29.756,
+          "sentence_len_mean": 27.553,
+          "short_line_rate": 0.528
+        }
+      }
+    },
+    {
+      "range": "451-492_oldest_to_newest",
+      "cosine_similarity": 0.9298,
+      "summary": {
+        "count": 42,
+        "date_range_utc": [
+          "2026-08-24T23:30:50+00:00",
+          "2026-08-31T13:00:00+00:00"
+        ],
+        "engagement_mean": 14.881,
+        "engagement_median": 12.5,
+        "likes_median": 7.0,
+        "feature_rates": {
+          "spiritual": 0.881,
+          "money": 0.405,
+          "science": 0.31,
+          "daily_scene": 0.119,
+          "body_feeling": 0.476,
+          "direct_reader": 0.452,
+          "first_person": 0.667,
+          "immediate_action": 0.31,
+          "offer_cta": 0.762,
+          "question": 0.405,
+          "numbers": 0.476,
+          "quotes": 1.0,
+          "contrast": 0.952,
+          "causal": 0.381,
+          "personal_story": 0.262,
+          "negation_reframe": 0.452,
+          "aphorism": 1.0,
+          "bullet": 0.024,
+          "arrow": 0.214
+        },
+        "style": {
+          "chars": 422.714,
+          "line_count": 15.524,
+          "line_len_mean": 30.106,
+          "sentence_len_mean": 28.473,
+          "short_line_rate": 0.473
+        }
+      }
+    }
+  ],
+  "top_posts": [
+    {
+      "root_id": "3913876570913900014",
+      "datetime_utc": "2026-06-07T00:01:07+00:00",
+      "engagement_score": 506,
+      "likes": 473,
+      "text": "引き寄せの法則はこう。\n\nあなた「恋人が欲しい」\n潜在意識『わかりました。恋人が欲しいという現実を作りますね』\n\nあなた「今すでに愛されている安心感の中にいる」\n潜在意識『わかりました。愛されている安心感にふさわしい現実を作りますね。素敵な出会いも用意しておきます』\n\n似てるようで、全然違う。注意点があって、\n\n「恋人が欲しい」と言っている限り、脳は「恋人がいない現実」を忠実に再現し続ける。本当に欲しいのは恋人じゃなく、恋人を得た時の「安心感」や「満ち足りた感覚」。お金も同じ。欲しいのはお金じゃなく、お金があった時の「豊かさ」や「自由な感覚」。\n\nだから順番はこう。\nモノや状況を追いかける前に、その感情を先に自分の中に作ること。\n感情が先、現実が後。その順番を間違えている限り、どれだけ願っても現実は動き出さない。今この瞬間から、欲しい感情の中に先に入ってみて。\n「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3932176764785212791",
+      "datetime_utc": "2026-07-02T06:00:20+00:00",
+      "engagement_score": 411,
+      "likes": 383,
+      "text": "美輪明宏さんが、長年ずっと言い続けてきた言葉がある。「宇宙は、いい人にもわるい人にも、平等にエネルギーを流している」これ、慰めの言葉じゃない。宇宙の「仕組み」の話。宇宙は、\n\nあなた「不安で仕方がない」\n宇宙→ わかりました、不安になる現実を用意しますね\n\nあなた「大丈夫だと思う」\n宇宙→ わかりました、大丈夫な現実を用意しますね\n\n判定してない。裁いてない。ただ、出したものを、そのまま返してるだけ。\n不幸な人が多いのは、宇宙が意地悪だからじゃない。\n「不安」を出す回数が、「安心」を出す回数より多いだけ。宇宙は0.1秒も迷わず、出したものをそのまま増幅して返してくる。裁かれてるんじゃない。ただ、忠実に反応されてるだけ。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3943863829453337102",
+      "datetime_utc": "2026-07-18T09:00:26+00:00",
+      "engagement_score": 408,
+      "likes": 396,
+      "text": "信じられないかもしれないけど、「私は愛されて当然」「私は幸せになって当然」「私は豊かになって当然」って思っている人は、本当に、その通りの現実になっていく、\n\n脳は、「私はこういう存在だ」というセルフイメージを、前提として信じ込む。そして、その前提に合う現実を、無意識に探し始める。「当然」だと思っていれば、脳はその根拠を探して集めてくる。「どうせ無理」だと思っていれば、脳はその根拠を探して集めてくる。どちらも、同じ仕組みで動いてる。\n\n一度、自分の口癖をチェックしてみて。\n「どうせ私なんて」\n「そんなにうまくいくわけがない」\n「贅沢言っちゃいけない」\nこういう言葉、1日に何回、口にしてる?その口癖こそが、脳に渡してる「前提」そのもの。\n\n▶︎自分の前提のズレに気づいた人が、現実の構造を理解しただけで現実が変わったnote『現実が動き出す構造の教科書』(特典:現実化セルフチェック&ロードマップシート付き)固定投稿のリンクから読めます。\n「これ、私のことだ」と思ったら保存しておいて。\n間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3963251696545365509",
+      "datetime_utc": "2026-08-14T03:00:40+00:00",
+      "engagement_score": 348,
+      "likes": 317,
+      "text": "ニコラ・テスラが使っていた「369メソッド」の本当の意味、ほとんどの人が知らない。\n\n朝3回、昼6回、夜9回、同じ言葉を書く。\n\nなぜこの回数なのか。\n\n脳が「これが現実だ」という前提を書き換えるには、1日の意識が起きている時間帯（朝・昼・夜）に繰り返し同じ情報を入れることが必要。\n\n「欲しいな」と思う回数じゃなく、「すでにある」という定義を一日中持ち続けること。\n\n欲しいと願う = 今ない、という定義を毎日更新している状態。\nすでにあると定義する = 脳がその証拠を集め始める状態。\n\nテスラが気づいていたのは、回数じゃなかった。「意識の中に何を定義し続けるか」だった。\n\n負のループから抜けられない時は、いくつかの罠にハマっているから。詳しくは「現実が動き出す構造の教科書」を読んでね。【現実化ロードマップ＆セルフチェック】も受け取れます。\nhttps://note.com/uzu358/n/n5218f03789f6"
+    },
+    {
+      "root_id": "3925744696286977102",
+      "datetime_utc": "2026-06-23T09:00:57+00:00",
+      "engagement_score": 323,
+      "likes": 321,
+      "text": "お金の引き寄せの法則は\n\nあなた「1000万円欲しい」\n宇宙『わかりました。でも「無理かもしれない」という疑いが強く出ているので、信号が分裂していますね』\n\nあなた「まず100万円」\n潜在意識『わかりました。疑いが少ないので、すぐに信号を揃えられますね。叶える練習、始めましょう』\n\n似てるようで、全然違う。\n\n願いが大きいほど、今の自分とのギャップが大きく見える。ギャップが大きいほど、脳は自動的に「無理かも」という疑い・恐れを強く出す。これがブレーキ。大きな願いほど、強いブレーキが踏まれやすい構造になっている。小さい願いはギャップが小さいから、ブレーキが弱い。信号がすぐに1本に揃い、現実が動きやすい。\nそして小さい願いが叶うたびに、脳は「願ったものは叶う」と学習していく。この学習の積み重ねが、後の大きな願いを叶える土台になる。\n大きく願う前に、まず小さく願って、叶う感覚を脳に教えてあげてみて。\n「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3946173608145002755",
+      "datetime_utc": "2026-07-21T13:29:34+00:00",
+      "engagement_score": 315,
+      "likes": 311,
+      "text": "嘘みたいな話だけど、素敵なパートナーを引き寄せたかったら、寝る前の5分間、ニタニタ妄想するだけで、叶っていくよ。絶対にやってはいけないことが１つだけあって、\n\n寝る前は、脳が「ゴールデンタイム」に入る時間。覚醒でも、深い眠りでもない、その狭間の状態では、脳の「疑う機能」が緩んで、イメージが、そのまま前提として入りやすくなる。だから、イライラや不安のまま眠りにつくのではなくて、「こうなったら嬉しい」叶った未来を想像して、ニタニタするだけでいい。大げさなことじゃなくていい。\n\n好きな人から連絡が来て嬉しい顔。\n欲しかったものが手に入って驚く顔。\n理想の毎日を過ごしてる自分。\n想像して、ニタニタするだけ。眠りに落ちる直前のその感覚が、そのまま、次の日への前提になっていく。同じシーンが現実化していったりするの。\nもう１つ本当のことを言うと、イメージ出来るってことは、その未来は確実に存在するの。あとは、願いに対してブレーキをかけないこと！\n▶︎もし叶わないとしたら、ブレーキをかけているから！そのブレーキは、\nnote『現実が動き出す構造の教科書』に全部書いてある！\n(特典:現実化セルフチェック&ロードマップシート付き)\n固定投稿のリンクから読めます。\n「これ、私のことだ」と思ったら保存しておいて。\n間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3940240014827554905",
+      "datetime_utc": "2026-07-13T09:00:34+00:00",
+      "engagement_score": 295,
+      "likes": 284,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「この世は、手放すのが先よ」\n\n頑張るのをやめると、現実が動きだし\n証明するのをやめると、認められだし\n急ぐのをやめると、物事が進みだし\n比べるのをやめると、満たされだし\n確認するのをやめると、叶いだし\nコントロールするのをやめると、流れが戻ってくる\n\nでも、宇宙が何度も繰り返していたのは、\n\n「自分を信頼しなさい」ということでした。頑張るのも、証明するのも、急ぐのも、比べるのも、確認するのも、コントロールするのも。全部、根っこは同じ。「自分でなんとかしないと、何も起こらない」という前提。宇宙いわく、これ実は、真面目さじゃなくて、「宇宙を信頼していない」を、宇宙に教え込んでるだけ。厄介なのは、この不信の前提が、「しっかりしてる人」の顔をして出てくるから、本人が気づきにくいこと。宇宙は最後にこう言っていた。「今日、力んだ瞬間があったら一回だけでいいから、\"任せてみる\"って手を開いてみ」信頼のない手放しは、ただの我慢になるだけ。\n\n引き寄せ迷子に好評の▶︎note『現実が動き出す構造の教科書』固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。\n間もなく豊かさの構造でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3915598066107356333",
+      "datetime_utc": "2026-06-09T09:01:25+00:00",
+      "engagement_score": 288,
+      "likes": 268,
+      "text": "頑張らない方が、結局強い。\nお金がどんどん流れ込んできた時、私は何をしていたか。\n\nがむしゃらに働いていた\nトイレ掃除を頑張っていた\n毎朝神社に参っていた\n全部違う。\n\n信じられないかもしれないけど、何もしていなかった。\nただ一つだけ、\n\n「すでに豊かである」という前提で、毎日を過ごしていた。不足の前提で頑張っても、不足の現実が引き寄せられるだけ。\n「まだ足りない」\n「もっと稼がないと」\n「頑張らないと手に入らない」\nこの状態でどれだけ行動しても、脳は「足りない現実の証拠」を日常から拾い続ける。トイレを磨くほど、神社に参るほど、不足の前提が強化されていくだけ。ここが重要で、\n\n変わったのは、行動じゃなく前提だった。「すでに豊か」「すでに満たされている」「お金は必要な時に必要な分だけ入ってくる」\nその感謝と安心感が当たり前になった瞬間、脳のフィルターが切り替わり、チャンスもお金の流れも、同じ日常の中から勝手に見え始めた。豊かさは行動の量じゃなく、前提の質が引き寄せる。頑張ることをやめて、まず「すでにある」という前提を一つだけ内側に置いてみて。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3940399255706111941",
+      "datetime_utc": "2026-07-13T14:16:57+00:00",
+      "engagement_score": 280,
+      "likes": 264,
+      "text": "好きな人からの連絡が来ない時、「もっと連絡しよう」でもなく、「他の人に目を向けよう」でもなく、「駆け引きを学ぼう」でもなく、一番効いたある方法が、\n\n「もう十分大切にされている記憶を、声に出して数える」ことでした。たった3つでいい。「前に、体調を気にかけてくれた」「一緒にいる時、ちゃんと笑ってくれた」「私の話を、覚えていてくれた」声に出すと、脳は「愛されてない証拠」ではなく「愛されてる証拠」を探し始める。\n\n脳科学的には、不安な時、脳は「危険を早く見つける」ために、悪い可能性ばかりを優先的に集めてしまう。でも「もう大切にされている」と一度でも脳に伝えると、探す先が「不安になる理由」から「安心できる理由」に切り替わる。安心は、関係が進んだ後に感じるものじゃなく、先に前提として持つもの。\n\nこの「前提の切り替え方」を、教科書にまとめました。▶︎引き寄せ迷子に好評のnote『現実が動き出す構造の教科書』固定投稿のリンクから読めます。\n「これ、私のことだ」と思ったら保存しておいて。\n間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3924355639229430435",
+      "datetime_utc": "2026-06-21T11:01:09+00:00",
+      "engagement_score": 243,
+      "likes": 232,
+      "text": "夏至の引き寄せの法則は、\n\nあなた「今日は夏至だから、何か良いことが起きるはず」\n宇宙『わかりました。\n　　　何かが起きるのを待っている現実を作り続けますね』\n\nあなた「今日は夏至。これを区切りに、\n　　　　私はもう愛されて当然という前提で生きる」\n宇宙『わかりました。\n　　　愛されて当然の前提の現実を作りますね』\n\n似てるようで、全然違う。\n\n吉日や夏至を「特別な力がある日」として外側に期待するほど、脳は「まだ何も起きていない」という不足の状態を作り続ける。\n流れに乗る人は、その日を前提を切り替えるスイッチとして使うだけ。\n区切りの力を使って、内側の前提を一段階上げる。それだけで、その後の日常の選択・行動・出会いが変わり始める。吉日に何が起きるかを待つんじゃなく、吉日を使って何を変えるかを決めてみて。\n「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3936676907886149421",
+      "datetime_utc": "2026-07-08T11:01:19+00:00",
+      "engagement_score": 222,
+      "likes": 209,
+      "text": "お金の不安が消えないとき、「もっと稼ごう」でもなく、「節約しよう」でもなく、「引き寄せノートを書こう」でもなく、一番効いたある方法が、\n\n「今すでにあるものを、声に出して数える」こと。たった3つでいい。「今日、電気が使えた」「温かいご飯を食べられた」「屋根の下で眠れた」声に出すと、脳は「欠けている」ではなく「満たされている」を前提として処理し始める。\n\n脳科学的には、「感謝」は不安を作る扁桃体の反応を数少なく静められる感情のひとつ。不安や欠乏を感じてる時、脳は「もっと必要」という前提で情報を集め続けます。でも「もう十分ある」と一度でも脳に伝えると、探す先が「欠けているもの」から「増えていくもの」に切り替わる。豊かさは、稼いだ後に感じるものじゃなく、先に前提として持つもの。\n\nこの「前提の切り替え方」を、教科書にまとめました。▶︎note『現実が動き出す構造の教科書』固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3940964944732872124",
+      "datetime_utc": "2026-07-14T09:00:52+00:00",
+      "engagement_score": 221,
+      "likes": 189,
+      "text": "好きな人が、他の誰かと楽しそうにしてるのを見て嫉妬した時、「もっと自分を磨こう」でもなく、「嫉妬なんてダメだと抑えよう」でもなく、「気にしないふりをしよう」でもなく、一番効いたある方法が、\n\n「その嫉妬は、自分の本音を教えてくれてるだけと認める」ことでした。嫉妬してる時、実は相手の「状態」に反応してる。\n楽しそうに笑ってる。\n大切にされてる。\n安心してる。\nその状態を、本当は自分も欲しいと思ってるだけ。\n\n脳科学的には、嫉妬を抑えるほど、その感情はエネルギーとして内側に残り続ける。でも「これ、私も本当は欲しいんだ」と一度でも認めると、探す先が「相手を責める理由」から「自分が本当に望んでること」に切り替わる。\n嫉妬は、消すものじゃなく、望みを教えてくれるサイン。\n\n望みを現実化させる▶︎引き寄せ迷子に好評のnote『現実が動き出す構造の教科書』固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3938700004801814870",
+      "datetime_utc": "2026-07-11T06:00:51+00:00",
+      "engagement_score": 207,
+      "likes": 197,
+      "text": "お金の引き寄せの法則はこう\n\nあなた「お金が欲しい。使うと減る」\n→ 宇宙『わかりました。お金がない現実を、\n　使うと減る現実を忠実に再現しますね』\n\nあなた「今すでに、満たされている、\n　　　　使っても循環して入ってくる」\n→ 宇宙『わかりました。その安心感にふさわしい\n  現実と使っても入ってくる現実を用意します。\n　お金の流れも、用意しておきます』\n\n似てるようで、全然違う。\n注意点があって、\n\n「お金が欲しい」と言っている限り、脳は「お金がない現実」を忠実に再現し続ける。本当に欲しいのは、お金そのものじゃなく、お金があった時の「安心感」や「自由な感覚」。恋愛も同じ。欲しいのは相手じゃなく、愛されている安心感。だから順番はこう↓\n\nモノや金額を追いかける前に、その感情を先に自分の中に作ること。感情が先、現実が後。今この瞬間から、欲しい感情の中に先に入ってみて。\nもうすぐ「豊かさの構造」、お知らせします。今のうちに、フォローしておいてね。「これ、私のことだ」と思ったら保存しておいて。@sora_shikumi"
+    },
+    {
+      "root_id": "3937174824401646095",
+      "datetime_utc": "2026-07-09T03:30:35+00:00",
+      "engagement_score": 201,
+      "likes": 195,
+      "text": "正直な話、お金がない時ほど、「お金がありすぎて、何に使おう」とワクワクしていると、本当にお金が入ってくるようになる。信じないかもしれないけど、\n\n脳には「網様体賦活系(RAS)」という、情報の取捨選択をするフィルターがある。「お金がない」を強く意識すると、脳は「欠けている証拠」ばかりを拾い集める。でも「ありすぎて使い道に困る」をイメージすると、脳は「すでにある前提」に基づいて情報を探し始める。同じ現実の中にいても、フィルターが変われば、見えるチャンスも変わってくる。疑う時間があるなら、まず一度、脳を「豊かさモード」に切り替えてみるといい。\n\nあなた「お金がない」\n→ 脳『わかりました。ない証拠を探し続けますね』\nあなた「ありすぎて何に使おうかな〜」\n→ 脳『わかりました。すでにある前提で、情報を探し始めますね』\n同じ現実を生きていても、脳に渡す前提が変わるだけで、見えてくる現実がまるで変わる。\n\nこの「前提の変え方」を、教科書にまとめました。▶︎note『現実が動き出す構造の教科書』固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3970680739226435452",
+      "datetime_utc": "2026-08-24T09:00:51+00:00",
+      "engagement_score": 192,
+      "likes": 186,
+      "text": "宇宙のテストってこんな感じ。\n\n信じられないかもしれないけど、\nプレゼントを貰った時、\n誰かが急にジュースを奢ってくれた時、\n\nそれはラッキーじゃなかった。\n宇宙のテスト配送だった。\n\n宇宙はいきなり100万円は送らない。\nまず小さな形で届けてくる。\n\nそしてあなたに聞いている。\n「どうぞ。受け取れますか？」\n\n「ありがとう、受け取りました」と返すと\n次はもう少し大きな形で来る。\n\n「貰えません」と驚くと\n宇宙は配達を一旦止める。\n\n臨時収入が続く人と\n1回来てそれっきりの人の違いは\nここだけ。\n\n目標は「ありえない」を\n「ああ来たね、ありがとう」に変えること。\n\n「頑張るほどお金が増えない人へ｜豊かさを止めている「前提」の書き換え方」\nhttps://note.com/uzu358/n/nf66f25c8074b?sub_rt=share_pb"
+    },
+    {
+      "root_id": "3943230196115130444",
+      "datetime_utc": "2026-07-17T12:01:31+00:00",
+      "engagement_score": 167,
+      "likes": 158,
+      "text": "正直な話、宇宙に願いをオーダーしたら、何度も強く願う必要はない。あとは、楽しいことしてウキウキしていれば、勝手に叶っていく。一つ言っておくと、\n\nレストランで注文したら、あとは料理が来るのを待つだけ。これも、それと同じルール。だから本当なの?と疑う時間があるなら、まずは試してみるといい。みんながやりがちなのが、\n\n「オーダーしたのに、まだ来ないんですけど」って、何度も確認しちゃうこと。これ、注文した直後に、何度もキッチンを覗きに行くようなもの。\n確認するほど、「まだ来てない」という前提が強くなる。前提が変われば『選択』が変わる選択が変われば『行動』が変わる行動が変われば『現実』が変わる\nつまり、オーダーした後の「待ち方」を変えない限り、現実は変わらない。\n\n現実が変わらない理由は１つじゃない。全部まとめた。私が一番最初に知りたかったこと。▶︎引き寄せ迷子に好評のnote『現実が動き出す構造の教科書』固定投稿のリンクから読めます。\n「これ、私のことだ」と思ったら保存しておいて。\n間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3914208845992435838",
+      "datetime_utc": "2026-06-07T11:01:17+00:00",
+      "engagement_score": 158,
+      "likes": 149,
+      "text": "お金の引き寄せの法則はこう。\n\nあなた「お金が増えたら安心するのに」\n宇宙『わかりました。お金が増えたら安心できる現実、つまり今はまだ足りない現実を作りますね』\n\nあなた「今あるものに目を向けて、先に安心する」\n宇宙『わかりました。すでに豊かな現実を作りますね。そこにふさわしいお金の流れも用意します』\n\n似てるようで、全然違う。\n\n「お金が増えたら安心する」と思っている限り、脳は「まだ足りない今」を現実として作り続ける。収入が増えても「まだ足りない」が続くのはそのため。脳は状態に従う。不足の状態のまま願っても、不足の現実がループするだけ。重要なことは、\n\nお金を増やす前に、今先に安心すること。順番はこれだけ。安心した状態が冷静な判断を生み、良い選択が自然と増え、現実が少しずつ変わり始める。\n豊かさを引き寄せたいなら、お金より先に自分の状態を整えてみて。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3930002555023498147",
+      "datetime_utc": "2026-06-29T06:00:34+00:00",
+      "engagement_score": 157,
+      "likes": 149,
+      "text": "美輪明宏さんが、長年人生相談で伝えてきた言葉がある。「不幸は自分が作っている」これ、厳しい言葉に聞こえるかもしれないけど、本質は逆、\n\n不幸を誰かのせいにしている限り、自分では変えられない。でも自分が作っているとわかれば、自分で変えられる。脳科学的に見ても、これは正しい。\n脳は、自分が採用している前提の証拠を日常から拾い続ける仕組みになっている。「私は不幸だ」という前提があれば、不幸の証拠が、「私は幸せだ」という前提があれば、幸せの証拠が見つかる。\n美輪さんが伝えてきたのは、占いやおまじないじゃなく、自分の在り方が現実を作るという、とてもシンプルな構造だったんだと思う。\n今日、自分がどんな前提で1日を見ているか、一度観察してみよ。これ、私のことだと思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3944317029393981747",
+      "datetime_utc": "2026-07-19T00:00:52+00:00",
+      "engagement_score": 142,
+      "likes": 135,
+      "text": "【ユダヤの大富豪から学んだお金の使い方】\n\n①消耗品には、できるだけお金をかけない\n②資産価値が上がるものにお金をかける\n(例:金、時計など)\n③資産価値がないものには、お金をかけない\n④人が喜ぶものに、お金を使う\n⑤人の役に立つものに、お金を使う\n\nポイントは、資産価値が高いもの・上がるものにお金をかけること。\nこれ、単なる節約術じゃない。「何にお金を使うか」の基準を先に持ってるかどうかの話。基準がないまま使うと、お金はただ減っていくだけになる。\n基準を持って使うと、お金は「消える」んじゃなく、「形を変えて残る」ようになる。私が出逢った豊かな人は、みんな当たり前に、こんな思考だった。\n\n▶︎引き寄せがわからなくなってしまうのは、やり方が間違っていたんじゃなくて、アクセルとブレーキを踏んでるから。ブレーキを外せば、動き出したnote『現実が動き出す構造の教科書』\n(特典:現実化セルフチェック&ロードマップシート付き)\n固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3927194488410113435",
+      "datetime_utc": "2026-06-25T09:01:26+00:00",
+      "engagement_score": 129,
+      "likes": 116,
+      "text": "これ気づいてない人多いけど、宇宙は言葉より状態に反応する。引き寄せでは「内側が先」と言われる。でも現実には、お金がない。連絡が来ない。夫婦関係が悪い。「どうやって現実を無視するの？」と苦しくなる人が多いけど、\n\n現実を無視する必要はない。現実を見ることと、現実に意味を足すことは、全く別の話。「お金が少ない」のは事実の確認。でもそこに「やっぱり私はダメだ」「どうせ豊かになれない」と意味を加えた瞬間、それは不足の状態として宇宙に発信され続ける。宇宙は「お金が少ない」という事実を見ていない。「やっぱりダメだ」と思っているあなたの状態を見ている。ここからが本質で、\n\n現実は結果。原因じゃない。今見ている現実は、過去の状態が作った結果にすぎない。苦しいのは現実そのものじゃなく、現実を見て自分を否定するループに入っているから。現実は否定しなくていい。\nただ、現実を見た後に「だから私は」と続ける言葉を、少しだけ変えてみて。「お金が少ない。だから今はこの瞬間を整える時間」その小さな言い換えが、ループを断ち切る入り口になる。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3952621420425320118",
+      "datetime_utc": "2026-07-30T11:00:13+00:00",
+      "engagement_score": 126,
+      "likes": 117,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「執着を手放しなさい」は、\n「諦めなさい、じゃないよ」\n\nあなた「手放せば叶うって聞いた」\n宇宙　 「その通り」\n\nあなた「手放そうとするほど、もっと欲しくなる」\n宇宙 「それ、\"手放そうとしている\"が前提になってるから。脳がまだ\"持っていない証拠\"を集め続けてる」\n\nあなた「じゃあどうすれば手放せる？」\n宇宙　「\"なくても大丈夫な側にいる\"を先に前提にすること。手放す努力より、先にそこに立つだけ」\n\n「手放す」とは、諦めることじゃない。\n「なくても自分は大丈夫」という前提に立つこと。\n\n手放そうとする努力は、\n「まだ手放せていない」という前提を強化する。\n\n引き寄せは頑張るものじゃなくて、\nどこに立っているかが全て。\n\n引き寄せを学んでも変わらない理由が1つだけある。それを固定投稿にまとめました。@sora_shikumi"
+    },
+    {
+      "root_id": "3943954430974666779",
+      "datetime_utc": "2026-07-18T12:00:27+00:00",
+      "engagement_score": 121,
+      "likes": 112,
+      "text": "宇宙は、よくこう教えてくれる。\n「好かれたいなら、本音を隠すのをやめてみ」\n\n我慢するのをやめると、大切にされだし\n合わせるのをやめると、心地よさが増し\n察するのをやめると、対等になれて\n本音を隠すのをやめると、安心が増し\n嫌われないようにするのをやめると、素直になれて\n自分を後回しにするのをやめると、愛される\n\nでも、宇宙が何度も繰り返していたのは、\n\n「本音を隠すのは、優しさじゃない」ということでした。\n嫌われたくなくて、本音を飲み込む。これ、優しさに見えるけど、実は「相手を信頼していない」だけ。宇宙いわく、これ実は、思いやりじゃなくて、\n「本当の自分を見せたら嫌われる」を、宇宙に教え込んでるだけ。厄介なのは、\n\nこの不信の前提が、「気配り上手な人」の顔をして出てくるから、本人が気づきにくいこと。宇宙は最後にこう言っていた。「今日、我慢しそうになったら\n一回だけでいいから、「本当はこう思ってる」って言ってみて。本音を隠した優しさは、ただの我慢になるだけ。保存しておいて、また見返してね。間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3964882361620052783",
+      "datetime_utc": "2026-08-16T09:00:31+00:00",
+      "engagement_score": 115,
+      "likes": 95,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「あの人への執着を手放しなさい」は、\n「あの人を諦めなさい、じゃないよ」\n\nあなた「手放せば引き寄せられるって聞いた」\n宇宙　「その通り」\n\nあなた「でも手放そうとするほど、もっと気になってしまう」\n宇宙　「それ、\"手放そうとしている\"が前提になってるから。脳がまだ\"あの人がいない証拠\"を集め続けてる」\n\nあなた「じゃあどうすれば手放せる？」\n宇宙　「\"連絡が来なくても、私は大丈夫\"を先に前提にすること。手放す努力より、先にそこに立つだけ」\n\n「手放す」とは、あの人を諦めることじゃない。「あの人がいなくても自分は大丈夫」という前提に立つこと。\n\n手放そうとする努力は、「まだ手放せていない」という前提を強化する。\n\n恋愛の引き寄せは頑張るものじゃなくて、どこに立っているかが全て。\n\n間もなく恋愛の構造も公開するよ。気になる方は、フォローして待っててね。"
+    },
+    {
+      "root_id": "3951896950685092250",
+      "datetime_utc": "2026-07-29T11:00:49+00:00",
+      "engagement_score": 113,
+      "likes": 107,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「あなたが引き寄せられないのは、\n 信じ方が足りないからじゃないよ」\n\nあなた：「好きな人に振り向いてほしい」\n宇宙：「わかった。でも今、\"どうせ私には無理\"\n という前提が強く出てる。\n　　　　脳がその証拠だけを集め続けてるよ」\n\nあなた：「じゃあもっとアファメーションする」\n宇宙：「前提が変わらないまま言葉を重ねても、\n　　　　脳は\"やっぱり無理\"の証拠を拾い続ける」\n\nあなた：「どうすればいい？」\n宇宙：「テクニックを増やすんじゃなくて、\n　　　　前提の構造を変えること。それだけ」\n\n引き寄せが機能しない理由は、信じる力でも、方法でも、努力でもない。\n「変わらない前提」の上で正しいことをやり続けているから。\n恋愛も、お金も、人間関係も全部、同じ構造で動いてる。\n\n引き寄せを学んでも変わらない理由が1つだけある。\nそれを固定投稿にまとめました。@sora_shikumi"
+    },
+    {
+      "root_id": "3941523617309910365",
+      "datetime_utc": "2026-07-15T03:30:51+00:00",
+      "engagement_score": 113,
+      "likes": 109,
+      "text": "会いたい気持ちが強すぎて、つい連絡しすぎてしまう時、「我慢しよう」でもなく、「既読無視で仕返ししよう」でもなく、「距離を置く方法を調べよう」でもなく、一番効いたある方法が、\n\n「今のこの気持ちは、不安からか安心からか」を、声に出して確認することでした。たった3つでいい。\n「今、私は寂しいから連絡したい」\n「今、私は不安を消したくて連絡したい」\n「今、私は本当は安心してるのに、癖で連絡したい」\n声に出すと、脳は「衝動のまま送る自分」ではなく「一度立ち止まれる自分」を前提として処理し始める。\n\n脳科学的には、不安な時、脳はすぐに行動して確認したくなる。確認する行為が、一時的に不安を下げるからだ。でも「これは不安からの連絡だ」と一度でも脳に伝えると、衝動と行動の間に、少しの間ができる。安心は、確認した後に感じるものじゃなく、確認する前に、先に持っておくもの。\nこの「衝動と前提の見分け方」を、教科書にまとめました。\n▶︎引き寄せ迷子に好評のnote『現実が動き出す構造の教科書』\n固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3916322875853928604",
+      "datetime_utc": "2026-06-10T09:01:30+00:00",
+      "engagement_score": 109,
+      "likes": 105,
+      "text": "失うものが何もなくなった瞬間、お金が動き出す。自己破産寸前まで追い詰められた人が、なぜかV字回復していく。これ、偶然じゃない。全員に共通していたことが一つだけある。引き寄せの法則はこう、\n\nあなた「お金がない。なんとかしなきゃ。破産だけは避けたい」\n宇宙『わかりました。お金がなくて必死に頑張っている現実を作り続けますね』\nあなた「もう破産でもどっちでもいい。失うものは何もない」\n宇宙『わかりました。執着が取れましたね。豊かさを受け取れる現実を作りますね』\n似てるようで、全然違う。\n\nギリギリまで頑張っている状態は、裏を返せば「お金がない現実」に執着し続けている状態。執着のベースには必ず不足の前提がある。不足の前提で頑張るほど、脳は不足の証拠を集め続け、同じ現実がループしていくだけ。「どっちでもいい」と手放した瞬間、執着が取れる。執着が取れると、不足の前提が消える。不足の前提が消えた瞬間、現実が一気に動き出す。失うものが何もなくなった瞬間が、一番豊かさに近い場所。お金を追いかける前に、まず執着を手放してみて。「これ、私のことだ」と思ったら保存しておいて。\n幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3957544149032507558",
+      "datetime_utc": "2026-08-06T06:00:48+00:00",
+      "engagement_score": 104,
+      "likes": 81,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「叶う直前に、ほとんどの人が諦めてしまう場所がある。 私はそれを、踊り場と呼んでいる。」\n\n踊り場にいる時のサイン\n\n「もっといい方法があるかも」と次を探し始める \n「最近変化した気がしない」と焦りが出てくる \n「やっぱりこれも違うかも」と前に戻ろうとする\n\n宇宙から見ると、この時期こそが「変化の手前」なのに ほとんどの人が、ここで方向を変えてしまう。\n\n叶う直前ほど、疑いが強くなる。\n\nそれは失敗のサインじゃない。 脳の防衛本能が「変化を止めよう」と最大限に働いているサイン。\n\n踊り場現象のこと、もっと詳しく書いた。 読むと「あ、だからずっと変わらなかったのか」となります。\n\n【現実が動き出す構造の教科書】 @sora_shikumi の固定投稿から読んでください。"
+    },
+    {
+      "root_id": "3942535300698135836",
+      "datetime_utc": "2026-07-16T13:00:53+00:00",
+      "engagement_score": 101,
+      "likes": 97,
+      "text": "理想のパートナーの引き寄せの法則はこう\n\nあなた「理想の人が欲しい。でも自分には勿体無い」\n→ 宇宙『わかりました。理想の人が現れない現実と\n現れても手放してしまう現実を忠実に再現しますね』\n\nあなた「今すでに理想の人にふさわしい自分でいる」\n→ 宇宙『わかりました。そのふさわしさに合う現実と\n出会いも用意します。関係が続く流れも用意します』\n\n似てるようで、全然違う。\n注意点があって、\n\n「理想の人が欲しい」と言っている限り、脳は「まだ現れていない現実」を忠実に再現し続ける。本当に欲しいのは、理想の人そのものじゃなく、その人といる時の「安心感」や「自分らしくいられる感覚」。\nだから順番はこう↓\n\n理想の相手を追いかける前に、その感情を先に自分の中に作ること。\n状態が先、現実が後。\n今この瞬間から、「大切にされている」感覚の中に、先に入ってみて。\n▶︎引き寄せ迷子に好評のnote『現実が動き出す構造の教科書』\n固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。間もなく『豊かさの構造』でも解説していくので、今のうちフォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3935166111037988298",
+      "datetime_utc": "2026-07-06T08:59:38+00:00",
+      "engagement_score": 97,
+      "likes": 89,
+      "text": "美輪明宏さんが、長年ずっと言い続けてきた言葉がある。\n\n「宇宙は、いい人にもわるい人にも、\n平等にエネルギーを流している」\n\nこれ、実は「比率」の話でもある。\n宇宙は、\n\nあなた「不安90%、安心10%で1日過ごす」\n→ 宇宙『わかりました。90%の方を、現実として採用しますね』\n\nあなた「安心60%、不安40%で1日過ごす」\n→ 宇宙『わかりました。60%の方を、現実として採用しますね』\n\n宇宙は、良い悪いを見てない。多数決で見てるだけ。1回の強い願いより、\n毎日の小さな前提の比率の方が、現実への影響力は大きい。見るべきは「何を願ったか」じゃなく、「今日、何を多く出していたか」\n願いが叶わない理由を細かくまとめてます。叶う方法より、叶う邪魔を止める方が勝手に叶っていくのよね。▶︎note『現実が動き出す構造の教科書』\n固定投稿のリンクから読めます。\n「これ、私のことだ」と思ったら保存しておいて。\n幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3952274494266101892",
+      "datetime_utc": "2026-07-29T23:30:56+00:00",
+      "engagement_score": 95,
+      "likes": 89,
+      "text": "宇宙は、よくこう教えてくれる。\n\n「お金が入ってこないのは、\n　稼ぎ方が足りないからじゃないよ」\n\nあなた：「もっとお金が欲しい」\n宇宙：「わかった。でも今、\n　　　　\"お金は足りない\"という前提が強く出てる。\n　　　　脳がその証拠だけを集め続けてるよ」\n\nあなた：「じゃあもっと頑張って稼ぐ」\n宇宙：「\"足りない\"が前提のまま頑張っても、\n　　　　脳は\"まだ足りない証拠\"を拾い続ける。\n　　　　お金が入ってきても\"また減る\"に目が向く」\n\nあなた：「どうすればいい？」\n宇宙：「稼ぎ方を変えるんじゃなくて、\n　　　　\"もう十分ある側にいる\"を前提に置くこと。それだけ」\n\n宇宙の法則で言うと、お金は「足りない人」には流れていかない。「もう十分ある側にいる」前提の人のところに自然と流れていく。収入が増えた時だけ豊かさを感じるのをやめる。今日、すでにあるものを一つ見てみる。それが、前提を切り替える最初の一歩。\n\n引き寄せを学んでも変わらない理由が1つだけある。それを固定投稿にまとめました。@sora_shikumi"
+    },
+    {
+      "root_id": "3957694984661159323",
+      "datetime_utc": "2026-08-06T11:00:29+00:00",
+      "engagement_score": 91,
+      "likes": 79,
+      "text": "「また引き寄せが叶わなかった」と感じた時、「新しい引き寄せの本を読もう」でもなく、 「YouTubeで方法を調べよう」でもなく、 「もっと引き寄せノートを増やそう」でもなく、一番最初にやること、\n\n「今の私は、不足から願っているか、可能性から願っているか」 声に出して確認する。たった一問でいい。\n\n【不足から願っている時のサイン】\n 「まだ叶っていない」という焦りがある \n「次の方法を試さないと」という不安がある \n「他の人は叶っているのに」という比較がある\n\n【可能性から願っている時のサイン 】\n「叶ったらどんな感じかな」というワクワクがある \n「今の私でも大丈夫」という感覚がある \n「流れに乗ればいい」という軽さがある\n\n引き寄せが叶わない時、 方法が間違っているわけじゃない。\n出発点が「不足」になっているだけ。出発点を「可能性」に戻すだけで、 同じ方法が、全く違う結果をもたらす。\n\n脳科学（RAS）的にも、前提が切り替わると 拾う現実が変わるから。\n\nこの「出発点の構造」をまとめたのがこのnote。\n\n【現実が動き出す構造の教科書】 @sora_shikumi の固定投稿から読んでください。"
+    },
+    {
+      "root_id": "3924870809718353240",
+      "datetime_utc": "2026-06-22T04:04:42+00:00",
+      "engagement_score": 89,
+      "likes": 81,
+      "text": "引き寄せの法則の第一人者、エイブラハム・ヒックスはこう言っている。「いい気分でいること以上に大切なことはない」最初聞いた時、シンプルすぎて拍子抜けした。でも実践してから、人生が静かに確実に回り始めた。知らない人も多いけど、\n\n私たちは常に波動を出している。いい気分＝高い波動の時、宇宙はその波動と一致した現実を作り続ける。不安や焦りの状態でいる時、宇宙はその不安や焦りと一致した現実を作り続ける。感情は、今の自分がどんな波動を出しているかを知らせるガイド。行き詰まっている時、ほとんどの人が気づいていないことがある。\n呼吸が浅くなっていること。呼吸が浅いと、脳は緊張状態だと判断し、不安や焦りの証拠を日常から拾い始める。だから、難しいことをする必要はない。\nまず深呼吸。\n好きな音楽を聴く。\n美味しいご飯を丁寧に味わう。\n小さな喜びを丁寧に味わうたびに、波動は静かに上がっていく。その波動の状態が整った瞬間、脳のフィルターが切り替わり、見える現実が変わり始める。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3914586427488768356",
+      "datetime_utc": "2026-06-07T23:31:28+00:00",
+      "engagement_score": 88,
+      "likes": 81,
+      "text": "恋愛の引き寄せの法則はこう。\n\nあなた「連絡来たら安心するのに」\n宇宙『わかりました。連絡が来たら安心できる現実、\n　　　つまり今は不安な現実を作りますね』\n\nあなた「今、先に安心する」\n宇宙『わかりました。安心している現実を作りますね。\n　　　その余裕が相手を自然と引き寄せます』\n\n似てるようで、全然違う。\n\n「連絡が来たら安心する」と思っている限り、脳は「まだ来ていない不安な今」を現実として作り続ける。何度スマホを確認しても、不安が消えないのはそのため。脳は状態に従う。不安な状態のまま願っても、不安な現実がループするだけ。重要なのは、\n\n連絡を待つ前に、今先に安心すること。順番はこれだけ。落ち着いた状態が執着を手放させ、自然な行動が関係を変え始める。現実を変えたいなら、相手より先に自分の状態を整えてみて。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3926469839867246813",
+      "datetime_utc": "2026-06-24T09:01:41+00:00",
+      "engagement_score": 87,
+      "likes": 80,
+      "text": "お金の引き寄せがうまくいかないのは、「願い」じゃなくて「願いながら拒否してる」状態になってるから。お金の引き寄せは、\n\nあなた「豊かになりたい」\n宇宙『わかりました。でも、豊かになったら嫉妬されるかもしれないという定義も同時に出ているので、両方を作りますね』\n\nあなた「豊かになりたい。豊かになっても安全だと知っている」\n宇宙『わかりました。安全に豊かになる現実を作りますね』\n\n似てるようで、全然違う。\n\n豊かになりたい。でも豊かになったら嫉妬される、責任が増える、人間関係が変わる。\n愛されたい。でも愛されたら傷つく、いつか裏切られる。\n願望はアクセル。でも恐れがブレーキ。この2つを同時に踏んでいる限り、車は前に進まない。これは嘘をついているわけじゃない。本当に願っている。でも同時に怖い。それだけ自然なこと。問題は願望じゃなく、願望の裏にある「叶ったら困る」という定義。その定義に気づくだけで、ブレーキは少しずつ緩み始める。「これ、私のことだ」と思ったら保存しておいて。\n幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3928779864445849308",
+      "datetime_utc": "2026-06-27T13:31:18+00:00",
+      "engagement_score": 85,
+      "likes": 83,
+      "text": "ほとんどの人が信じないけど、\n究極、気分を良くしているだけで現実は勝手に叶っていく。アファメーションよりも、ビジョンボードよりも、引き寄せのテクニックよりも大切なことがある。それは、ただ気分を良くすること。脳科学的に見ても、これは偶然じゃないんだけど、\n\n人は常に何らかの波動を出している。気分がいい時、脳はリラックスし、可能性の証拠を日常から拾い始める。気分が重い時、脳は緊張し、不安や不足の証拠を拾い始める。宇宙は言葉よりも、今この瞬間の気分という状態に反応している。正しい方法を探すより、今日の気分を一つ軽くすることの方が、よっぽど現実を動かす。好きな音楽を聴く。美味しいものを丁寧に味わう。深呼吸をする。その小さな気分の積み重ねが、波動を上げ、必要なチャンスやタイミングを引き寄せていく。難しいことはいらない。今日、気分が軽くなることを一つだけ選んでみて。これ、私のことだと思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3971525965310278965",
+      "datetime_utc": "2026-08-25T13:00:10+00:00",
+      "engagement_score": 84,
+      "likes": 73,
+      "text": "宇宙に委ねるってどういうこと？\nずっとわからなかった。\n\nこれが分かった時、全部つながった。\n委ねるとは「ある状態に立つこと」だった。\n\n宇宙は、いつも3つだけ問いかけてくる。\n\n１「今、何を足そうとしている？」\n　→ 足そうとしている間、「まだない前提」に立っている\n\n２「今、何を握っている？」\n　→ 握っている間、受け取る空間がない\n\n３「今、どこに立っている？」\n　→ ズレた位置のまま動いても、届かない\n\nこの3つに正直に答えられた時。\n足すのをやめて、握っているものを放して、位置を合わせた時。\n\nそれが委ねた状態。\n\n方法や引き寄せノートや行動量の問題じゃなかった。\n立ち位置の問題だった。\n\n負のループから抜けられない時は、いくつかの罠にハマっているから。詳しくは「現実が動き出す構造の教科書」を読んでね。【現実化ロードマップ＆セルフチェック】も受け取れます。@sora_shikumi の固定投稿から読んでください。"
+    },
+    {
+      "root_id": "3945751346028720719",
+      "datetime_utc": "2026-07-20T23:30:36+00:00",
+      "engagement_score": 82,
+      "likes": 74,
+      "text": "これ、気づいてない人多いけど、\n宇宙は言葉より状態に反応する。\n事実と意味付けの違い、\nリストにするとこう。\n\n「彼に既読無視された」は事実。\n「だから、嫌われた」は意味付け。\n\n「体重が増えた」は事実。\n「だから、もうダメだ」は意味付け。\n\n「昇進しなかった」は事実。\n「だから、才能がない」は意味付け。\n\n「貯金が増えていない」は事実。\n「だから、一生このまま」は意味付け。\n\nただ、一番もったいないのは、\n\n事実を確認したつもりで、毎回、意味付けまでセットで宇宙に発信していること。事実は中立。意味付けは無限。意味付けこそが、次の現実を決めている「状態」そのもの。事実を見た後に続ける言葉を、少しだけ変えてみて。\n「〇〇だから、もうダメだ」じゃなく「〇〇だから、今は整える時間」に。\nめちゃくちゃ大事な、宇宙の法則「与えた意味を体験するだけ」現実の分かれ道だから、保存して何回も見返しておいて。\n\n▶︎事実に勝手な意味付けをして苦しんでた人が、「事実と意味を分けたら」現実の見え方が変わったnote『現実が動き出す構造の教科書』\n(特典:現実化セルフチェック&ロードマップシート付き)\n固定投稿のリンクから読めます。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3936736807001086814",
+      "datetime_utc": "2026-07-08T13:00:19+00:00",
+      "engagement_score": 82,
+      "likes": 80,
+      "text": "美輪明宏さんが、長年ずっと言い続けてきた言葉がある。\n\n「宇宙は、いい人にもわるい人にも、\n平等にエネルギーを流している」\n\nこれ、慰めの言葉じゃない。\n宇宙の「速度」の話でもある。宇宙は、\n\nあなた「引き寄せ、時間がかかる」\n→ 宇宙『いいえ、私は0.1秒も迷ってません。あなたが出したものを、即座に返しています』\n\nあなた「じゃあ、なぜ現実が変わらないの」\n→ 宇宙『あなたが、昨日と違うものを出し始めた\"直後\"から、もう反応は始まってます』\n\n願いが叶うのが遅いんじゃない。不安と安心を、交互に出し続けてるだけ。\n宇宙は迷わない。迷ってるのは、こっちの方。\n願いが叶わない理由を細かくまとめてます。叶う方法より、叶う邪魔を止める方が勝手に叶っていくのよね。▶︎note『現実が動き出す構造の教科書』\n固定投稿のリンクから読めます。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。@sora_shikumi"
+    },
+    {
+      "root_id": "3947200586407791128",
+      "datetime_utc": "2026-07-22T23:29:59+00:00",
+      "engagement_score": 81,
+      "likes": 64,
+      "text": "好きな人に既読スルーされた時、「もう一度連絡してみよう」でもなく、「既読無視する人は縁がない」でもなく、「自分に問題があるのかな」でもなく、\n今すぐやってみてほしいことが、一つだけあって、\n\n「この人に大切にされた記憶を、3つ書き出す」こと。\n小さなことでいい。\n「忙しいのに返信してくれた」\n「私の好きなもの、覚えてくれてた」\n「一緒にいる時、ちゃんと目を見て話してくれた」\n\n既読スルーされた瞬間、脳は「嫌われた証拠」を集め始める。\n\nこれはRASという脳の仕組みで、\n「ない」という前提を持つと、\n脳はその証拠だけを探し続ける。\n\n「大切にされた記憶」を先に書き出すと、\n脳が探す先が「ない証拠」から\n「ある証拠」に切り替わる。\n\n不安が消えるのではなく、\n見えているものが変わる。\n\n夜やってほしいことが１つ。\n\nスマホを置いて、ノートを開いて、 この人に大切にされた記憶を3つだけ書いてみて。思い出せたなら、それがあなたの現実。\n\n『現実が動き出す構造の教科書』では、学んでも変わらない堂々巡りから\n抜けるための視点をまとめました。やり方集めを終わらせたい人は、\n固定投稿から読んでください→＠sora_shikumi"
+    },
+    {
+      "root_id": "3932388592420713124",
+      "datetime_utc": "2026-07-02T13:01:12+00:00",
+      "engagement_score": 76,
+      "likes": 74,
+      "text": "最強の引き寄せは、「いい気分」でいること。でも不安は出てくる。不安を消そうとするほど、不安が強くなる。これ、気合いや根性の問題じゃない。脳の仕組みで知ってるかどうかで、\n\n現実が変わってくる。\nあなた「この不安、消えて」\n→ 脳『わかりました。\"不安\"という単語に注目しますね』\n\n→ 数日後、また同じ不安が出てくる\nあなた「この不安、何が前提になってる?」\n→ 脳『わかりました。前提を確認しますね』\n→ 前提を書き換えた瞬間、不安の出方が変わる\n\n同じ「不安を消したい」でも、聞き方一つで脳の反応がまるで違う。感情はコントロールする対象じゃない。観察する対象。見るべきは感情そのものじゃなく、「その感情が生まれる前提は何か」。前提が変われば、感情は勝手に形を変える。「これ、私のことだ」と思ったら保存しておいて。幸せになる仕組みを構造で解説しているので、フォローもしてもらえると嬉しい。\n@sora_shikumi"
+    }
+  ],
+  "oldest_to_newest_feature_deltas": [
+    {
+      "feature": "offer_cta",
+      "oldest": 0.16,
+      "newest": 0.74,
+      "delta": 0.58
+    },
+    {
+      "feature": "science",
+      "oldest": 0.8,
+      "newest": 0.26,
+      "delta": -0.54
+    },
+    {
+      "feature": "first_person",
+      "oldest": 0.98,
+      "newest": 0.68,
+      "delta": -0.3
+    },
+    {
+      "feature": "numbers",
+      "oldest": 0.18,
+      "newest": 0.48,
+      "delta": 0.3
+    },
+    {
+      "feature": "question",
+      "oldest": 0.16,
+      "newest": 0.4,
+      "delta": 0.24
+    },
+    {
+      "feature": "spiritual",
+      "oldest": 0.72,
+      "newest": 0.9,
+      "delta": 0.18
+    },
+    {
+      "feature": "personal_story",
+      "oldest": 0.4,
+      "newest": 0.26,
+      "delta": -0.14
+    },
+    {
+      "feature": "negation_reframe",
+      "oldest": 0.6,
+      "newest": 0.46,
+      "delta": -0.14
+    },
+    {
+      "feature": "daily_scene",
+      "oldest": 0.24,
+      "newest": 0.12,
+      "delta": -0.12
+    },
+    {
+      "feature": "body_feeling",
+      "oldest": 0.58,
+      "newest": 0.46,
+      "delta": -0.12
+    },
+    {
+      "feature": "direct_reader",
+      "oldest": 0.42,
+      "newest": 0.5,
+      "delta": 0.08
+    },
+    {
+      "feature": "arrow",
+      "oldest": 0.1,
+      "newest": 0.18,
+      "delta": 0.08
+    },
+    {
+      "feature": "money",
+      "oldest": 0.46,
+      "newest": 0.42,
+      "delta": -0.04
+    },
+    {
+      "feature": "immediate_action",
+      "oldest": 0.22,
+      "newest": 0.26,
+      "delta": 0.04
+    },
+    {
+      "feature": "quotes",
+      "oldest": 1.0,
+      "newest": 0.98,
+      "delta": -0.02
+    },
+    {
+      "feature": "contrast",
+      "oldest": 0.9,
+      "newest": 0.92,
+      "delta": 0.02
+    },
+    {
+      "feature": "causal",
+      "oldest": 0.36,
+      "newest": 0.38,
+      "delta": 0.02
+    },
+    {
+      "feature": "aphorism",
+      "oldest": 0.98,
+      "newest": 1.0,
+      "delta": 0.02
+    },
+    {
+      "feature": "bullet",
+      "oldest": 0.04,
+      "newest": 0.02,
+      "delta": -0.02
+    }
+  ]
+}
