@@ -1,0 +1,17 @@
+{
+  "target_count": 500,
+  "accounts": [
+    {
+      "username": "shiro_sns01",
+      "profile_url": "https://www.threads.com/@shiro_sns01"
+    },
+    {
+      "username": "shiro_money01",
+      "profile_url": "https://www.threads.com/@shiro_money01"
+    },
+    {
+      "username": "nekasegi",
+      "profile_url": "https://www.threads.com/@nekasegi"
+    }
+  ]
+}
