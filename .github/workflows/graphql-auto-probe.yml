@@ -21,11 +21,13 @@ jobs:
         run: |
           python -m pip install --quiet playwright
           python -m playwright install --with-deps chromium
-      - name: Crawl current Relay profile pages
+      - name: Crawl and analyze Threads corpus
         shell: bash
         run: |
           python - <<'PY'
-          import json, math, re, urllib.request
+          import json, math, re, statistics, urllib.request
+          from collections import Counter
+          from datetime import datetime, timezone
           from playwright.sync_api import sync_playwright
 
           cfg = json.load(open('.graphql-auto-request.json', encoding='utf-8'))
@@ -39,7 +41,6 @@ jobs:
           target = next(x for x in network['relay_operations'] if x['name'] == 'BarcelonaProfileThreadsTabRefetchableDirectQuery')
           doc_id = target['doc_id']
           js_url = target['url']
-
           with urllib.request.urlopen(urllib.request.Request(js_url, headers={'User-Agent': 'Mozilla/5.0'}), timeout=30) as r:
               script = r.read().decode('utf-8', errors='ignore')
           needle = 'BarcelonaProfileThreadsTabRefetchableDirectQuery.threads.graphql'
@@ -48,29 +49,16 @@ jobs:
               raise SystemExit('query module not found')
           snippet = script[max(0, pos - 5000):min(len(script), pos + 150000)]
           providers = sorted(set(re.findall(r'__relay_internal__pv__[A-Za-z0-9_]+relayprovider', snippet)))
-
           base_vars = {k: False for k in providers}
           for k in providers:
               if 'IsCrawler' in k or 'OptionalCookiesEnabled' in k or 'IsLoggedOut' in k:
                   base_vars[k] = True
-          base_vars.update({
-              'allow_page_info_for_lox_user': True,
-              'before': None,
-              'first': page_size,
-              'last': None,
-              'userID': user_id,
-          })
+          base_vars.update({'allow_page_info_for_lox_user': True, 'before': None, 'first': page_size, 'last': None, 'userID': user_id})
 
           def text_from_post(post):
               info = post.get('text_post_app_info') or {}
               fragments = ((info.get('text_fragments') or {}).get('fragments') or [])
-              parts = []
-              for frag in fragments:
-                  if not isinstance(frag, dict):
-                      continue
-                  val = frag.get('plaintext')
-                  if isinstance(val, str):
-                      parts.append(val)
+              parts = [f.get('plaintext') for f in fragments if isinstance(f, dict) and isinstance(f.get('plaintext'), str)]
               if parts:
                   return ''.join(parts).strip()
               caption = post.get('caption')
@@ -81,67 +69,38 @@ jobs:
                       return post[key].strip()
               return ''
 
-          def collect_named_scalars(node, wanted, out, prefix=''):
-              if isinstance(node, dict):
-                  for k, v in node.items():
-                      path = f'{prefix}.{k}' if prefix else k
-                      lk = k.lower()
-                      if any(token in lk for token in wanted) and isinstance(v, (str, int, float, bool)):
-                          out.setdefault(path, v)
-                      if isinstance(v, (dict, list)):
-                          collect_named_scalars(v, wanted, out, path)
-              elif isinstance(node, list):
-                  for i, v in enumerate(node):
-                      if isinstance(v, (dict, list)):
-                          collect_named_scalars(v, wanted, out, f'{prefix}[{i}]')
+          def first_timestamp(post):
+              for key in ('taken_at', 'timestamp', 'created_at', 'published_at'):
+                  v = post.get(key)
+                  if isinstance(v, (int, float)):
+                      return int(v)
+              return None
 
-          def normalize_post(post, edge_cursor, page_no, thread_items_count):
+          def normalize_segment(post):
               info = post.get('text_post_app_info') or {}
               user = post.get('user') or {}
               self_info = info.get('self_thread_info') or {}
-              pinned = info.get('pinned_post_info') or {}
-              metrics = {}
-              collect_named_scalars(post, ('like_count', 'reply_count', 'repost_count', 'quote_count', 'reshare_count', 'view_count'), metrics)
-              timing = {}
-              collect_named_scalars(post, ('taken_at', 'timestamp', 'created_at', 'published_at'), timing)
               code = post.get('code') or post.get('shortcode') or ''
-              pk = str(post.get('pk') or post.get('id') or '')
+              ts = first_timestamp(post)
               return {
-                  'id': pk,
+                  'id': str(post.get('pk') or post.get('id') or ''),
                   'code': code,
-                  'permalink': f'https://www.threads.com/@{user.get("username")}/post/{code}' if code and user.get('username') else None,
                   'username': user.get('username'),
-                  'full_name': user.get('full_name'),
                   'text': text_from_post(post),
                   'like_count': post.get('like_count'),
                   'reply_count': info.get('direct_reply_count'),
                   'repost_count': info.get('repost_count'),
                   'quote_count': info.get('quote_count'),
-                  'reshare_count': info.get('reshare_count'),
-                  'is_pinned': pinned.get('is_pinned_to_profile'),
+                  'timestamp': ts,
+                  'datetime_utc': datetime.fromtimestamp(ts, timezone.utc).isoformat() if ts else None,
                   'self_thread_length': self_info.get('self_thread_length'),
                   'self_thread_position': self_info.get('post_position_in_self_thread'),
                   'self_thread_id': self_info.get('id'),
-                  'thread_items_count': thread_items_count,
-                  'metrics_candidates': metrics,
-                  'timing_candidates': timing,
-                  'page': page_no,
-                  'edge_cursor': edge_cursor,
               }
 
-          result = {
-              'doc_id': doc_id,
-              'target_count': target_count,
-              'retrieved_unique_count': 0,
-              'reached_target': False,
-              'stop_reason': None,
-              'page_size': page_size,
-              'provider_count': len(providers),
-              'pages': [],
-              'post_ids': [],
-          }
-          posts = []
-          seen_ids = set()
+          probe = {'doc_id': doc_id, 'target_count': target_count, 'retrieved_unique_count': 0, 'reached_target': False, 'stop_reason': None, 'page_size': page_size, 'provider_count': len(providers), 'pages': [], 'post_ids': []}
+          threads = []
+          seen_roots = set()
           cursor = None
 
           with sync_playwright() as p:
@@ -150,7 +109,6 @@ jobs:
               page = context.new_page()
               page.goto(profile_url, wait_until='domcontentloaded', timeout=90000)
               page.wait_for_timeout(5000)
-
               html = page.content()
               tokens = []
               for pat in [r'"LSD",\[\],\{"token":"([^"]+)"', r'"token":"([A-Za-z0-9_-]{18,80})"']:
@@ -160,102 +118,157 @@ jobs:
               lsd = tokens[0] if tokens else 't'
 
               for page_no in range(1, max_pages + 1):
-                  variables = dict(base_vars)
-                  variables['after'] = cursor
-                  payload = {
-                      'doc_id': doc_id,
-                      'lsd': lsd,
-                      'variables': json.dumps(variables, separators=(',', ':')),
-                  }
+                  variables = dict(base_vars); variables['after'] = cursor
+                  payload = {'doc_id': doc_id, 'lsd': lsd, 'variables': json.dumps(variables, separators=(',', ':'))}
                   res = page.evaluate('''async p=>{const f=new URLSearchParams();f.set('lsd',p.lsd);f.set('doc_id',p.doc_id);f.set('variables',p.variables);const r=await fetch('/api/graphql',{method:'POST',credentials:'include',headers:{'Content-Type':'application/x-www-form-urlencoded','X-FB-LSD':p.lsd,'X-IG-App-ID':'238260118697367','X-FB-Friendly-Name':'BarcelonaProfileThreadsTabRefetchableDirectQuery'},body:f.toString()});return {status:r.status,type:r.headers.get('content-type'),text:await r.text()}}''', payload)
-
-                  page_result = {'page': page_no, 'status': res.get('status'), 'content_type': res.get('type'), 'after': cursor}
+                  page_result = {'page': page_no, 'status': res.get('status'), 'after': cursor}
                   if res.get('status') != 200:
-                      result['stop_reason'] = f'http_{res.get("status")}'
-                      result['pages'].append(page_result)
-                      break
-
+                      probe['stop_reason'] = f'http_{res.get("status")}'; probe['pages'].append(page_result); break
                   try:
                       obj = json.loads(res.get('text') or '')
                   except Exception as e:
-                      page_result['json_error'] = str(e)
-                      result['pages'].append(page_result)
-                      result['stop_reason'] = 'invalid_json'
-                      break
-
-                  errors = obj.get('errors') if isinstance(obj, dict) else None
-                  page_result['errors'] = errors
+                      page_result['json_error'] = str(e); probe['pages'].append(page_result); probe['stop_reason'] = 'invalid_json'; break
                   data = obj.get('data') if isinstance(obj, dict) else None
                   media = data.get('mediaData') if isinstance(data, dict) else None
                   edges = media.get('edges') if isinstance(media, dict) and isinstance(media.get('edges'), list) else []
                   page_info = media.get('page_info') if isinstance(media, dict) and isinstance(media.get('page_info'), dict) else {}
-
-                  ids_this_page = []
-                  new_ids = []
+                  new_roots = 0
                   for edge in edges:
-                      node = edge.get('node') or {}
-                      items = node.get('thread_items') or []
+                      items = (edge.get('node') or {}).get('thread_items') or []
                       if not items:
                           continue
-                      post = (items[0] or {}).get('post') or {}
-                      pk = str(post.get('pk') or post.get('id') or '')
-                      if not pk:
+                      raw_posts = [((item or {}).get('post') or {}) for item in items]
+                      segs = [normalize_segment(x) for x in raw_posts if isinstance(x, dict)]
+                      segs = [x for x in segs if x['id'] and x['username'] == 'osabori_space_human']
+                      if not segs:
                           continue
-                      ids_this_page.append(pk)
-                      if pk not in seen_ids:
-                          seen_ids.add(pk)
-                          new_ids.append(pk)
-                          result['post_ids'].append(pk)
-                          posts.append(normalize_post(post, edge.get('cursor'), page_no, len(items)))
-
-                  next_cursor = page_info.get('end_cursor')
-                  has_next = bool(page_info.get('has_next_page'))
-                  page_result.update({
-                      'edge_count': len(edges),
-                      'unique_ids_on_page': len(set(ids_this_page)),
-                      'new_unique_ids': len(new_ids),
-                      'total_unique_ids': len(seen_ids),
-                      'end_cursor': next_cursor,
-                      'has_next_page': has_next,
-                  })
-                  result['pages'].append(page_result)
-
-                  if len(seen_ids) >= target_count:
-                      result['reached_target'] = True
-                      result['stop_reason'] = 'target_reached'
-                      break
-                  if not new_ids:
-                      result['stop_reason'] = 'no_new_posts'
-                      break
+                      root = segs[0]
+                      if root['id'] in seen_roots:
+                          continue
+                      seen_roots.add(root['id']); new_roots += 1; probe['post_ids'].append(root['id'])
+                      combined = '\n\n'.join(s['text'] for s in segs if s['text']).strip()
+                      threads.append({
+                          'root_id': root['id'], 'root_code': root['code'],
+                          'permalink': f'https://www.threads.com/@osabori_space_human/post/{root["code"]}' if root['code'] else None,
+                          'timestamp': root['timestamp'], 'datetime_utc': root['datetime_utc'],
+                          'like_count': root['like_count'] if isinstance(root['like_count'], int) else 0,
+                          'reply_count': root['reply_count'] if isinstance(root['reply_count'], int) else 0,
+                          'repost_count': root['repost_count'] if isinstance(root['repost_count'], int) else 0,
+                          'quote_count': root['quote_count'] if isinstance(root['quote_count'], int) else 0,
+                          'segment_count': len(segs), 'root_text': root['text'], 'combined_text': combined,
+                          'segments': segs, 'page': page_no,
+                      })
+                  next_cursor = page_info.get('end_cursor'); has_next = bool(page_info.get('has_next_page'))
+                  page_result.update({'edge_count': len(edges), 'new_unique_ids': new_roots, 'total_unique_ids': len(seen_roots), 'end_cursor': next_cursor, 'has_next_page': has_next})
+                  probe['pages'].append(page_result)
+                  if len(seen_roots) >= target_count:
+                      probe['reached_target'] = True; probe['stop_reason'] = 'target_reached'; break
+                  if not new_roots:
+                      probe['stop_reason'] = 'no_new_posts'; break
                   if not has_next or not next_cursor:
-                      result['stop_reason'] = 'no_next_cursor'
-                      break
+                      probe['stop_reason'] = 'no_next_cursor'; break
                   if next_cursor == cursor:
-                      result['stop_reason'] = 'cursor_stalled'
-                      break
+                      probe['stop_reason'] = 'cursor_stalled'; break
                   cursor = next_cursor
-
               browser.close()
 
-          result['retrieved_unique_count'] = min(len(seen_ids), target_count)
-          result['post_ids'] = result['post_ids'][:target_count]
-          posts = posts[:target_count]
-          if result['retrieved_unique_count'] >= target_count:
-              result['reached_target'] = True
-              result['stop_reason'] = 'target_reached'
+          threads = threads[:target_count]
+          probe['post_ids'] = probe['post_ids'][:target_count]
+          probe['retrieved_unique_count'] = len(threads)
+          if len(threads) >= target_count:
+              probe['reached_target'] = True; probe['stop_reason'] = 'target_reached'
 
-          with open('data/graphql_auto_probe.json', 'w', encoding='utf-8') as f:
-              json.dump(result, f, ensure_ascii=False, indent=2)
-              f.write('\n')
-          with open('data/posts_analysis.json', 'w', encoding='utf-8') as f:
-              json.dump({'profile_url': profile_url, 'user_id': user_id, 'count': len(posts), 'posts': posts}, f, ensure_ascii=False, indent=2)
-              f.write('\n')
+          def median(vals): return statistics.median(vals) if vals else 0
+          def mean(vals): return round(statistics.mean(vals), 3) if vals else 0
+          def pct(vals, p):
+              if not vals: return 0
+              s=sorted(vals); idx=min(len(s)-1, max(0, math.ceil(p*len(s))-1)); return s[idx]
+
+          valid = [t for t in threads if t['combined_text'].strip()]
+          likes = [t['like_count'] for t in valid]
+          lengths = [len(t['combined_text']) for t in valid]
+          seg_counts = [t['segment_count'] for t in valid]
+          dates = [t['timestamp'] for t in valid if t['timestamp']]
+
+          FEATURES = {
+              'continuation_arrow': lambda x: '↓' in x,
+              'first_person_wai': lambda x: 'ワイ' in x,
+              'first_person_boku_ore': lambda x: ('僕' in x or '俺' in x),
+              'direct_reader_address': lambda x: any(w in x for w in ['あなた','君','みんな','あんた']),
+              'personal_experience': lambda x: any(w in x for w in ['ワイが','ワイは','借金','昔','当時','だった頃','やった頃','経験']),
+              'specific_numbers': lambda x: bool(re.search(r'\d', x)),
+              'money_terms': lambda x: any(w in x for w in ['円','万円','借金','収入','お金','金運','入金','宝くじ']),
+              'spiritual_terms': lambda x: any(w in x for w in ['引き寄せ','宇宙','波動','周波数','潜在意識','願望','エネルギー']),
+              'science_authority_terms': lambda x: any(w in x for w in ['量子','RAS','脳','心理学','自律神経','科学']),
+              'contrast_inversion': lambda x: any(w in x for w in ['実は','逆','じゃない','ちゃう','むしろ','よりも']),
+              'immediate_action': lambda x: any(w in x for w in ['やってみ','試して','見てみ','してみ','今日','今すぐ','今一回','帰ったら']),
+              'question_mark': lambda x: ('？' in x or '?' in x),
+              'quote_dialogue': lambda x: ('「' in x and '」' in x),
+              'casual_kansai_voice': lambda x: any(w in x for w in ['やで','なんや','やん','やろ','せや','へん','やった']),
+              'strong_hook': lambda x: any(x.startswith(w) for w in ['正直','これ','ちょっと','実は','マジ','ガチ','断言','もし','知らん','知ってる']),
+          }
+
+          ordered = sorted(valid, key=lambda t: t['like_count'])
+          qn = max(1, len(ordered)//4)
+          bottom = ordered[:qn]; top = ordered[-qn:]
+          feature_stats = []
+          for name, fn in FEATURES.items():
+              yes=[t for t in valid if fn(t['combined_text'])]; no=[t for t in valid if not fn(t['combined_text'])]
+              top_rate=sum(fn(t['combined_text']) for t in top)/len(top) if top else 0
+              bottom_rate=sum(fn(t['combined_text']) for t in bottom)/len(bottom) if bottom else 0
+              feature_stats.append({
+                  'feature':name,'count':len(yes),'rate':round(len(yes)/len(valid),3) if valid else 0,
+                  'mean_likes_with':mean([t['like_count'] for t in yes]),'median_likes_with':median([t['like_count'] for t in yes]),
+                  'mean_likes_without':mean([t['like_count'] for t in no]),'median_likes_without':median([t['like_count'] for t in no]),
+                  'top_quartile_rate':round(top_rate,3),'bottom_quartile_rate':round(bottom_rate,3),'top_minus_bottom':round(top_rate-bottom_rate,3),
+              })
+          feature_stats.sort(key=lambda x: abs(x['top_minus_bottom']), reverse=True)
+
+          def bucket_stats(items, keyfn):
+              groups={}
+              for t in items: groups.setdefault(keyfn(t),[]).append(t)
+              return [{'bucket':k,'count':len(v),'mean_likes':mean([x['like_count'] for x in v]),'median_likes':median([x['like_count'] for x in v])} for k,v in groups.items()]
+
+          len_buckets=bucket_stats(valid, lambda t: '<200' if len(t['combined_text'])<200 else '200-399' if len(t['combined_text'])<400 else '400-699' if len(t['combined_text'])<700 else '700+')
+          seg_buckets=bucket_stats(valid, lambda t: str(t['segment_count']))
+
+          opening_patterns=['正直','これ','ちょっと','実は','マジ','ガチ','もし','知らん','知ってる','断言','ワイ','最近','引き寄せ']
+          openings=Counter()
+          endings=Counter()
+          for t in valid:
+              txt=t['combined_text'].strip()
+              for ptn in opening_patterns:
+                  if txt.startswith(ptn): openings[ptn]+=1
+              last=txt.splitlines()[-1].strip() if txt else ''
+              for ptn in ['やってみ','試して','見てみ','してみ','で。','やで','や。','な。','↓']:
+                  if last.endswith(ptn) or ptn in last: endings[ptn]+=1
+
+          top_posts=sorted(valid,key=lambda t:(t['like_count'],t['reply_count']),reverse=True)[:25]
+          bottom_posts=sorted(valid,key=lambda t:(t['like_count'],t['reply_count']))[:25]
+          def sample(t):
+              return {'root_id':t['root_id'],'code':t['root_code'],'datetime_utc':t['datetime_utc'],'likes':t['like_count'],'replies':t['reply_count'],'segments':t['segment_count'],'chars':len(t['combined_text']),'text':t['combined_text'][:900]}
+
+          summary={
+              'profile':'osabori_space_human','requested':target_count,'retrieved_threads':len(threads),'valid_threads':len(valid),
+              'empty_threads':len(threads)-len(valid),'duplicate_root_ids':len(threads)-len(set(t['root_id'] for t in threads)),
+              'date_range_utc':[datetime.fromtimestamp(min(dates),timezone.utc).isoformat(),datetime.fromtimestamp(max(dates),timezone.utc).isoformat()] if dates else None,
+              'likes':{'mean':mean(likes),'median':median(likes),'p75':pct(likes,.75),'p90':pct(likes,.90),'max':max(likes) if likes else 0,'zero_count':sum(x==0 for x in likes)},
+              'combined_chars':{'mean':mean(lengths),'median':median(lengths),'p75':pct(lengths,.75),'p90':pct(lengths,.90)},
+              'segment_count':dict(Counter(seg_counts)),
+              'length_buckets':len_buckets,'segment_buckets':seg_buckets,'feature_stats':feature_stats,
+              'opening_pattern_counts':openings.most_common(),'ending_pattern_counts':endings.most_common(),
+              'top_posts':[sample(t) for t in top_posts],'bottom_posts':[sample(t) for t in bottom_posts],
+          }
+
+          with open('data/graphql_auto_probe.json','w',encoding='utf-8') as f: json.dump(probe,f,ensure_ascii=False,indent=2); f.write('\n')
+          with open('data/threads_corpus_300.json','w',encoding='utf-8') as f: json.dump({'profile_url':profile_url,'count':len(threads),'threads':threads},f,ensure_ascii=False,indent=2); f.write('\n')
+          with open('data/threads_corpus_analysis.json','w',encoding='utf-8') as f: json.dump(summary,f,ensure_ascii=False,indent=2); f.write('\n')
           PY
       - name: Commit result
         run: |
           git config user.name threads-fetch-bot
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/graphql_auto_probe.json data/posts_analysis.json
+          git add data/graphql_auto_probe.json data/threads_corpus_300.json data/threads_corpus_analysis.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'Save normalized Threads posts for analysis'
+          git commit -m 'Build complete Threads corpus and analysis'
           git push origin "HEAD:${GITHUB_REF_NAME}"
