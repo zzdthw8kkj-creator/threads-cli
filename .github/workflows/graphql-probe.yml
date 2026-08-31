@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import json, re
+          import json, re, urllib.request
           from playwright.sync_api import sync_playwright
 
           cfg = json.load(open('.graphql-probe-request.json', encoding='utf-8'))
@@ -76,6 +76,58 @@ jobs:
               out['edge_count_recursive'] = edges[0]
               return out
 
+          # Pull the currently loaded JS modules and extract the compiled query
+          # argument definitions. This tells us which required variables Meta added.
+          schemas = []
+          try:
+              network = json.load(open('data/network_docids.json', encoding='utf-8'))
+          except Exception:
+              network = {}
+          op_urls = {}
+          for op in network.get('relay_operations', []):
+              name = op.get('name')
+              if name in {'BarcelonaProfileThreadsTabDirectQuery', 'BarcelonaProfileThreadsTabRefetchableDirectQuery'}:
+                  op_urls[name] = op.get('url')
+
+          for query_name, url in op_urls.items():
+              if not url:
+                  continue
+              request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as r:
+                      script = r.read().decode('utf-8', errors='ignore')
+              except Exception as e:
+                  schemas.append({'query_name': query_name, 'url': url, 'error': str(e)})
+                  continue
+              needles = [
+                  query_name + '.threads.graphql',
+                  query_name + '.graphql',
+                  query_name + '$Parameters',
+                  query_name,
+              ]
+              matches = []
+              for needle in needles:
+                  start = 0
+                  while len(matches) < 12:
+                      pos = script.find(needle, start)
+                      if pos < 0:
+                          break
+                      lo = max(0, pos - 5000)
+                      hi = min(len(script), pos + 12000)
+                      snippet = script[lo:hi]
+                      arg_names = list(dict.fromkeys(re.findall(r'(?:LocalArgument|RootArgument).*?name:["\']([^"\']+)', snippet)))
+                      defaults = []
+                      for m in re.finditer(r'defaultValue:([^,}\]]+).*?kind:["\']LocalArgument["\'].*?name:["\']([^"\']+)', snippet):
+                          defaults.append({'name': m.group(2), 'default_raw': m.group(1)[:200]})
+                      matches.append({
+                          'needle': needle,
+                          'argument_names': arg_names,
+                          'local_defaults': defaults,
+                          'snippet': snippet[:16000],
+                      })
+                      start = pos + len(needle)
+              schemas.append({'query_name': query_name, 'url': url, 'matches': matches})
+
           results = []
           with sync_playwright() as p:
               browser = p.chromium.launch(headless=True)
@@ -103,8 +155,6 @@ jobs:
                       'lsd': lsd,
                       'variables': json.dumps(variables, separators=(',', ':')),
                   }
-                  # Execute from inside the loaded Threads page. This preserves the
-                  # anonymous browser cookies, origin and request context.
                   res = page.evaluate('''async (p) => {
                     const form = new URLSearchParams();
                     form.set('lsd', p.lsd);
@@ -121,12 +171,7 @@ jobs:
                       },
                       body: form.toString()
                     });
-                    return {
-                      status: r.status,
-                      final_url: r.url,
-                      content_type: r.headers.get('content-type'),
-                      text: await r.text()
-                    };
+                    return {status:r.status, final_url:r.url, content_type:r.headers.get('content-type'), text:await r.text()};
                   }''', payload)
                   item = {
                       'label': label,
@@ -147,6 +192,7 @@ jobs:
               json.dump({
                   'profile_url': profile_url,
                   'mode': 'same_origin_browser_fetch',
+                  'query_schemas': schemas,
                   'results': results,
               }, f, ensure_ascii=False, indent=2)
               f.write('\n')
@@ -159,5 +205,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/graphql_probe.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Probe anonymous Threads GraphQL in browser context"
+          git commit -m "Inspect current Threads query variables"
           git push origin "HEAD:${GITHUB_REF_NAME}"
