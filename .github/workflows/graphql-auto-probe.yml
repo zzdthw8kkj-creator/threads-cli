@@ -64,12 +64,13 @@ jobs:
           result = {
               'doc_id': doc_id,
               'target_count': target_count,
+              'retrieved_unique_count': 0,
+              'reached_target': False,
+              'stop_reason': None,
               'page_size': page_size,
               'provider_count': len(providers),
               'pages': [],
               'post_ids': [],
-              'reached_target': False,
-              'stop_reason': None,
           }
           seen_ids = set()
           cursor = None
