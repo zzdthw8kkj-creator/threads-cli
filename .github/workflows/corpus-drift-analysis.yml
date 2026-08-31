@@ -1,0 +1,103 @@
+name: Threads Corpus Drift Analysis
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .corpus-drift-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Analyze corpus drift and duplicates
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, math, re, statistics
+          from collections import Counter, defaultdict
+
+          data=json.load(open('data/threads_corpus_300.json',encoding='utf-8'))
+          threads=data['threads']
+          FEATURES={
+            'continuation_arrow':lambda x:'↓' in x,
+            'wai':lambda x:'ワイ' in x,
+            'numbers':lambda x:bool(re.search(r'\d',x)),
+            'personal_experience':lambda x:any(w in x for w in ['ワイが','ワイは','借金','昔','当時','だった頃','やった頃']),
+            'direct_reader':lambda x:any(w in x for w in ['あなた','君','みんな','あんた']),
+            'contrast':lambda x:any(w in x for w in ['実は','逆','じゃない','ちゃう','むしろ','よりも']),
+            'immediate_action':lambda x:any(w in x for w in ['やってみ','試して','見てみ','してみ','今日','今すぐ','今一回','帰ったら']),
+            'science_terms':lambda x:any(w in x for w in ['量子','RAS','脳','心理学','自律神経','科学']),
+            'money_terms':lambda x:any(w in x for w in ['円','万円','借金','収入','お金','金運','入金','宝くじ']),
+            'question':lambda x:'？' in x or '?' in x,
+          }
+          def med(v): return statistics.median(v) if v else 0
+          def mean(v): return round(statistics.mean(v),3) if v else 0
+          def normtext(s): return re.sub(r'[\s　]+','',s).strip()
+
+          months=defaultdict(list)
+          for t in threads:
+            month=(t.get('datetime_utc') or 'unknown')[:7]
+            months[month].append(t)
+          monthly=[]
+          for m,items in sorted(months.items()):
+            ls=[x['like_count'] for x in items]
+            row={'month':m,'count':len(items),'mean_likes':mean(ls),'median_likes':med(ls),'max_likes':max(ls) if ls else 0,'mean_chars':mean([len(x['combined_text']) for x in items]),'mean_segments':mean([x['segment_count'] for x in items])}
+            for name,fn in FEATURES.items(): row[name+'_rate']=round(sum(fn(x['combined_text']) for x in items)/len(items),3)
+            monthly.append(row)
+
+          exact=defaultdict(list)
+          for t in threads: exact[normtext(t['combined_text'])].append(t)
+          duplicate_groups=[]
+          for text,items in exact.items():
+            if text and len(items)>1:
+              duplicate_groups.append({'count':len(items),'likes':[x['like_count'] for x in items],'dates':[x['datetime_utc'] for x in items],'codes':[x['root_code'] for x in items],'text_prefix':items[0]['combined_text'][:300]})
+          duplicate_groups.sort(key=lambda x:(-x['count'],-max(x['likes'])))
+
+          prefix=Counter()
+          for t in threads:
+            p=normtext(t['combined_text'])[:28]
+            if p: prefix[p]+=1
+          repeated_prefixes=[{'prefix':p,'count':c} for p,c in prefix.most_common(30) if c>1]
+
+          # Month-normalized performance reduces time/regime confounding.
+          month_medians={m:med([x['like_count'] for x in items]) or 1 for m,items in months.items()}
+          for t in threads:
+            m=(t.get('datetime_utc') or 'unknown')[:7]
+            t['_relative_like']=t['like_count']/month_medians[m]
+          feature_relative=[]
+          for name,fn in FEATURES.items():
+            yes=[x['_relative_like'] for x in threads if fn(x['combined_text'])]
+            no=[x['_relative_like'] for x in threads if not fn(x['combined_text'])]
+            feature_relative.append({'feature':name,'count':len(yes),'median_relative_with':round(med(yes),3),'median_relative_without':round(med(no),3),'mean_relative_with':mean(yes),'mean_relative_without':mean(no)})
+          feature_relative.sort(key=lambda x:abs(x['mean_relative_with']-x['mean_relative_without']),reverse=True)
+
+          # Top/bottom quartile inside each month, then aggregate feature prevalence.
+          top=[]; bottom=[]
+          for m,items in months.items():
+            s=sorted(items,key=lambda x:x['like_count']); n=max(1,len(s)//4); bottom+=s[:n]; top+=s[-n:]
+          controlled=[]
+          for name,fn in FEATURES.items():
+            tr=sum(fn(x['combined_text']) for x in top)/len(top) if top else 0
+            br=sum(fn(x['combined_text']) for x in bottom)/len(bottom) if bottom else 0
+            controlled.append({'feature':name,'top_within_month_rate':round(tr,3),'bottom_within_month_rate':round(br,3),'difference':round(tr-br,3)})
+          controlled.sort(key=lambda x:abs(x['difference']),reverse=True)
+
+          out={'thread_count':len(threads),'unique_exact_texts':len(exact),'duplicate_group_count':len(duplicate_groups),'duplicate_thread_count':sum(x['count'] for x in duplicate_groups),'monthly_stats':monthly,'month_normalized_feature_performance':feature_relative,'within_month_quartile_features':controlled,'exact_duplicate_groups':duplicate_groups[:30],'repeated_opening_prefixes':repeated_prefixes}
+          with open('data/threads_corpus_drift_analysis.json','w',encoding='utf-8') as f: json.dump(out,f,ensure_ascii=False,indent=2); f.write('\n')
+          PY
+      - name: Commit analysis
+        run: |
+          git config user.name threads-fetch-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/threads_corpus_drift_analysis.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Analyze Threads corpus drift and duplicates'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
