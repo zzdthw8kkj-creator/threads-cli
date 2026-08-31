@@ -1,0 +1,30 @@
+name: Growth Trajectory Deep Dive
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .growth-deep-dive-request.json
+      - scripts/growth_deep_dive.py
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Analyze trajectory content shifts
+        run: python scripts/growth_deep_dive.py
+      - name: Commit deep dive
+        run: |
+          git config user.name threads-growth-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/growth_trajectory/sora_shikumi/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Deep dive sora_shikumi trajectory'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
