@@ -1,7 +1,7 @@
 {
-  "mode": "note_creator",
-  "note_user": "osabori_space",
-  "limit": 1,
-  "request_id": "2026-08-31T19:05+09:00-note-resolve-osabori-retry",
+  "mode": "profile",
+  "profile_url": "https://www.threads.com/@osabori_space_human?igshid=NTc4MTIwNjQ2YQ==",
+  "limit": 300,
+  "request_id": "2026-08-31T19:06+09:00-osabori-space-human-300",
   "requested_by": "chatgpt"
 }
