@@ -30,7 +30,7 @@ const (
 // refresh these from a logged-out page load and the anonymous pagination path
 // recovers. The SSR path does not depend on them.
 const (
-	DocIDProfileThreads = "33773912952222602" // a profile's threads tab
+	DocIDProfileThreads = "28414404834914246" // current BarcelonaProfileThreadsTabRefetchableDirectQuery
 	DocIDPostPage       = "7448594591874178"  // a single post page and its replies
 	DocIDSearch         = "24871030029227550" // keyword/user search
 )
