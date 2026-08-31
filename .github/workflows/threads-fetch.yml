@@ -35,6 +35,8 @@ jobs:
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import json
+          from urllib.parse import urlparse
+
           req = json.load(open('.threads-request.json', encoding='utf-8'))
           mode = str(req.get('mode', 'profile')).strip().lower()
           limit = int(req.get('limit', 50))
@@ -44,10 +46,18 @@ jobs:
               raise SystemExit('limit must be between 1 and 500')
           print(f'mode={mode}')
           print(f'limit={limit}')
+
           if mode == 'profile':
               username = str(req.get('username', '')).lstrip('@').strip()
+              if not username:
+                  profile_url = str(req.get('profile_url', '')).strip()
+                  if profile_url:
+                      path = urlparse(profile_url).path.strip('/')
+                      first = path.split('/', 1)[0] if path else ''
+                      if first.startswith('@'):
+                          username = first[1:]
               if not username or not all(c.isalnum() or c in '._' for c in username):
-                  raise SystemExit('Invalid username')
+                  raise SystemExit('profile mode requires a valid username or Threads profile_url')
               print(f'username={username}')
           elif mode == 'search':
               query = str(req.get('query', '')).strip()
@@ -85,9 +95,12 @@ jobs:
               f.write('\n')
           PY
           fi
+
           python - <<'PY'
           import json
           from datetime import datetime, timezone
+          from urllib.parse import urlparse
+
           req = json.load(open('.threads-request.json', encoding='utf-8'))
           mode = str(req.get('mode', 'profile')).strip().lower()
           meta = {
@@ -99,7 +112,13 @@ jobs:
           if mode == 'profile':
               rows = json.load(open('data/posts_raw.json', encoding='utf-8'))
               meta['retrieved_count'] = len(rows) if isinstance(rows, list) else None
-              meta['username'] = str(req.get('username', '')).lstrip('@')
+              username = str(req.get('username', '')).lstrip('@').strip()
+              if not username:
+                  profile_url = str(req.get('profile_url', '')).strip()
+                  path = urlparse(profile_url).path.strip('/') if profile_url else ''
+                  first = path.split('/', 1)[0] if path else ''
+                  username = first[1:] if first.startswith('@') else first
+              meta['username'] = username
           elif mode == 'search':
               rows = json.load(open('data/search_raw.json', encoding='utf-8'))
               meta['retrieved_count'] = len(rows) if isinstance(rows, list) else None
