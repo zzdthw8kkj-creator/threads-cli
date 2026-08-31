@@ -37,15 +37,20 @@ jobs:
           profile_url = req_cfg.get('profile_url') or 'https://www.threads.com/@zuck'
           graphql = []
           js_hits = []
+          relay_ops = []
           seen_graphql = set()
           seen_js = set()
+          seen_relay = set()
           keywords = [
+              'BarcelonaProfileThreadsTabDirectQuery$Parameters',
+              'BarcelonaProfileThreadsTabDirectQuery',
+              'BarcelonaProfileThreadsTabPaginationDirectFragment',
               'BarcelonaProfileThreadsTabQuery',
               'ProfileThreadsTabQuery',
               'BarcelonaProfileThreads',
               'ProfileThreads',
-              'BarcelonaProfileRepliesTabQuery',
-              'BarcelonaPostPageQuery',
+              'cr:36540',
+              'cr:36541',
           ]
 
           with sync_playwright() as p:
@@ -73,11 +78,7 @@ jobs:
                       parsed_vars = json.loads(variables) if variables else None
                   except Exception:
                       parsed_vars = None
-                  graphql.append({
-                      'doc_id': doc_id,
-                      'friendly_name': friendly,
-                      'variables': parsed_vars,
-                  })
+                  graphql.append({'doc_id': doc_id, 'friendly_name': friendly, 'variables': parsed_vars})
 
               def capture_response(response):
                   url = response.url
@@ -88,31 +89,48 @@ jobs:
                       text = response.text()
                   except Exception:
                       return
+
+                  # Relay operation ids are emitted as tiny modules whose exported
+                  # value is the persisted GraphQL document id.
+                  for m in re.finditer(r'__d\("([^"]+)_threadsRelayOperation".*?exports=["\'](\d{10,20})["\']', text, re.S):
+                      name, doc_id = m.group(1), m.group(2)
+                      if not any(x.lower() in name.lower() for x in ['profile', 'threads', 'timeline', 'feed']):
+                          continue
+                      key = (name, doc_id)
+                      if key not in seen_relay:
+                          seen_relay.add(key)
+                          relay_ops.append({'name': name, 'doc_id': doc_id, 'url': url})
+
                   for kw in keywords:
-                      pos = text.find(kw)
-                      if pos < 0:
-                          continue
-                      lo = max(0, pos - 2500)
-                      hi = min(len(text), pos + 2500)
-                      snippet = text[lo:hi]
-                      nums = list(dict.fromkeys(re.findall(r'(?<!\d)\d{10,20}(?!\d)', snippet)))
-                      patterns = []
-                      for pat in [
-                          r'(?:id|doc_id|docId|docID)\s*[:=]\s*["\'](\d{10,20})["\']',
-                          r'["\']id["\']\s*:\s*["\'](\d{10,20})["\']',
-                      ]:
-                          patterns.extend(re.findall(pat, snippet, re.I))
-                      key = (kw, url, tuple(nums[:20]))
-                      if key in seen_js:
-                          continue
-                      seen_js.add(key)
-                      js_hits.append({
-                          'keyword': kw,
-                          'url': url,
-                          'numbers_nearby': nums[:30],
-                          'id_patterns': list(dict.fromkeys(patterns))[:20],
-                          'snippet': snippet[:5000],
-                      })
+                      start = 0
+                      hit_count = 0
+                      while True:
+                          pos = text.find(kw, start)
+                          if pos < 0 or hit_count >= 8:
+                              break
+                          lo = max(0, pos - 3500)
+                          hi = min(len(text), pos + 3500)
+                          snippet = text[lo:hi]
+                          nums = list(dict.fromkeys(re.findall(r'(?<!\d)\d{10,20}(?!\d)', snippet)))
+                          patterns = []
+                          for pat in [
+                              r'(?:id|doc_id|docId|docID)\s*[:=]\s*["\'](\d{10,20})["\']',
+                              r'["\']id["\']\s*:\s*["\'](\d{10,20})["\']',
+                              r'exports=["\'](\d{10,20})["\']',
+                          ]:
+                              patterns.extend(re.findall(pat, snippet, re.I))
+                          key = (kw, url, pos)
+                          if key not in seen_js:
+                              seen_js.add(key)
+                              js_hits.append({
+                                  'keyword': kw,
+                                  'url': url,
+                                  'numbers_nearby': nums[:40],
+                                  'id_patterns': list(dict.fromkeys(patterns))[:30],
+                                  'snippet': snippet[:7000],
+                              })
+                          hit_count += 1
+                          start = pos + len(kw)
 
               page.on('request', capture_request)
               page.on('response', capture_response)
@@ -139,6 +157,8 @@ jobs:
                   'profile_url': profile_url,
                   'graphql_request_count': len(graphql),
                   'graphql_requests': graphql,
+                  'relay_operation_count': len(relay_ops),
+                  'relay_operations': relay_ops,
                   'js_hit_count': len(js_hits),
                   'js_hits': js_hits,
               }, f, ensure_ascii=False, indent=2)
