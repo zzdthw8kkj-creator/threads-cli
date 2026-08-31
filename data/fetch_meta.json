@@ -1,7 +1,7 @@
 {
-  "username": "dara_dara_fairy",
-  "requested_limit": 100,
-  "retrieved_count": 15,
-  "source": "threads-cli",
-  "generated_at": "2026-08-31T09:51:35.158563+00:00"
+  "mode": "note_creator",
+  "requested_limit": 1,
+  "source": "note-api",
+  "generated_at": "2026-08-31T10:13:53.513162+00:00",
+  "note_user": "osabori_space"
 }
