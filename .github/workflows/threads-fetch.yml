@@ -36,35 +36,55 @@ jobs:
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           req = json.load(open('.threads-request.json', encoding='utf-8'))
-          username = str(req.get('username', '')).lstrip('@').strip()
+          mode = str(req.get('mode', 'profile')).strip().lower()
           limit = int(req.get('limit', 50))
-          if not username or not all(c.isalnum() or c in '._' for c in username):
-              raise SystemExit('Invalid username')
+          if mode not in {'profile', 'search'}:
+              raise SystemExit('mode must be profile or search')
           if not 1 <= limit <= 500:
               raise SystemExit('limit must be between 1 and 500')
-          print(f'username={username}')
+          print(f'mode={mode}')
           print(f'limit={limit}')
+          if mode == 'profile':
+              username = str(req.get('username', '')).lstrip('@').strip()
+              if not username or not all(c.isalnum() or c in '._' for c in username):
+                  raise SystemExit('Invalid username')
+              print(f'username={username}')
+          else:
+              query = str(req.get('query', '')).strip()
+              if not query:
+                  raise SystemExit('search mode requires query')
+              print(f'query={query}')
           PY
 
-      - name: Fetch Threads posts
+      - name: Fetch Threads data
         shell: bash
         run: |
           mkdir -p data
-          go run ./cmd/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
+          if [ "${{ steps.request.outputs.mode }}" = "profile" ]; then
+            go run ./cmd/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
+          else
+            go run ./cmd/th search "${{ steps.request.outputs.query }}" -n "${{ steps.request.outputs.limit }}" -o json > data/search_raw.json
+          fi
           python - <<'PY'
           import json
           from datetime import datetime, timezone
-          posts = json.load(open('data/posts_raw.json', encoding='utf-8'))
-          if not isinstance(posts, list):
-              raise SystemExit('threads-cli output was not a JSON list')
           req = json.load(open('.threads-request.json', encoding='utf-8'))
+          mode = str(req.get('mode', 'profile')).strip().lower()
+          path = 'data/posts_raw.json' if mode == 'profile' else 'data/search_raw.json'
+          rows = json.load(open(path, encoding='utf-8'))
+          if not isinstance(rows, list):
+              raise SystemExit('threads-cli output was not a JSON list')
           meta = {
-              'username': str(req.get('username', '')).lstrip('@'),
+              'mode': mode,
               'requested_limit': int(req.get('limit', 50)),
-              'retrieved_count': len(posts),
+              'retrieved_count': len(rows),
               'source': 'threads-cli',
               'generated_at': datetime.now(timezone.utc).isoformat(),
           }
+          if mode == 'profile':
+              meta['username'] = str(req.get('username', '')).lstrip('@')
+          else:
+              meta['query'] = str(req.get('query', ''))
           with open('data/fetch_meta.json', 'w', encoding='utf-8') as f:
               json.dump(meta, f, ensure_ascii=False, indent=2)
               f.write('\n')
@@ -75,10 +95,10 @@ jobs:
         run: |
           git config user.name "threads-fetch-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/posts_raw.json data/fetch_meta.json
+          git add data/posts_raw.json data/search_raw.json data/fetch_meta.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."
             exit 0
           fi
-          git commit -m "Fetch Threads posts for @${{ steps.request.outputs.username }}"
+          git commit -m "Fetch Threads data"
           git push origin "HEAD:${GITHUB_REF_NAME}"
