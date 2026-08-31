@@ -1,6 +1,7 @@
 {
-  "username": "dara_dara_fairy",
-  "limit": 100,
-  "request_id": "2026-08-31T18:48+09:00-initial-100",
+  "mode": "search",
+  "query": "おさぼり宇宙人",
+  "limit": 50,
+  "request_id": "2026-08-31T18:55+09:00-resolve-osabori",
   "requested_by": "chatgpt"
 }
