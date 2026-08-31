@@ -2,6 +2,7 @@
   "mode": "profile",
   "profile_url": "https://www.threads.com/@osabori_space_human?igshid=NTc4MTIwNjQ2YQ==",
   "limit": 300,
-  "request_id": "2026-08-31T19:06+09:00-osabori-space-human-300",
+  "hydrate_replies": true,
+  "request_id": "2026-08-31T19:08+09:00-osabori-space-human-300-hydrated",
   "requested_by": "chatgpt"
 }
