@@ -92,6 +92,12 @@ jobs:
 
           roots = json.load(open('data/posts_raw.json', encoding='utf-8'))
           bundles = []
+          compact = []
+
+          def pick(row):
+              keys = ['id','shortcode','text','permalink','username','timestamp','like_count','reply_count','repost_count','quote_count','media_type','parent_id','root_id']
+              return {k: row.get(k) for k in keys if row.get(k) is not None}
+
           for root in roots:
               url = root.get('permalink') or root.get('shortcode') or root.get('id')
               replies = []
@@ -112,6 +118,7 @@ jobs:
                           error = f'json:{e}'
                   else:
                       error = (proc.stderr or f'exit {proc.returncode}').strip()[-1000:]
+
               self_replies = [r for r in replies if r.get('username') == root.get('username')]
               bundles.append({
                   'root': root,
@@ -119,8 +126,27 @@ jobs:
                   'self_replies': self_replies,
                   'hydrate_error': error,
               })
+
+              text_replies = [r for r in self_replies if (r.get('text') or '').strip()]
+              parts = [(root.get('text') or '').strip()] + [(r.get('text') or '').strip() for r in text_replies]
+              parts = [p for p in parts if p]
+              root_text = (root.get('text') or '').rstrip()
+              continuation_marker = root_text.endswith('↓') or root_text.endswith('解説すると、') or root_text.endswith('解説すると') or root_text.endswith('結果として起きてること')
+              compact.append({
+                  'root': pick(root),
+                  'self_replies': [pick(r) for r in self_replies],
+                  'full_text': '\n\n'.join(parts),
+                  'continuation_marker': continuation_marker,
+                  'self_reply_count': len(self_replies),
+                  'text_self_reply_count': len(text_replies),
+                  'hydrate_error': error,
+              })
+
           with open('data/threads_hydrated.json', 'w', encoding='utf-8') as f:
               json.dump(bundles, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          with open('data/analysis_input.json', 'w', encoding='utf-8') as f:
+              json.dump(compact, f, ensure_ascii=False, indent=2)
               f.write('\n')
           PY
             fi
