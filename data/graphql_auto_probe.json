@@ -1,6 +1,6 @@
 {
   "doc_id": "28414404834914246",
-  "target_count": 48,
+  "target_count": 72,
   "page_size": 24,
   "provider_count": 31,
   "pages": [
@@ -14,20 +14,33 @@
       "unique_ids_on_page": 24,
       "new_unique_ids": 24,
       "total_unique_ids": 24,
-      "end_cursor": "AQHTLRS9T3uIsEwCQtgbRv4iuiaF6jvDyEDBZTYjvDDff33mICvA6gn8cPB9sGece0DGrdMt0cN2LpAAk50FDiWHYQ",
+      "end_cursor": "AQHTuXPmQ5dFSXYVkBIEs61gTcMDa8mOxNUbWMSWS2Kp4sY2AqoygEVxdLR8av2XRmykrQrMJtV2jt51xTa0Z6y4Zw",
       "has_next_page": true
     },
     {
       "page": 2,
       "status": 200,
       "content_type": "text/javascript; charset=utf-8",
-      "after": "AQHTLRS9T3uIsEwCQtgbRv4iuiaF6jvDyEDBZTYjvDDff33mICvA6gn8cPB9sGece0DGrdMt0cN2LpAAk50FDiWHYQ",
+      "after": "AQHTuXPmQ5dFSXYVkBIEs61gTcMDa8mOxNUbWMSWS2Kp4sY2AqoygEVxdLR8av2XRmykrQrMJtV2jt51xTa0Z6y4Zw",
       "errors": null,
       "edge_count": 24,
       "unique_ids_on_page": 24,
       "new_unique_ids": 24,
       "total_unique_ids": 48,
-      "end_cursor": "AQHTPP51SD7Bj0ExO9k18dfw4Kkr6PzREFEvjJMNQfA4xdK_U2OHVUiVivFH1fFvHJrev1azJ-BnYZPXQyNc9y1H6A",
+      "end_cursor": "AQHTskGxIUjclJbIsvS2zfizQXWOdkz5Kt2mckPaK9u56RI_H7hnzn50n2ILkl6a1UCBO37iLyjU57KQM3ATy4LygA",
+      "has_next_page": true
+    },
+    {
+      "page": 3,
+      "status": 200,
+      "content_type": "text/javascript; charset=utf-8",
+      "after": "AQHTskGxIUjclJbIsvS2zfizQXWOdkz5Kt2mckPaK9u56RI_H7hnzn50n2ILkl6a1UCBO37iLyjU57KQM3ATy4LygA",
+      "errors": null,
+      "edge_count": 24,
+      "unique_ids_on_page": 24,
+      "new_unique_ids": 24,
+      "total_unique_ids": 72,
+      "end_cursor": "AQHT6vBm2QuaLuQVTAHiYxZLtQxjEnXldMCOCvZ-kMPS5DkWGArTLfGmLNZIWYyi6r9oSAnHiKCDTtywutXyBqad1Q",
       "has_next_page": true
     }
   ],
@@ -79,9 +92,33 @@
     "3920807896057829161",
     "3920807853116501810",
     "3920807814528949905",
-    "3920807772351003456"
+    "3920807772351003456",
+    "3919329836758455617",
+    "3918631593523222696",
+    "3914995634005052766",
+    "3911370834992893557",
+    "3909102480890508491",
+    "3907714459087624700",
+    "3907011226065135979",
+    "3906256923901772745",
+    "3905565751936014310",
+    "3902675552293770133",
+    "3902675372735655025",
+    "3902675423956476029",
+    "3902675467023593320",
+    "3902675508664626256",
+    "3901892705702370129",
+    "3901211631322135751",
+    "3900501976434311664",
+    "3897544825080315923",
+    "3895428330862883131",
+    "3894704873174981880",
+    "3893982200065102294",
+    "3892534787991342106",
+    "3891071819688594405",
+    "3891071734141557282"
   ],
   "reached_target": true,
   "stop_reason": "target_reached",
-  "retrieved_unique_count": 48
+  "retrieved_unique_count": 72
 }
