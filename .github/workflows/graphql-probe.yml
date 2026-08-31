@@ -1,0 +1,146 @@
+name: Threads Anonymous GraphQL Probe
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .graphql-probe-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Probe current profile queries
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, re, urllib.parse, urllib.request
+
+          cfg = json.load(open('.graphql-probe-request.json', encoding='utf-8'))
+          profile_url = cfg['profile_url']
+          user_id = str(cfg['user_id'])
+
+          browser_ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
+          req = urllib.request.Request(profile_url, headers={'User-Agent': browser_ua, 'Accept-Language': 'en-US,en;q=0.9'})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              html = r.read().decode('utf-8', errors='ignore')
+
+          token_candidates = []
+          patterns = [
+              r'"LSD",\[\],\{"token":"([^"]+)"',
+              r'"token":"([A-Za-z0-9_-]{18,80})"',
+          ]
+          for pat in patterns:
+              for x in re.findall(pat, html):
+                  if x not in token_candidates:
+                      token_candidates.append(x)
+          lsd = token_candidates[0] if token_candidates else 't'
+
+          relay = {
+              '__relay_internal__pv__BarcelonaIsLoggedInrelayprovider': False,
+              '__relay_internal__pv__BarcelonaIsInternalUserrelayprovider': False,
+              '__relay_internal__pv__BarcelonaIsCrawlerrelayprovider': True,
+              '__relay_internal__pv__BarcelonaOptionalCookiesEnabledrelayprovider': True,
+              '__relay_internal__pv__BarcelonaIsLoggedOutrelayprovider': True,
+          }
+
+          tests = [
+              ('direct', '28060185173641715', 'BarcelonaProfileThreadsTabDirectQuery', {'userID': user_id, 'first': 24}),
+              ('refetch', '28414404834914246', 'BarcelonaProfileThreadsTabRefetchableDirectQuery', {'userID': user_id, 'first': 24}),
+          ]
+
+          def find_page_infos(node, out):
+              if isinstance(node, dict):
+                  if 'page_info' in node and isinstance(node['page_info'], dict):
+                      out.append(node['page_info'])
+                  for v in node.values():
+                      find_page_infos(v, out)
+              elif isinstance(node, list):
+                  for v in node:
+                      find_page_infos(v, out)
+
+          def count_edges(node):
+              total = 0
+              if isinstance(node, dict):
+                  e = node.get('edges')
+                  if isinstance(e, list):
+                      total += len(e)
+                  for v in node.values():
+                      total += count_edges(v)
+              elif isinstance(node, list):
+                  for v in node:
+                      total += count_edges(v)
+              return total
+
+          results = []
+          for label, doc_id, friendly, base_vars in tests:
+              for token_mode, token in [('page_token', lsd), ('literal_t', 't')]:
+                  variables = dict(base_vars)
+                  variables.update(relay)
+                  form = urllib.parse.urlencode({
+                      'lsd': token,
+                      'doc_id': doc_id,
+                      'variables': json.dumps(variables, separators=(',', ':')),
+                  }).encode()
+                  headers = {
+                      'User-Agent': browser_ua,
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'X-FB-LSD': token,
+                      'X-IG-App-ID': '238260118697367',
+                      'X-FB-Friendly-Name': friendly,
+                      'Origin': 'https://www.threads.com',
+                      'Referer': profile_url,
+                  }
+                  request = urllib.request.Request('https://www.threads.com/api/graphql', data=form, headers=headers, method='POST')
+                  item = {'label': label, 'doc_id': doc_id, 'friendly_name': friendly, 'token_mode': token_mode, 'token_found': bool(token_candidates)}
+                  try:
+                      with urllib.request.urlopen(request, timeout=30) as r:
+                          body = r.read().decode('utf-8', errors='ignore')
+                          item['status'] = r.status
+                  except Exception as e:
+                      item['transport_error'] = str(e)
+                      results.append(item)
+                      continue
+                  item['body_prefix'] = body[:4000]
+                  try:
+                      obj = json.loads(body)
+                      item['top_keys'] = list(obj.keys()) if isinstance(obj, dict) else []
+                      item['errors'] = obj.get('errors') if isinstance(obj, dict) else None
+                      data = obj.get('data') if isinstance(obj, dict) else None
+                      item['data_is_null'] = data is None
+                      item['data_keys'] = list(data.keys()) if isinstance(data, dict) else []
+                      pages = []
+                      find_page_infos(data, pages)
+                      item['page_infos'] = pages[:20]
+                      item['edge_count_recursive'] = count_edges(data)
+                  except Exception as e:
+                      item['json_error'] = str(e)
+                  results.append(item)
+
+          with open('data/graphql_probe.json', 'w', encoding='utf-8') as f:
+              json.dump({
+                  'profile_url': profile_url,
+                  'token_candidate_count': len(token_candidates),
+                  'token_lengths': [len(x) for x in token_candidates[:10]],
+                  'results': results,
+              }, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          PY
+
+      - name: Commit probe output
+        shell: bash
+        run: |
+          git config user.name "threads-fetch-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/graphql_probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Probe anonymous Threads GraphQL queries"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
