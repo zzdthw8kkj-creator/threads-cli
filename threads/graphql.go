@@ -37,7 +37,13 @@ func (c *Client) graphqlProfileThreads(ctx context.Context, userID, startCursor 
 	var out []Post
 	cursor := startCursor
 	for page := 0; page < maxGraphQLPages; page++ {
-		vars := map[string]any{"userID": userID}
+		// Relay's current profile pagination query is a refetchable connection.
+		// It needs a page size as well as the cursor; omitting first can return a
+		// valid response with no edges, which looks like pagination simply stopped.
+		vars := map[string]any{
+			"userID": userID,
+			"first":  24,
+		}
 		if cursor != "" {
 			vars["after"] = cursor
 		}
