@@ -27,7 +27,8 @@ jobs:
           base='data/corpora/dara_dara_fairy'
           all323=json.load(open(f'{base}/all_323.json',encoding='utf-8'))
           profile23=json.load(open(f'{base}/profile_top23.json',encoding='utf-8'))
-          osabori=json.load(open('data/threads_corpus_300.json',encoding='utf-8'))
+          osabori_raw=json.load(open('data/threads_corpus_300.json',encoding='utf-8'))
+          osabori=osabori_raw.get('threads',[]) if isinstance(osabori_raw,dict) else osabori_raw
 
           chrono=sorted(all323,key=lambda t:(t.get('timestamp') or 0),reverse=True)
           recent20=chrono[:20]
@@ -95,16 +96,13 @@ jobs:
                   if ch: out.append(style_summary(ch))
               return out
 
-          # Historical internal performance: top/bottom quartiles by likes.
           ordered=sorted(historical300,key=lambda t:t.get('like_count',0) or 0)
           q=max(1,len(ordered)//4); low=ordered[:q]; high=ordered[-q:]
           feature_perf=[]
           for name,fn in FEATURES.items():
               feature_perf.append({
-                'feature':name,
-                'historical_rate':rate(historical300,fn),
-                'top_quartile_rate':rate(high,fn),
-                'bottom_quartile_rate':rate(low,fn),
+                'feature':name,'historical_rate':rate(historical300,fn),
+                'top_quartile_rate':rate(high,fn),'bottom_quartile_rate':rate(low,fn),
                 'top_minus_bottom':round(rate(high,fn)-rate(low,fn),3)
               })
           feature_perf.sort(key=lambda x:abs(x['top_minus_bottom']),reverse=True)
@@ -117,13 +115,9 @@ jobs:
               s=sorted(items,key=lambda t:(t.get('like_count',0) or 0,t.get('reply_count',0) or 0),reverse=reverse)[:n]
               return [{'id':t['root_id'],'datetime_utc':t.get('datetime_utc'),'likes':t.get('like_count',0),'chars':len(txt(t)),'segments':t.get('segment_count',1),'first_line':first_line(t),'last_line':last_line(t),'text':txt(t)} for t in s]
 
-          # repeated openings/closings in Claude recent 20
           recent_open=Counter(first_line(t) for t in recent20 if first_line(t))
           recent_close=Counter(last_line(t) for t in recent20 if last_line(t))
-          hist_open=Counter(first_line(t) for t in historical300 if first_line(t))
-
-          exact_hist=Counter(txt(t) for t in historical300 if txt(t))
-          exact_recent=Counter(txt(t) for t in recent20 if txt(t))
+          exact_hist=Counter(txt(t) for t in historical300 if txt(t)); exact_recent=Counter(txt(t) for t in recent20 if txt(t))
 
           result={
             'split':{
@@ -131,18 +125,12 @@ jobs:
               'profile_top23_count':len(profile23),'pin_candidate_count':len(pin_candidates),
               'pin_candidates':[{'profile_order':t['profile_order'],'id':t['root_id'],'datetime_utc':t.get('datetime_utc'),'likes':t.get('like_count',0),'first_line':first_line(t)} for t in pin_candidates],
             },
-            'recent20':style_summary(recent20),
-            'historical300':style_summary(historical300),
-            'osabori300':style_summary(osabori),
+            'recent20':style_summary(recent20),'historical300':style_summary(historical300),'osabori300':style_summary(osabori),
             'historical_feature_performance':feature_perf,
             'historical_period_chunks_newest_to_oldest':period_chunks(historical300,5),
-            'recent_repeated_openings':recent_open.most_common(20),
-            'recent_repeated_closings':recent_close.most_common(20),
-            'historical_duplicate_groups':sum(1 for n in exact_hist.values() if n>1),
-            'recent_duplicate_groups':sum(1 for n in exact_recent.values() if n>1),
-            'recent20_posts':samples(recent20,20,True),
-            'historical_top20':samples(historical300,20,True),
-            'historical_bottom20':samples(historical300,20,False),
+            'recent_repeated_openings':recent_open.most_common(20),'recent_repeated_closings':recent_close.most_common(20),
+            'historical_duplicate_groups':sum(1 for n in exact_hist.values() if n>1),'recent_duplicate_groups':sum(1 for n in exact_recent.values() if n>1),
+            'recent20_posts':samples(recent20,20,True),'historical_top20':samples(historical300,20,True),'historical_bottom20':samples(historical300,20,False),
           }
 
           with open(f'{base}/claude_recent20.json','w',encoding='utf-8') as f: json.dump(recent20,f,ensure_ascii=False,indent=2); f.write('\n')
