@@ -18,31 +18,22 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
 
-      - name: Probe current profile queries
+      - name: Install browser tooling
+        shell: bash
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Probe current profile queries in browser context
         shell: bash
         run: |
           python - <<'PY'
-          import json, re, urllib.parse, urllib.request
+          import json, re
+          from playwright.sync_api import sync_playwright
 
           cfg = json.load(open('.graphql-probe-request.json', encoding='utf-8'))
           profile_url = cfg['profile_url']
           user_id = str(cfg['user_id'])
-
-          browser_ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
-          req = urllib.request.Request(profile_url, headers={'User-Agent': browser_ua, 'Accept-Language': 'en-US,en;q=0.9'})
-          with urllib.request.urlopen(req, timeout=30) as r:
-              html = r.read().decode('utf-8', errors='ignore')
-
-          token_candidates = []
-          patterns = [
-              r'"LSD",\[\],\{"token":"([^"]+)"',
-              r'"token":"([A-Za-z0-9_-]{18,80})"',
-          ]
-          for pat in patterns:
-              for x in re.findall(pat, html):
-                  if x not in token_candidates:
-                      token_candidates.append(x)
-          lsd = token_candidates[0] if token_candidates else 't'
 
           relay = {
               '__relay_internal__pv__BarcelonaIsLoggedInrelayprovider': False,
@@ -51,85 +42,111 @@ jobs:
               '__relay_internal__pv__BarcelonaOptionalCookiesEnabledrelayprovider': True,
               '__relay_internal__pv__BarcelonaIsLoggedOutrelayprovider': True,
           }
-
           tests = [
-              ('direct', '28060185173641715', 'BarcelonaProfileThreadsTabDirectQuery', {'userID': user_id, 'first': 24}),
-              ('refetch', '28414404834914246', 'BarcelonaProfileThreadsTabRefetchableDirectQuery', {'userID': user_id, 'first': 24}),
+              ('direct', '28060185173641715', 'BarcelonaProfileThreadsTabDirectQuery'),
+              ('refetch', '28414404834914246', 'BarcelonaProfileThreadsTabRefetchableDirectQuery'),
           ]
 
-          def find_page_infos(node, out):
-              if isinstance(node, dict):
-                  if 'page_info' in node and isinstance(node['page_info'], dict):
-                      out.append(node['page_info'])
-                  for v in node.values():
-                      find_page_infos(v, out)
-              elif isinstance(node, list):
-                  for v in node:
-                      find_page_infos(v, out)
-
-          def count_edges(node):
-              total = 0
-              if isinstance(node, dict):
-                  e = node.get('edges')
-                  if isinstance(e, list):
-                      total += len(e)
-                  for v in node.values():
-                      total += count_edges(v)
-              elif isinstance(node, list):
-                  for v in node:
-                      total += count_edges(v)
-              return total
+          def summarize(body):
+              out = {'body_prefix': body[:1200]}
+              try:
+                  obj = json.loads(body)
+              except Exception as e:
+                  out['json_error'] = str(e)
+                  return out
+              out['top_keys'] = list(obj.keys()) if isinstance(obj, dict) else []
+              out['errors'] = obj.get('errors') if isinstance(obj, dict) else None
+              data = obj.get('data') if isinstance(obj, dict) else None
+              out['data_is_null'] = data is None
+              out['data_keys'] = list(data.keys()) if isinstance(data, dict) else []
+              def walk(node, pages, edges):
+                  if isinstance(node, dict):
+                      if isinstance(node.get('page_info'), dict):
+                          pages.append(node['page_info'])
+                      if isinstance(node.get('edges'), list):
+                          edges[0] += len(node['edges'])
+                      for v in node.values():
+                          walk(v, pages, edges)
+                  elif isinstance(node, list):
+                      for v in node:
+                          walk(v, pages, edges)
+              pages, edges = [], [0]
+              walk(data, pages, edges)
+              out['page_infos'] = pages[:20]
+              out['edge_count_recursive'] = edges[0]
+              return out
 
           results = []
-          for label, doc_id, friendly, base_vars in tests:
-              for token_mode, token in [('page_token', lsd), ('literal_t', 't')]:
-                  variables = dict(base_vars)
-                  variables.update(relay)
-                  form = urllib.parse.urlencode({
-                      'lsd': token,
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              context = browser.new_context(
+                  locale='en-US',
+                  viewport={'width': 1280, 'height': 1200},
+                  user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+              )
+              page = context.new_page()
+              page.goto(profile_url, wait_until='domcontentloaded', timeout=90000)
+              page.wait_for_timeout(5000)
+              html = page.content()
+              tokens = []
+              for pat in [r'"LSD",\[\],\{"token":"([^"]+)"', r'"token":"([A-Za-z0-9_-]{18,80})"']:
+                  for x in re.findall(pat, html):
+                      if x not in tokens:
+                          tokens.append(x)
+              lsd = tokens[0] if tokens else 't'
+
+              for label, doc_id, friendly in tests:
+                  variables = {'userID': user_id, 'first': 24, **relay}
+                  payload = {
                       'doc_id': doc_id,
+                      'friendly': friendly,
+                      'lsd': lsd,
                       'variables': json.dumps(variables, separators=(',', ':')),
-                  }).encode()
-                  headers = {
-                      'User-Agent': browser_ua,
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                      'X-FB-LSD': token,
-                      'X-IG-App-ID': '238260118697367',
-                      'X-FB-Friendly-Name': friendly,
-                      'Origin': 'https://www.threads.com',
-                      'Referer': profile_url,
                   }
-                  request = urllib.request.Request('https://www.threads.com/api/graphql', data=form, headers=headers, method='POST')
-                  item = {'label': label, 'doc_id': doc_id, 'friendly_name': friendly, 'token_mode': token_mode, 'token_found': bool(token_candidates)}
-                  try:
-                      with urllib.request.urlopen(request, timeout=30) as r:
-                          body = r.read().decode('utf-8', errors='ignore')
-                          item['status'] = r.status
-                  except Exception as e:
-                      item['transport_error'] = str(e)
-                      results.append(item)
-                      continue
-                  item['body_prefix'] = body[:4000]
-                  try:
-                      obj = json.loads(body)
-                      item['top_keys'] = list(obj.keys()) if isinstance(obj, dict) else []
-                      item['errors'] = obj.get('errors') if isinstance(obj, dict) else None
-                      data = obj.get('data') if isinstance(obj, dict) else None
-                      item['data_is_null'] = data is None
-                      item['data_keys'] = list(data.keys()) if isinstance(data, dict) else []
-                      pages = []
-                      find_page_infos(data, pages)
-                      item['page_infos'] = pages[:20]
-                      item['edge_count_recursive'] = count_edges(data)
-                  except Exception as e:
-                      item['json_error'] = str(e)
+                  # Execute from inside the loaded Threads page. This preserves the
+                  # anonymous browser cookies, origin and request context.
+                  res = page.evaluate('''async (p) => {
+                    const form = new URLSearchParams();
+                    form.set('lsd', p.lsd);
+                    form.set('doc_id', p.doc_id);
+                    form.set('variables', p.variables);
+                    const r = await fetch('/api/graphql', {
+                      method: 'POST',
+                      credentials: 'include',
+                      headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-FB-LSD': p.lsd,
+                        'X-IG-App-ID': '238260118697367',
+                        'X-FB-Friendly-Name': p.friendly
+                      },
+                      body: form.toString()
+                    });
+                    return {
+                      status: r.status,
+                      final_url: r.url,
+                      content_type: r.headers.get('content-type'),
+                      text: await r.text()
+                    };
+                  }''', payload)
+                  item = {
+                      'label': label,
+                      'doc_id': doc_id,
+                      'friendly_name': friendly,
+                      'status': res.get('status'),
+                      'final_url': res.get('final_url'),
+                      'content_type': res.get('content_type'),
+                      'token_found': bool(tokens),
+                      'token_length': len(lsd),
+                  }
+                  item.update(summarize(res.get('text') or ''))
                   results.append(item)
+
+              browser.close()
 
           with open('data/graphql_probe.json', 'w', encoding='utf-8') as f:
               json.dump({
                   'profile_url': profile_url,
-                  'token_candidate_count': len(token_candidates),
-                  'token_lengths': [len(x) for x in token_candidates[:10]],
+                  'mode': 'same_origin_browser_fetch',
                   'results': results,
               }, f, ensure_ascii=False, indent=2)
               f.write('\n')
@@ -142,5 +159,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/graphql_probe.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Probe anonymous Threads GraphQL queries"
+          git commit -m "Probe anonymous Threads GraphQL in browser context"
           git push origin "HEAD:${GITHUB_REF_NAME}"
