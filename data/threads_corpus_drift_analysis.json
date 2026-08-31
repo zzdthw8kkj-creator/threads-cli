@@ -1,0 +1,489 @@
+{
+  "thread_count": 300,
+  "unique_exact_texts": 292,
+  "duplicate_group_count": 8,
+  "duplicate_thread_count": 16,
+  "monthly_stats": [
+    {
+      "month": "2026-02",
+      "count": 13,
+      "mean_likes": 39.308,
+      "median_likes": 35,
+      "max_likes": 65,
+      "mean_chars": 287.462,
+      "mean_segments": 1.923,
+      "continuation_arrow_rate": 0.077,
+      "wai_rate": 0.923,
+      "numbers_rate": 0.385,
+      "personal_experience_rate": 0.538,
+      "direct_reader_rate": 0.538,
+      "contrast_rate": 0.615,
+      "immediate_action_rate": 0.308,
+      "science_terms_rate": 0.077,
+      "money_terms_rate": 0.538,
+      "question_rate": 0.538
+    },
+    {
+      "month": "2026-03",
+      "count": 155,
+      "mean_likes": 62.355,
+      "median_likes": 42,
+      "max_likes": 1138,
+      "mean_chars": 272.161,
+      "mean_segments": 1.723,
+      "continuation_arrow_rate": 0.058,
+      "wai_rate": 0.497,
+      "numbers_rate": 0.574,
+      "personal_experience_rate": 0.342,
+      "direct_reader_rate": 0.361,
+      "contrast_rate": 0.413,
+      "immediate_action_rate": 0.387,
+      "science_terms_rate": 0.394,
+      "money_terms_rate": 0.6,
+      "question_rate": 0.49
+    },
+    {
+      "month": "2026-04",
+      "count": 44,
+      "mean_likes": 33.227,
+      "median_likes": 31.0,
+      "max_likes": 122,
+      "mean_chars": 367.659,
+      "mean_segments": 2.023,
+      "continuation_arrow_rate": 0.114,
+      "wai_rate": 0.591,
+      "numbers_rate": 0.75,
+      "personal_experience_rate": 0.523,
+      "direct_reader_rate": 0.705,
+      "contrast_rate": 0.409,
+      "immediate_action_rate": 0.523,
+      "science_terms_rate": 0.409,
+      "money_terms_rate": 0.659,
+      "question_rate": 0.545
+    },
+    {
+      "month": "2026-05",
+      "count": 37,
+      "mean_likes": 43.73,
+      "median_likes": 26,
+      "max_likes": 202,
+      "mean_chars": 393.568,
+      "mean_segments": 2.243,
+      "continuation_arrow_rate": 0.378,
+      "wai_rate": 0.865,
+      "numbers_rate": 0.784,
+      "personal_experience_rate": 0.622,
+      "direct_reader_rate": 0.784,
+      "contrast_rate": 0.622,
+      "immediate_action_rate": 0.595,
+      "science_terms_rate": 0.243,
+      "money_terms_rate": 0.703,
+      "question_rate": 0.595
+    },
+    {
+      "month": "2026-06",
+      "count": 13,
+      "mean_likes": 26.769,
+      "median_likes": 23,
+      "max_likes": 56,
+      "mean_chars": 383.846,
+      "mean_segments": 2.077,
+      "continuation_arrow_rate": 0.308,
+      "wai_rate": 0.692,
+      "numbers_rate": 1.0,
+      "personal_experience_rate": 0.692,
+      "direct_reader_rate": 0.538,
+      "contrast_rate": 0.615,
+      "immediate_action_rate": 0.308,
+      "science_terms_rate": 0.154,
+      "money_terms_rate": 0.846,
+      "question_rate": 0.308
+    },
+    {
+      "month": "2026-07",
+      "count": 33,
+      "mean_likes": 10.697,
+      "median_likes": 10,
+      "max_likes": 28,
+      "mean_chars": 363.333,
+      "mean_segments": 2.515,
+      "continuation_arrow_rate": 0.788,
+      "wai_rate": 0.939,
+      "numbers_rate": 1.0,
+      "personal_experience_rate": 0.97,
+      "direct_reader_rate": 0.758,
+      "contrast_rate": 0.485,
+      "immediate_action_rate": 0.606,
+      "science_terms_rate": 0.303,
+      "money_terms_rate": 1.0,
+      "question_rate": 0.394
+    },
+    {
+      "month": "2026-08",
+      "count": 5,
+      "mean_likes": 8.8,
+      "median_likes": 9,
+      "max_likes": 11,
+      "mean_chars": 337.8,
+      "mean_segments": 3,
+      "continuation_arrow_rate": 1.0,
+      "wai_rate": 0.8,
+      "numbers_rate": 1.0,
+      "personal_experience_rate": 1.0,
+      "direct_reader_rate": 0.6,
+      "contrast_rate": 0.6,
+      "immediate_action_rate": 0.8,
+      "science_terms_rate": 0.2,
+      "money_terms_rate": 1.0,
+      "question_rate": 0.2
+    }
+  ],
+  "month_normalized_feature_performance": [
+    {
+      "feature": "immediate_action",
+      "count": 137,
+      "median_relative_with": 1.0,
+      "median_relative_without": 1.0,
+      "mean_relative_with": 1.633,
+      "mean_relative_without": 1.14
+    },
+    {
+      "feature": "money_terms",
+      "count": 204,
+      "median_relative_with": 1.095,
+      "median_relative_without": 0.894,
+      "mean_relative_with": 1.514,
+      "mean_relative_without": 1.047
+    },
+    {
+      "feature": "personal_experience",
+      "count": 152,
+      "median_relative_with": 1.074,
+      "median_relative_without": 0.974,
+      "mean_relative_with": 1.49,
+      "mean_relative_without": 1.236
+    },
+    {
+      "feature": "continuation_arrow",
+      "count": 64,
+      "median_relative_with": 1.0,
+      "median_relative_without": 1.028,
+      "mean_relative_with": 1.176,
+      "mean_relative_without": 1.416
+    },
+    {
+      "feature": "contrast",
+      "count": 140,
+      "median_relative_with": 1.056,
+      "median_relative_without": 1.0,
+      "mean_relative_with": 1.49,
+      "mean_relative_without": 1.255
+    },
+    {
+      "feature": "direct_reader",
+      "count": 158,
+      "median_relative_with": 1.065,
+      "median_relative_without": 1.0,
+      "mean_relative_with": 1.474,
+      "mean_relative_without": 1.243
+    },
+    {
+      "feature": "science_terms",
+      "count": 102,
+      "median_relative_with": 1.012,
+      "median_relative_without": 1.0,
+      "mean_relative_with": 1.293,
+      "mean_relative_without": 1.402
+    },
+    {
+      "feature": "wai",
+      "count": 191,
+      "median_relative_with": 1.0,
+      "median_relative_without": 1.065,
+      "mean_relative_with": 1.35,
+      "mean_relative_without": 1.39
+    },
+    {
+      "feature": "numbers",
+      "count": 207,
+      "median_relative_with": 1.0,
+      "median_relative_without": 0.976,
+      "mean_relative_with": 1.354,
+      "mean_relative_without": 1.388
+    },
+    {
+      "feature": "question",
+      "count": 147,
+      "median_relative_with": 1.0,
+      "median_relative_without": 1.0,
+      "mean_relative_with": 1.368,
+      "mean_relative_without": 1.361
+    }
+  ],
+  "within_month_quartile_features": [
+    {
+      "feature": "money_terms",
+      "top_within_month_rate": 0.767,
+      "bottom_within_month_rate": 0.493,
+      "difference": 0.274
+    },
+    {
+      "feature": "numbers",
+      "top_within_month_rate": 0.726,
+      "bottom_within_month_rate": 0.589,
+      "difference": 0.137
+    },
+    {
+      "feature": "personal_experience",
+      "top_within_month_rate": 0.575,
+      "bottom_within_month_rate": 0.438,
+      "difference": 0.137
+    },
+    {
+      "feature": "direct_reader",
+      "top_within_month_rate": 0.616,
+      "bottom_within_month_rate": 0.479,
+      "difference": 0.137
+    },
+    {
+      "feature": "immediate_action",
+      "top_within_month_rate": 0.589,
+      "bottom_within_month_rate": 0.452,
+      "difference": 0.137
+    },
+    {
+      "feature": "question",
+      "top_within_month_rate": 0.562,
+      "bottom_within_month_rate": 0.425,
+      "difference": 0.137
+    },
+    {
+      "feature": "contrast",
+      "top_within_month_rate": 0.521,
+      "bottom_within_month_rate": 0.438,
+      "difference": 0.082
+    },
+    {
+      "feature": "continuation_arrow",
+      "top_within_month_rate": 0.164,
+      "bottom_within_month_rate": 0.233,
+      "difference": -0.068
+    },
+    {
+      "feature": "wai",
+      "top_within_month_rate": 0.616,
+      "bottom_within_month_rate": 0.671,
+      "difference": -0.055
+    },
+    {
+      "feature": "science_terms",
+      "top_within_month_rate": 0.329,
+      "bottom_within_month_rate": 0.315,
+      "difference": 0.014
+    }
+  ],
+  "exact_duplicate_groups": [
+    {
+      "count": 2,
+      "likes": [
+        108,
+        1138
+      ],
+      "dates": [
+        "2026-05-29T11:58:06+00:00",
+        "2026-03-01T07:01:17+00:00"
+      ],
+      "codes": [
+        "DY6_Zi5k1n8",
+        "DVVSrzDk-ij"
+      ],
+      "text_prefix": "ちょっと、信じられんかもしれんけど実話や。\nワイが借金500万で、連絡先を片っ端から消して「独りぼっち」になった1週間後の話。\n「もう誰にも気遣わんでええわ」って、お気に入りの喫茶店でおさぼりしてたんよ。\nそしたら、隣に座ったおっちゃんに話しかけられた。\n\nそのおっちゃん、実は年商数十億の経営者やったんよ。\n「君、ええ脱力感してるな」って気に入られて、そこから人生がバグり始めた。\n\n今の師匠を紹介してくれたんも、宝くじ級のチャンスをくれたんも、全部その「おさぼり」の空白から始まったんや。\n\nもしワイが、昔の「嫌な付き合い」に時間使ってたら、その席には座ってへんかった。\n執着を捨てて「空白」を作"
+    },
+    {
+      "count": 2,
+      "likes": [
+        140,
+        361
+      ],
+      "dates": [
+        "2026-05-20T12:38:08+00:00",
+        "2026-03-10T03:06:17+00:00"
+      ],
+      "codes": [
+        "DYj408mk_zH",
+        "DVsC8ZQk5e3"
+      ],
+      "text_prefix": "これ、マジでヤバい。\n金運を秒でバグらせる口癖、教えたるわ。\nみんな「お金ほしい」とか「金運上げたい」って言うやろ？\nでもそれ、宇宙には「今はお金がありません」って宣言してるのと一緒。\nワイが今でも言ってる本物の口癖はこれ↓\n\n「なぜか知らんけど、ワイの元にはお金が流れ込んでくる」\nこの「なぜか知らんけど」が肝なんよ。\n稼ぎ方なんて考えんでええ。宇宙に丸投げや。\n理屈を捨てた奴から、豊かさのゲートが開くんや。\n今日から口癖変えてみ。未来の自分に感謝されるで。"
+    },
+    {
+      "count": 2,
+      "likes": [
+        149,
+        280
+      ],
+      "dates": [
+        "2026-03-14T10:13:55+00:00",
+        "2026-03-07T01:19:24+00:00"
+      ],
+      "codes": [
+        "DV3HEEbk9Fz",
+        "DVkIU7Ik4kR"
+      ],
+      "text_prefix": "金運がガツンと上がる直前、実は「一見、悪いこと」に見えるバグが起きる。\nこれが来たら、おめでとう。札束が玄関先まで来てる証拠や。\n\n・ 大事にしてたものが壊れる（身代わり・厄落とし）\n・ なぜか「掃除」や「断捨離」を無性にしたくなる\n・ 急な出費が続く（エネルギーの入れ替わり）\n・ あり得んくらい、眠い（潜在意識の書き換え中）\n\nでも絶対やったら、あかんNG行為もある。これだけはやめてな、\n\n特に出費が重なった時、「減っていく…」って不安になるのはNG。\n「大きな豊かさが入るためのスペース空けやな！」ってニヤニヤして過ごしてみ。\n\n宇宙は空いたスペースを、必ず「今のアンタに見合った富」で埋めよ"
+    },
+    {
+      "count": 2,
+      "likes": [
+        82,
+        161
+      ],
+      "dates": [
+        "2026-03-11T11:56:26+00:00",
+        "2026-03-03T02:42:01+00:00"
+      ],
+      "codes": [
+        "DVvkaQNE-vR",
+        "DVZ-mj4kyBl"
+      ],
+      "text_prefix": "「あ、ゾロ目や」「スクラッチ1000円当たった」\nここで「ラッキー！」で終わらせてる人、もったいなさすぎて涙出るわ。\n今の師匠に言われたんよ。\n「アンタ、それ宇宙銀行からの着金テストやで。スルーしてへんか？」\n\n着金テストってのはな、宇宙が「この金額でアンタ、どんな周波数出すん？」って試してる状態。\n1000円当たって「たったこれだけか…」って思う奴には、次は1円も来ん。\n逆に「うわ！宇宙さん、ワイのこと大好きやん！受取口全開やで！」って、億当たった時と同じくらいニヤける人。\nこの「ニヤけの周波数」が、次の桁を連れてくるんや。\n\n1. 見つけたら即、自分を褒める（「引き寄せたワイ、天才！」）\n"
+    },
+    {
+      "count": 2,
+      "likes": [
+        55,
+        98
+      ],
+      "dates": [
+        "2026-03-19T08:56:36+00:00",
+        "2026-03-08T01:04:36+00:00"
+      ],
+      "codes": [
+        "DWD2LzGkW71",
+        "DVmrbbHEzzL"
+      ],
+      "text_prefix": "「臨時収入が欲しい」と願ってるうちは、1円も入ってこん。\r\nなぜなら、脳が「今は金がない」という欠乏状態をフル稼働させてるからや。\r\n臨時収入を引き寄せる最短ルートは、これや↓\n\n「今あるお金を、宇宙からの前払い金やと思い込むこと」\r\n・給料が入った→「あ、宇宙からのボーナス（第1弾）やな」\r\n・10円拾った→「お、金運の呼び水きたで」\r\n・奢ってもらった→「宇宙の利息、回収完了」\r\n「まだ足りない」を「もう始まってる」に書き換えた瞬間、脳のサーチライトが「豊かさ」にピントを合わせる。\r\nすると、今まで見えてなかった臨時収入の種（チャンスやアイデア）がボロボロ見つかるようになるんや。\r\n宇宙は"
+    },
+    {
+      "count": 2,
+      "likes": [
+        48,
+        83
+      ],
+      "dates": [
+        "2026-05-06T10:09:16+00:00",
+        "2026-03-02T09:13:59+00:00"
+      ],
+      "codes": [
+        "DX_kqS3kwXG",
+        "DVYGqgEk_ET"
+      ],
+      "text_prefix": "【人に感謝ばかりしていると、なぜか人生が停滞する】\nコレ宇宙の真理なんやけど、\n\n答えはシンプル。その感謝、「自分を置き去りにして、外側に媚びてるだけ」やから。\n「今の環境に感謝しなきゃ」\n「嫌な人にもありがとう」って無理に心に蓋をしてへん？\nこれ、宇宙から見れば「今の不遇な状態で満足です！」って宣言してるのと同じ。\n本当の感謝は、外側に向ける前に「今の自分を全肯定する」ことから始まる。\n自分を「おさぼり」させて、甘やかして、心がホッとした時に自然と溢れるのが本物の周波数。無理な感謝はただの「執着」や。\n今すぐ「感謝教」を脱退して、自分を一番に愛でてみ。その瞬間、停滞してた運命が爆速で動き出す"
+    },
+    {
+      "count": 2,
+      "likes": [
+        35,
+        61
+      ],
+      "dates": [
+        "2026-05-12T13:07:45+00:00",
+        "2026-03-01T00:22:29+00:00"
+      ],
+      "codes": [
+        "DYPV22VEzE7",
+        "DVUlC6TE9eX"
+      ],
+      "text_prefix": "引き寄せの法則っちゅうのは、「予想外の角度」から現実が飛んでくるから、\nほんまにビックリするんよ。\nこれ、スピリチュアルちゃうで？「意識のチャンネル」合わせただけやねん。\n\nワイもな、もう11年も毎日自由に過ごしてんねんけど、\nこれ、明らかに「引き寄せのパワー」使いこなしてるからやねん。\n必死こいて階段駆け上がってる人、おるやろ？\nでもな、引き寄せ知ってもうたら、人生「上りのエスカレーター」乗ったみたいなもんよ。\n何もしてへんように見えて、自分はただ乗ってるだけ。\nそれで人生がスーーーーッて、勝手に進化していくねん。\nもし今、「人生しんどいわ」って息切らして階段登ってるんなら、\nあんた、もうエ"
+    },
+    {
+      "count": 2,
+      "likes": [
+        20,
+        58
+      ],
+      "dates": [
+        "2026-05-11T13:10:22+00:00",
+        "2026-02-28T09:05:20+00:00"
+      ],
+      "codes": [
+        "DYMxXJ2k9z4",
+        "DVS8Fa5kzOw"
+      ],
+      "text_prefix": "炎上覚悟で言うわ。\n世の中に出回ってる「引き寄せの法則」、9割が偽物やで。\n「毎日アファメーション100回しましょう」\n「常にポジティブでいましょう」\nこれ信じて頑張ってる人、正直に手挙げてみ。\nしんどいやろ？ それ、逆効果なんよ。\n\n本当の引き寄せはな、「頑張る」とか「必死に願う」とか、そんな疲れることせんでええ。\nむしろ、ポジティブでいようと必死になればなるほど、潜在意識は「今の自分はネガティブや」って強烈に書き込んでる。\n偽物を見分ける方法はたった一つ。\n「それをやってて心が楽になるか、しんどくなるか」\nしんどいなら、それはあんたを縛る呪いや。\nワイの師匠から教わった「本物の引き寄せ」は"
+    }
+  ],
+  "repeated_opening_prefixes": [
+    {
+      "prefix": "ちょっと、信じられんかもしれんけど実話や。借金500万で",
+      "count": 5
+    },
+    {
+      "prefix": "これ知らんと損するで。金運上がる人の財布、中身は薄いのに",
+      "count": 2
+    },
+    {
+      "prefix": "正直、これだけは墓場まで持っていこうと思っとった。借金5",
+      "count": 2
+    },
+    {
+      "prefix": "「おさぼりして引き寄せ体質に！」これ聞くと、真面目な人ほ",
+      "count": 2
+    },
+    {
+      "prefix": "ちょっと、信じられんかもしれんけど実話や。ワイが借金50",
+      "count": 2
+    },
+    {
+      "prefix": "引き寄せの師匠が放った言葉が狂ってた。「あんた、借金に感",
+      "count": 2
+    },
+    {
+      "prefix": "「人生変えるには死ぬ気で努力！」とか思ってる奴、一生苦労",
+      "count": 2
+    },
+    {
+      "prefix": "これ、マジでヤバい。金運を秒でバグらせる口癖、教えたるわ",
+      "count": 2
+    },
+    {
+      "prefix": "引き寄せの法則っちゅうのは、「予想外の角度」から現実が飛",
+      "count": 2
+    },
+    {
+      "prefix": "炎上覚悟で言うわ。世の中に出回ってる「引き寄せの法則」、",
+      "count": 2
+    },
+    {
+      "prefix": "【人に感謝ばかりしていると、なぜか人生が停滞する】コレ宇",
+      "count": 2
+    },
+    {
+      "prefix": "ちょっと、迷ったけど言うわ。宇宙銀行への一番ええ預け方、",
+      "count": 2
+    },
+    {
+      "prefix": "内緒にしてほしいんやけど、ワイの教えてる30代の会社員の",
+      "count": 2
+    },
+    {
+      "prefix": "「臨時収入が欲しい」と願ってるうちは、1円も入ってこん。",
+      "count": 2
+    },
+    {
+      "prefix": "宇宙銀行から振込が始まる前兆、教えたるわ。それは「なぜか",
+      "count": 2
+    },
+    {
+      "prefix": "不思議な話なんやけど、自分を大切に、つまり「自分を後回し",
+      "count": 2
+    },
+    {
+      "prefix": "金運がガツンと上がる直前、実は「一見、悪いこと」に見える",
+      "count": 2
+    },
+    {
+      "prefix": "「あ、ゾロ目や」「スクラッチ1000円当たった」ここで「",
+      "count": 2
+    }
+  ]
+}
