@@ -37,12 +37,16 @@ func (c *Client) graphqlProfileThreads(ctx context.Context, userID, startCursor 
 	var out []Post
 	cursor := startCursor
 	for page := 0; page < maxGraphQLPages; page++ {
-		// Relay's current profile pagination query is a refetchable connection.
-		// It needs a page size as well as the cursor; omitting first can return a
-		// valid response with no edges, which looks like pagination simply stopped.
+		// The current Relay refetchable operation expects all six local arguments
+		// to be present in variables even when their compiled client defaults are
+		// null/false. Omitting them produces missing_required_variable_value.
 		vars := map[string]any{
-			"userID": userID,
-			"first":  24,
+			"after":                        nil,
+			"allow_page_info_for_lox_user": false,
+			"before":                       nil,
+			"first":                        24,
+			"last":                         nil,
+			"userID":                       userID,
 		}
 		if cursor != "" {
 			vars["after"] = cursor
