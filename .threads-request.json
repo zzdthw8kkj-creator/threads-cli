@@ -1,7 +1,7 @@
 {
-  "mode": "search",
-  "query": "おさぼり宇宙人",
-  "limit": 50,
-  "request_id": "2026-08-31T18:55+09:00-resolve-osabori",
+  "mode": "profile",
+  "username": "osabori_space",
+  "limit": 300,
+  "request_id": "2026-08-31T19:00+09:00-osabori-300",
   "requested_by": "chatgpt"
 }
