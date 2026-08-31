@@ -1,0 +1,350 @@
+name: Threads Monetization Corpus Lab
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .monetization-corpus-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Install Playwright
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+      - name: Collect 3 account corpora and analyze monetization
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, math, os, re, statistics, urllib.request
+          from collections import Counter, defaultdict
+          from datetime import datetime, timezone
+          from playwright.sync_api import sync_playwright
+
+          cfg=json.load(open('.monetization-corpus-request.json',encoding='utf-8'))
+          accounts=cfg['accounts']
+          target_count=int(cfg.get('target_count',500))
+          rootdir='data/monetization_benchmark'
+          os.makedirs(rootdir,exist_ok=True)
+          page_size=24
+
+          network=json.load(open('data/network_docids.json',encoding='utf-8'))
+          target=next(x for x in network['relay_operations'] if x['name']=='BarcelonaProfileThreadsTabRefetchableDirectQuery')
+          doc_id=target['doc_id']; js_url=target['url']
+          with urllib.request.urlopen(urllib.request.Request(js_url,headers={'User-Agent':'Mozilla/5.0'}),timeout=30) as r:
+              script=r.read().decode('utf-8',errors='ignore')
+          needle='BarcelonaProfileThreadsTabRefetchableDirectQuery.threads.graphql'
+          pos=script.find(needle)
+          if pos<0: raise SystemExit('query module not found')
+          snippet=script[max(0,pos-5000):min(len(script),pos+150000)]
+          providers=sorted(set(re.findall(r'__relay_internal__pv__[A-Za-z0-9_]+relayprovider',snippet)))
+          provider_defaults={k:False for k in providers}
+          for k in providers:
+              if 'IsCrawler' in k or 'OptionalCookiesEnabled' in k or 'IsLoggedOut' in k:
+                  provider_defaults[k]=True
+
+          def text_from_post(post):
+              info=post.get('text_post_app_info') or {}
+              fr=((info.get('text_fragments') or {}).get('fragments') or [])
+              parts=[x.get('plaintext') for x in fr if isinstance(x,dict) and isinstance(x.get('plaintext'),str)]
+              if parts: return ''.join(parts).strip()
+              cap=post.get('caption')
+              if isinstance(cap,dict) and isinstance(cap.get('text'),str): return cap['text'].strip()
+              for k in ('text','caption_text'):
+                  if isinstance(post.get(k),str): return post[k].strip()
+              return ''
+
+          def ts_from_post(post):
+              for k in ('taken_at','timestamp','created_at','published_at'):
+                  v=post.get(k)
+                  if isinstance(v,(int,float)): return int(v)
+              return None
+
+          def normalize_segment(post):
+              info=post.get('text_post_app_info') or {}; user=post.get('user') or {}; ts=ts_from_post(post)
+              return {
+                  'id':str(post.get('pk') or post.get('id') or ''),
+                  'code':post.get('code') or post.get('shortcode') or '',
+                  'username':user.get('username'),
+                  'user_id':str(user.get('pk') or user.get('id') or ''),
+                  'text':text_from_post(post),
+                  'like_count':post.get('like_count'),
+                  'reply_count':info.get('direct_reply_count'),
+                  'repost_count':info.get('repost_count'),
+                  'quote_count':info.get('quote_count'),
+                  'timestamp':ts,
+                  'datetime_utc':datetime.fromtimestamp(ts,timezone.utc).isoformat() if ts else None,
+              }
+
+          def extract_lsd(html):
+              tokens=[]
+              for pat in [r'"LSD",\[\],\{"token":"([^"]+)"',r'"token":"([A-Za-z0-9_-]{18,80})"']:
+                  for x in re.findall(pat,html):
+                      if x not in tokens: tokens.append(x)
+              return tokens[0] if tokens else 't'
+
+          def candidate_user_ids(html, username):
+              out=[]; low=html.lower(); needle=username.lower(); start=0
+              while True:
+                  p=low.find(needle,start)
+                  if p<0: break
+                  chunk=html[max(0,p-2500):min(len(html),p+2500)]
+                  for pat in [r'["\\](?:pk|id)["\\]?\s*:\s*["\\]?(\d{5,15})', r'(\d{5,15}).{0,500}["\\]username["\\]?\s*:\s*["\\]'+re.escape(username)]:
+                      try: vals=re.findall(pat,chunk,re.I|re.S)
+                      except Exception: vals=[]
+                      for v in vals:
+                          if v not in out: out.append(v)
+                  start=p+len(needle)
+              return out
+
+          def gql_fetch(page, lsd, variables):
+              payload={'doc_id':doc_id,'lsd':lsd,'variables':json.dumps(variables,separators=(',',':'))}
+              return page.evaluate('''async p=>{const f=new URLSearchParams();f.set('lsd',p.lsd);f.set('doc_id',p.doc_id);f.set('variables',p.variables);const r=await fetch('/api/graphql',{method:'POST',credentials:'include',headers:{'Content-Type':'application/x-www-form-urlencoded','X-FB-LSD':p.lsd,'X-IG-App-ID':'238260118697367','X-FB-Friendly-Name':'BarcelonaProfileThreadsTabRefetchableDirectQuery'},body:f.toString()});return {status:r.status,text:await r.text()}}''',payload)
+
+          def media_from_response(res):
+              if res.get('status')!=200: return None
+              try: obj=json.loads(res.get('text') or '{}')
+              except Exception: return None
+              data=obj.get('data') or {}
+              media=data.get('mediaData')
+              return media if isinstance(media,dict) else None
+
+          def discover_user_id(page, html, lsd, username):
+              cands=candidate_user_ids(html,username)
+              # Also use user ids found near visible post-user objects if present.
+              for pat in [r'"username":"'+re.escape(username)+r'".{0,1200}?"pk":"(\d{5,15})"',
+                          r'"pk":"(\d{5,15})".{0,1200}?"username":"'+re.escape(username)+r'"']:
+                  for v in re.findall(pat,html,re.I|re.S):
+                      if v not in cands: cands.append(v)
+              for uid in cands[:30]:
+                  vars=dict(provider_defaults)
+                  vars.update({'allow_page_info_for_lox_user':True,'before':None,'first':3,'last':None,'userID':str(uid),'after':None})
+                  media=media_from_response(gql_fetch(page,lsd,vars))
+                  if not media: continue
+                  for edge in media.get('edges') or []:
+                      for item in ((edge.get('node') or {}).get('thread_items') or []):
+                          post=(item or {}).get('post') or {}; user=post.get('user') or {}
+                          if (user.get('username') or '').lower()==username.lower():
+                              actual=str(user.get('pk') or user.get('id') or uid)
+                              return actual
+              raise RuntimeError(f'Could not resolve user_id for {username}; candidates={cands[:10]}')
+
+          FEATURES={
+              'monetization_direct':['収益','売上','稼ぐ','稼げ','マネタイズ','利益','月収','年収','副業','案件','商品','販売','有料','成約'],
+              'offer_product':['note','教材','講座','コンサル','スクール','コミュニティ','サロン','ロードマップ','テンプレ','プロンプト','Brain','Tips','tips','コンテンツ販売'],
+              'lead_magnet':['無料','プレゼント','配布','特典','テンプレ','プロンプト','受け取','欲しい人','保存版','公開します'],
+              'cta_profile':['プロフィール','プロフ','リンク','固定投稿','bio','リンクから','プロフから'],
+              'cta_engagement':['DM','コメント','リプ','返信','合言葉','欲しい人','フォロー','保存して'],
+              'scarcity':['限定','先着','締切','今日まで','残り','今だけ','期間限定','募集終了'],
+              'proof':['実績','売上','収益','フォロワー','閲覧','表示','view','View','達成','成果','購入','受講生','再現','伸びた','増えた'],
+              'authority_ai':['Claude','ChatGPT','GPT','AI','Threads','スレッズ','分析','検証','データ','自動化'],
+              'pain_problem':['伸びない','稼げない','売れない','悩','失敗','しんど','できない','詰む','伸び悩'],
+              'transformation':['変わった','伸びた','増えた','売れた','稼げた','できた','改善','達成'],
+              'belief_flip':['実は','逆','じゃない','ではない','勘違い','知らない','間違い','むしろ'],
+              'instruction':['やり方','方法','手順','ステップ','まず','次に','コツ','ポイント','設計','作り方'],
+              'community':['コミュニティ','オプチャ','オープンチャット','Discord','サロン','仲間','メンバー'],
+              'story':['僕は','私は','自分は','当時','昔','最初は','ある日','ヶ月前','年前'],
+          }
+          URL_RE=re.compile(r'https?://\S+')
+          MONEY_RE=re.compile(r'(?<!\d)(\d{1,4}(?:\.\d+)?)(万|千)?円')
+
+          def has_any(txt, words): return any(w.lower() in txt.lower() for w in words)
+          def tags(txt): return [k for k,v in FEATURES.items() if has_any(txt,v)]
+          def funnel_stages(txt):
+              t=set(tags(txt)); out=[]
+              if t & {'pain_problem','belief_flip','instruction'}: out.append('awareness_education')
+              if t & {'proof','authority_ai','story','transformation'}: out.append('authority_trust')
+              if t & {'lead_magnet','cta_profile','cta_engagement'}: out.append('lead_capture')
+              if t & {'offer_product','monetization_direct','scarcity'}: out.append('offer_conversion')
+              if 'community' in t: out.append('retention_community')
+              return out or ['unclear']
+          def cta_type(txt):
+              last='\n'.join([x.strip() for x in txt.splitlines() if x.strip()][-3:])
+              if has_any(last,FEATURES['cta_profile']): return 'profile_link'
+              if has_any(last,['DM','コメント','リプ','返信','合言葉','欲しい人']): return 'engagement_dm_comment'
+              if has_any(last,['フォロー']): return 'follow'
+              if has_any(last,['保存']): return 'save'
+              if URL_RE.search(last): return 'external_url'
+              return 'none_or_implicit'
+          def engagement(t):
+              return (t.get('like_count') or 0)+2*(t.get('reply_count') or 0)+3*(t.get('repost_count') or 0)+3*(t.get('quote_count') or 0)
+
+          def annotate(t):
+              txt=t.get('combined_text') or ''
+              t['engagement_score']=engagement(t)
+              t['monetization_tags']=tags(txt)
+              t['funnel_stages']=funnel_stages(txt)
+              t['cta_type']=cta_type(txt)
+              t['urls']=URL_RE.findall(txt)
+              t['money_mentions']=[''.join(x) for x in MONEY_RE.findall(txt)]
+              return t
+
+          def rate(items, key):
+              return round(sum(key in (t.get('monetization_tags') or []) for t in items)/len(items),3) if items else 0
+          def mean(vals): return round(statistics.mean(vals),3) if vals else 0
+          def med(vals): return statistics.median(vals) if vals else 0
+
+          def analyze_account(username, threads, crawl_meta):
+              valid=[annotate(dict(t)) for t in threads if (t.get('combined_text') or '').strip()]
+              ordered=sorted(valid,key=lambda t:t['engagement_score'])
+              q=max(1,len(ordered)//4); bottom=ordered[:q]; top=ordered[-q:]
+              feature_perf=[]
+              for name in FEATURES:
+                  feature_perf.append({
+                      'feature':name,'rate':rate(valid,name),'top_quartile_rate':rate(top,name),'bottom_quartile_rate':rate(bottom,name),
+                      'top_minus_bottom':round(rate(top,name)-rate(bottom,name),3)
+                  })
+              feature_perf.sort(key=lambda x:abs(x['top_minus_bottom']),reverse=True)
+              cta=Counter(t['cta_type'] for t in valid); stage=Counter(s for t in valid for s in t['funnel_stages'])
+              chunks=[]
+              chronological=sorted(valid,key=lambda t:t.get('timestamp') or 0,reverse=True)
+              for i in range(0,len(chronological),100):
+                  ch=chronological[i:i+100]
+                  if not ch: continue
+                  chunks.append({'range':f'{i+1}-{i+len(ch)}_newest_to_oldest','count':len(ch),'engagement_median':med([x['engagement_score'] for x in ch]),
+                                 'feature_rates':{k:rate(ch,k) for k in FEATURES},'cta_types':dict(Counter(x['cta_type'] for x in ch))})
+              relevant=[t for t in valid if set(t['monetization_tags']) & {'monetization_direct','offer_product','lead_magnet','cta_profile','cta_engagement','scarcity','proof','community'}]
+              top_relevant=sorted(relevant,key=lambda t:(t['engagement_score'],t.get('timestamp') or 0),reverse=True)[:120]
+              top_overall=sorted(valid,key=lambda t:(t['engagement_score'],t.get('timestamp') or 0),reverse=True)[:60]
+              openings=Counter()
+              endings=Counter()
+              for t in valid:
+                  ls=[x.strip() for x in (t['combined_text'] or '').splitlines() if x.strip()]
+                  if ls:
+                      openings[ls[0][:50]]+=1; endings[ls[-1][:70]]+=1
+              result={
+                  'username':username,'crawl':crawl_meta,'count':len(valid),
+                  'date_range_utc':[min((t.get('datetime_utc') for t in valid if t.get('datetime_utc')),default=None),max((t.get('datetime_utc') for t in valid if t.get('datetime_utc')),default=None)],
+                  'engagement':{'mean':mean([t['engagement_score'] for t in valid]),'median':med([t['engagement_score'] for t in valid]),'max':max([t['engagement_score'] for t in valid],default=0)},
+                  'feature_rates':{k:rate(valid,k) for k in FEATURES},'feature_performance':feature_perf,
+                  'cta_distribution':dict(cta),'funnel_stage_distribution':dict(stage),'chunks_newest_to_oldest':chunks,
+                  'top_repeated_openings':openings.most_common(30),'top_repeated_endings':endings.most_common(30),
+                  'monetization_relevant_count':len(relevant),'top_monetization_posts':top_relevant,'top_overall_posts':top_overall,
+              }
+              return valid,result
+
+          all_analyses={}; all_annotated={}; crawl_results={}
+
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              for idx,acct in enumerate(accounts):
+                  username=acct['username'].lstrip('@'); profile_url=acct.get('profile_url') or f'https://www.threads.com/@{username}'
+                  outdir=os.path.join(rootdir,username); os.makedirs(outdir,exist_ok=True)
+                  context=browser.new_context(locale='ja-JP',viewport={'width':1280,'height':1200})
+                  page=context.new_page(); page.goto(profile_url,wait_until='domcontentloaded',timeout=90000); page.wait_for_timeout(5000)
+                  html=page.content(); lsd=extract_lsd(html)
+                  user_id=str(acct.get('user_id') or '')
+                  if not user_id:
+                      user_id=discover_user_id(page,html,lsd,username)
+                  base_vars=dict(provider_defaults)
+                  base_vars.update({'allow_page_info_for_lox_user':True,'before':None,'first':page_size,'last':None,'userID':user_id})
+                  threads=[]; seen=set(); cursor=None; pages=[]; max_pages=max(1,math.ceil(target_count/page_size)+2)
+                  stop_reason=None
+                  for page_no in range(1,max_pages+1):
+                      variables=dict(base_vars); variables['after']=cursor
+                      res=gql_fetch(page,lsd,variables); media=media_from_response(res)
+                      if not media:
+                          stop_reason=f'graphql_http_or_parse_{res.get("status")}'; break
+                      edges=media.get('edges') or []; pi=media.get('page_info') or {}; new=0
+                      for edge in edges:
+                          node=edge.get('node') or {}; items=node.get('thread_items') or []
+                          if not items: continue
+                          raw_posts=[(item or {}).get('post') or {} for item in items]
+                          segs=[normalize_segment(x) for x in raw_posts if isinstance(x,dict)]
+                          own=[x for x in segs if x['id'] and (x.get('username') or '').lower()==username.lower()]
+                          if not own: continue
+                          root=own[0]
+                          if root['id'] in seen: continue
+                          seen.add(root['id']); new+=1
+                          combined='\n\n'.join(x['text'] for x in own if x['text']).strip()
+                          threads.append({'profile_order':len(threads)+1,'root_id':root['id'],'root_code':root['code'],
+                              'permalink':f'https://www.threads.com/@{username}/post/{root["code"]}' if root['code'] else None,
+                              'timestamp':root['timestamp'],'datetime_utc':root['datetime_utc'],
+                              'like_count':root['like_count'] if isinstance(root['like_count'],int) else 0,
+                              'reply_count':root['reply_count'] if isinstance(root['reply_count'],int) else 0,
+                              'repost_count':root['repost_count'] if isinstance(root['repost_count'],int) else 0,
+                              'quote_count':root['quote_count'] if isinstance(root['quote_count'],int) else 0,
+                              'segment_count':len(own),'root_text':root['text'],'combined_text':combined,'segments':own})
+                      pages.append({'page':page_no,'edges':len(edges),'new':new,'total':len(threads),'has_next_page':bool(pi.get('has_next_page'))})
+                      if len(threads)>=target_count: stop_reason='target_reached'; break
+                      nxt=pi.get('end_cursor')
+                      if not new: stop_reason='no_new_posts'; break
+                      if not pi.get('has_next_page') or not nxt: stop_reason='no_next_cursor'; break
+                      if nxt==cursor: stop_reason='cursor_stalled'; break
+                      cursor=nxt; page.wait_for_timeout(700)
+                  threads=threads[:target_count]
+                  meta={'username':username,'profile_url':profile_url,'user_id':user_id,'requested':target_count,'retrieved':len(threads),'pages':pages,'stop_reason':stop_reason}
+                  annotated,analysis=analyze_account(username,threads,meta)
+                  all_annotated[username]=annotated; all_analyses[username]=analysis; crawl_results[username]=meta
+                  with open(os.path.join(outdir,'raw_500.json'),'w',encoding='utf-8') as f: json.dump(threads,f,ensure_ascii=False,indent=2); f.write('\n')
+                  with open(os.path.join(outdir,'annotated_500.json'),'w',encoding='utf-8') as f: json.dump(annotated,f,ensure_ascii=False,indent=2); f.write('\n')
+                  with open(os.path.join(outdir,'monetization_analysis.json'),'w',encoding='utf-8') as f: json.dump(analysis,f,ensure_ascii=False,indent=2); f.write('\n')
+                  context.close()
+                  if idx<len(accounts)-1: page_wait=1500
+              browser.close()
+
+          # Cross-account comparison.
+          feature_cross=[]
+          for feat in FEATURES:
+              rows=[]; positives=0
+              for u,a in all_analyses.items():
+                  perf=next(x for x in a['feature_performance'] if x['feature']==feat)
+                  rows.append({'username':u,'rate':perf['rate'],'top_minus_bottom':perf['top_minus_bottom']})
+                  if perf['top_minus_bottom']>0: positives+=1
+              feature_cross.append({'feature':feat,'positive_lift_accounts':positives,'accounts':rows,
+                                    'mean_top_minus_bottom':round(statistics.mean([x['top_minus_bottom'] for x in rows]),3) if rows else 0})
+          feature_cross.sort(key=lambda x:(x['positive_lift_accounts'],x['mean_top_minus_bottom']),reverse=True)
+
+          stage_compare={u:a['funnel_stage_distribution'] for u,a in all_analyses.items()}
+          cta_compare={u:a['cta_distribution'] for u,a in all_analyses.items()}
+          best_posts=[]
+          for u,posts in all_annotated.items():
+              for t in posts:
+                  if set(t['monetization_tags']) & {'monetization_direct','offer_product','lead_magnet','cta_profile','cta_engagement','scarcity','proof','community'}:
+                      best_posts.append({'username':u,**t})
+          best_posts=sorted(best_posts,key=lambda x:(x['engagement_score'],x.get('timestamp') or 0),reverse=True)[:240]
+
+          cross={'generated_at_utc':datetime.now(timezone.utc).isoformat(),'target_per_account':target_count,'crawl_results':crawl_results,
+                 'accounts':{u:{'count':a['count'],'feature_rates':a['feature_rates'],'engagement':a['engagement'],'monetization_relevant_count':a['monetization_relevant_count']} for u,a in all_analyses.items()},
+                 'feature_cross_account':feature_cross,'funnel_stage_compare':stage_compare,'cta_compare':cta_compare,
+                 'top_cross_account_monetization_posts':best_posts}
+          with open(os.path.join(rootdir,'cross_account_analysis.json'),'w',encoding='utf-8') as f: json.dump(cross,f,ensure_ascii=False,indent=2); f.write('\n')
+
+          # Compact evidence pack for AI/human reading without loading all raw posts.
+          md=['# Monetization Benchmark Evidence Pack','',f'Target: {target_count} posts/account','']
+          for u,a in all_analyses.items():
+              md += [f'## @{u}',f"Retrieved: {a['count']} / monetization-relevant: {a['monetization_relevant_count']}",
+                     f"Engagement score median: {a['engagement']['median']} / max: {a['engagement']['max']}",'',
+                     '### Feature rates']
+              for k,v in sorted(a['feature_rates'].items(),key=lambda x:x[1],reverse=True): md.append(f'- {k}: {v}')
+              md += ['','### Strongest top-v-bottom lifts']
+              for x in a['feature_performance'][:10]: md.append(f"- {x['feature']}: {x['top_minus_bottom']:+.3f} (top {x['top_quartile_rate']}, bottom {x['bottom_quartile_rate']})")
+              md += ['','### CTA distribution']+[f'- {k}: {v}' for k,v in a['cta_distribution'].items()]
+              md += ['','### Top monetization-relevant examples']
+              for t in a['top_monetization_posts'][:20]:
+                  txt=(t['combined_text'] or '').replace('\n',' / ')
+                  md.append(f"- score={t['engagement_score']} tags={','.join(t['monetization_tags'])} :: {txt[:420]}")
+              md.append('')
+          md += ['## Cross-account robust signals']
+          for x in feature_cross:
+              md.append(f"- {x['feature']}: positive in {x['positive_lift_accounts']}/3, mean lift {x['mean_top_minus_bottom']:+.3f}")
+          with open(os.path.join(rootdir,'EVIDENCE_PACK.md'),'w',encoding='utf-8') as f: f.write('\n'.join(md)+'\n')
+          PY
+      - name: Commit monetization corpus and analysis
+        run: |
+          git config user.name monetization-research-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/monetization_benchmark/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Collect and analyze monetization benchmark corpora'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
