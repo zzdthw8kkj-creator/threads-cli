@@ -1,0 +1,205 @@
+name: Dara Corpus Collector
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .dara-corpus-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Install Playwright
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+      - name: Collect and split corpus
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, math, os, re, statistics, urllib.request
+          from datetime import datetime, timezone
+          from collections import Counter
+          from playwright.sync_api import sync_playwright
+
+          cfg=json.load(open('.dara-corpus-request.json',encoding='utf-8'))
+          profile_url=cfg['profile_url']
+          username=cfg['username']
+          user_id=str(cfg['user_id'])
+          target_count=int(cfg.get('target_count',323))
+          outdir=f'data/corpora/{username}'
+          os.makedirs(outdir,exist_ok=True)
+          page_size=24
+          max_pages=max(1,math.ceil(target_count/page_size))
+
+          network=json.load(open('data/network_docids.json',encoding='utf-8'))
+          target=next(x for x in network['relay_operations'] if x['name']=='BarcelonaProfileThreadsTabRefetchableDirectQuery')
+          doc_id=target['doc_id']; js_url=target['url']
+          with urllib.request.urlopen(urllib.request.Request(js_url,headers={'User-Agent':'Mozilla/5.0'}),timeout=30) as r:
+              script=r.read().decode('utf-8',errors='ignore')
+          needle='BarcelonaProfileThreadsTabRefetchableDirectQuery.threads.graphql'
+          pos=script.find(needle)
+          if pos<0: raise SystemExit('query module not found')
+          snippet=script[max(0,pos-5000):min(len(script),pos+150000)]
+          providers=sorted(set(re.findall(r'__relay_internal__pv__[A-Za-z0-9_]+relayprovider',snippet)))
+          base_vars={k:False for k in providers}
+          for k in providers:
+              if 'IsCrawler' in k or 'OptionalCookiesEnabled' in k or 'IsLoggedOut' in k: base_vars[k]=True
+          base_vars.update({'allow_page_info_for_lox_user':True,'before':None,'first':page_size,'last':None,'userID':user_id})
+
+          def text_from_post(post):
+              info=post.get('text_post_app_info') or {}
+              fr=((info.get('text_fragments') or {}).get('fragments') or [])
+              parts=[x.get('plaintext') for x in fr if isinstance(x,dict) and isinstance(x.get('plaintext'),str)]
+              if parts: return ''.join(parts).strip()
+              cap=post.get('caption')
+              if isinstance(cap,dict) and isinstance(cap.get('text'),str): return cap['text'].strip()
+              for k in ('text','caption_text'):
+                  if isinstance(post.get(k),str): return post[k].strip()
+              return ''
+
+          def ts_from_post(post):
+              for k in ('taken_at','timestamp','created_at','published_at'):
+                  v=post.get(k)
+                  if isinstance(v,(int,float)): return int(v)
+              return None
+
+          def seg(post):
+              info=post.get('text_post_app_info') or {}; user=post.get('user') or {}; ts=ts_from_post(post)
+              return {
+                  'id':str(post.get('pk') or post.get('id') or ''),
+                  'code':post.get('code') or post.get('shortcode') or '',
+                  'username':user.get('username'),
+                  'text':text_from_post(post),
+                  'like_count':post.get('like_count'),
+                  'reply_count':info.get('direct_reply_count'),
+                  'repost_count':info.get('repost_count'),
+                  'quote_count':info.get('quote_count'),
+                  'timestamp':ts,
+                  'datetime_utc':datetime.fromtimestamp(ts,timezone.utc).isoformat() if ts else None,
+              }
+
+          threads=[]; seen=set(); cursor=None; pages=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              context=browser.new_context(locale='en-US',viewport={'width':1280,'height':1200})
+              page=context.new_page(); page.goto(profile_url,wait_until='domcontentloaded',timeout=90000); page.wait_for_timeout(5000)
+              html=page.content(); tokens=[]
+              for pat in [r'"LSD",\[\],\{"token":"([^"]+)"',r'"token":"([A-Za-z0-9_-]{18,80})"']:
+                  for x in re.findall(pat,html):
+                      if x not in tokens: tokens.append(x)
+              lsd=tokens[0] if tokens else 't'
+              for page_no in range(1,max_pages+1):
+                  variables=dict(base_vars); variables['after']=cursor
+                  payload={'doc_id':doc_id,'lsd':lsd,'variables':json.dumps(variables,separators=(',',':'))}
+                  res=page.evaluate('''async p=>{const f=new URLSearchParams();f.set('lsd',p.lsd);f.set('doc_id',p.doc_id);f.set('variables',p.variables);const r=await fetch('/api/graphql',{method:'POST',credentials:'include',headers:{'Content-Type':'application/x-www-form-urlencoded','X-FB-LSD':p.lsd,'X-IG-App-ID':'238260118697367','X-FB-Friendly-Name':'BarcelonaProfileThreadsTabRefetchableDirectQuery'},body:f.toString()});return {status:r.status,text:await r.text()}}''',payload)
+                  if res.get('status')!=200: break
+                  obj=json.loads(res.get('text') or '{}'); data=obj.get('data') or {}; media=data.get('mediaData') or {}
+                  edges=media.get('edges') or []; pi=media.get('page_info') or {}; new=0
+                  for edge in edges:
+                      node=edge.get('node') or {}; items=node.get('thread_items') or []
+                      if not items: continue
+                      raw_posts=[(item or {}).get('post') or {} for item in items]
+                      all_segs=[seg(x) for x in raw_posts if isinstance(x,dict)]
+                      own=[x for x in all_segs if x['id'] and x['username']==username]
+                      if not own: continue
+                      root=own[0]
+                      if root['id'] in seen: continue
+                      seen.add(root['id']); new+=1
+                      root_raw=raw_posts[0] if raw_posts else {}
+                      is_pinned=bool(root_raw.get('is_pinned') or node.get('is_pinned') or edge.get('is_pinned'))
+                      combined='\n\n'.join(x['text'] for x in own if x['text']).strip()
+                      threads.append({
+                          'profile_order':len(threads)+1,
+                          'root_id':root['id'],'root_code':root['code'],
+                          'permalink':f'https://www.threads.com/@{username}/post/{root["code"]}' if root['code'] else None,
+                          'is_pinned':is_pinned,
+                          'timestamp':root['timestamp'],'datetime_utc':root['datetime_utc'],
+                          'like_count':root['like_count'] if isinstance(root['like_count'],int) else 0,
+                          'reply_count':root['reply_count'] if isinstance(root['reply_count'],int) else 0,
+                          'repost_count':root['repost_count'] if isinstance(root['repost_count'],int) else 0,
+                          'quote_count':root['quote_count'] if isinstance(root['quote_count'],int) else 0,
+                          'segment_count':len(own),'root_text':root['text'],'combined_text':combined,'segments':own,
+                      })
+                  pages.append({'page':page_no,'edges':len(edges),'new':new,'total':len(threads),'has_next_page':bool(pi.get('has_next_page'))})
+                  if len(threads)>=target_count: break
+                  nxt=pi.get('end_cursor')
+                  if not new or not pi.get('has_next_page') or not nxt or nxt==cursor: break
+                  cursor=nxt
+              browser.close()
+
+          threads=threads[:target_count]
+          profile23=threads[:23]
+          current20=[]
+          for t in threads:
+              if not t['is_pinned']:
+                  current20.append(t)
+              if len(current20)>=20: break
+          current_ids={t['root_id'] for t in current20}
+          historical_candidates=[t for t in threads if t['root_id'] not in current_ids]
+          historical_candidates.sort(key=lambda t:(t['timestamp'] or 0),reverse=True)
+          historical300=historical_candidates[:300]
+
+          FEATURES={
+              'question':lambda x:'？' in x or '?' in x,
+              'numbers':lambda x:bool(re.search(r'\d',x)),
+              'personal_experience':lambda x:any(w in x for w in ['僕','俺','自分','昔','当時','前は','だった','経験']),
+              'direct_reader':lambda x:any(w in x for w in ['あなた','君','みんな','フォロワー']),
+              'contrast':lambda x:any(w in x for w in ['でも','実は','じゃない','むしろ','逆','違う']),
+              'immediate_action':lambda x:any(w in x for w in ['やってみ','してみ','試して','今日','今すぐ','一回','だけやる']),
+              'spiritual_terms':lambda x:any(w in x for w in ['引き寄せ','宇宙','潜在意識','願望','波動','周波数','豊かさ']),
+              'science_terms':lambda x:any(w in x for w in ['脳','心理','自律神経','科学','認知','神経','ホルモン']),
+              'money_terms':lambda x:any(w in x for w in ['円','万円','お金','収入','借金','臨時収入','金運']),
+              'dialogue_quotes':lambda x:'「' in x and '」' in x,
+              'continuation_arrow':lambda x:'↓' in x,
+          }
+          def summary(items):
+              texts=[t['combined_text'] for t in items if t['combined_text']]
+              likes=[t['like_count'] for t in items]
+              chars=[len(t['combined_text']) for t in items]
+              return {
+                  'count':len(items),'valid_text_count':len(texts),
+                  'likes_mean':round(statistics.mean(likes),2) if likes else 0,
+                  'likes_median':statistics.median(likes) if likes else 0,
+                  'likes_max':max(likes) if likes else 0,
+                  'chars_mean':round(statistics.mean(chars),1) if chars else 0,
+                  'chars_median':statistics.median(chars) if chars else 0,
+                  'segments_mean':round(statistics.mean([t['segment_count'] for t in items]),2) if items else 0,
+                  'feature_rates':{name:round(sum(fn(t['combined_text']) for t in items)/len(items),3) if items else 0 for name,fn in FEATURES.items()},
+              }
+          exact=Counter(t['combined_text'] for t in historical300 if t['combined_text'])
+          duplicates=[{'text':txt,'count':n} for txt,n in exact.items() if n>1]
+          top_hist=sorted(historical300,key=lambda t:(t['like_count'],t['reply_count']),reverse=True)[:20]
+          bottom_hist=sorted(historical300,key=lambda t:(t['like_count'],t['reply_count']))[:20]
+          meta={
+              'username':username,'requested':target_count,'retrieved':len(threads),
+              'profile23_count':len(profile23),'profile23_pinned_count':sum(t['is_pinned'] for t in profile23),
+              'claude_recent20_count':len(current20),'historical300_count':len(historical300),
+              'pages':pages,
+              'recent23_summary':summary(profile23),'claude_recent20_summary':summary(current20),'historical300_summary':summary(historical300),
+              'historical_exact_duplicate_groups':len(duplicates),
+              'claude_recent20_ids':[t['root_id'] for t in current20],
+              'profile23_pinned':[{'root_id':t['root_id'],'datetime_utc':t['datetime_utc'],'likes':t['like_count'],'text':t['combined_text']} for t in profile23 if t['is_pinned']],
+              'historical_top20':[{'root_id':t['root_id'],'datetime_utc':t['datetime_utc'],'likes':t['like_count'],'chars':len(t['combined_text']),'segments':t['segment_count'],'text':t['combined_text']} for t in top_hist],
+              'historical_bottom20':[{'root_id':t['root_id'],'datetime_utc':t['datetime_utc'],'likes':t['like_count'],'chars':len(t['combined_text']),'segments':t['segment_count'],'text':t['combined_text']} for t in bottom_hist],
+          }
+          files={'all_323.json':threads,'profile_top23.json':profile23,'claude_recent20.json':current20,'historical300.json':historical300,'summary.json':meta}
+          for name,obj in files.items():
+              with open(os.path.join(outdir,name),'w',encoding='utf-8') as f: json.dump(obj,f,ensure_ascii=False,indent=2); f.write('\n')
+          PY
+      - name: Commit corpus
+        run: |
+          git config user.name threads-fetch-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/corpora/dara_dara_fairy/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Collect dara_dara_fairy recent and historical corpora'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
