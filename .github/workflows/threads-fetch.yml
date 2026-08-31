@@ -38,8 +38,8 @@ jobs:
           req = json.load(open('.threads-request.json', encoding='utf-8'))
           mode = str(req.get('mode', 'profile')).strip().lower()
           limit = int(req.get('limit', 50))
-          if mode not in {'profile', 'search'}:
-              raise SystemExit('mode must be profile or search')
+          if mode not in {'profile', 'search', 'note_creator'}:
+              raise SystemExit('mode must be profile, search, or note_creator')
           if not 1 <= limit <= 500:
               raise SystemExit('limit must be between 1 and 500')
           print(f'mode={mode}')
@@ -49,42 +49,63 @@ jobs:
               if not username or not all(c.isalnum() or c in '._' for c in username):
                   raise SystemExit('Invalid username')
               print(f'username={username}')
-          else:
+          elif mode == 'search':
               query = str(req.get('query', '')).strip()
               if not query:
                   raise SystemExit('search mode requires query')
               print(f'query={query}')
+          else:
+              note_user = str(req.get('note_user', '')).strip()
+              if not note_user or not all(c.isalnum() or c in '._' for c in note_user):
+                  raise SystemExit('Invalid note_user')
+              print(f'note_user={note_user}')
           PY
 
-      - name: Fetch Threads data
+      - name: Fetch data
         shell: bash
         run: |
           mkdir -p data
-          if [ "${{ steps.request.outputs.mode }}" = "profile" ]; then
+          MODE="${{ steps.request.outputs.mode }}"
+          if [ "$MODE" = "profile" ]; then
             go run ./cmd/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
-          else
+          elif [ "$MODE" = "search" ]; then
             go run ./cmd/th search "${{ steps.request.outputs.query }}" -n "${{ steps.request.outputs.limit }}" -o json > data/search_raw.json
+          else
+            python - <<'PY'
+          import json, urllib.request
+          user = "${{ steps.request.outputs.note_user }}"
+          req = urllib.request.Request(
+              f"https://note.com/api/v2/creators/{user}",
+              headers={"User-Agent": "Mozilla/5.0"},
+          )
+          with urllib.request.urlopen(req, timeout=30) as r:
+              body = json.load(r)
+          with open('data/note_creator.json','w',encoding='utf-8') as f:
+              json.dump(body,f,ensure_ascii=False,indent=2)
+              f.write('\n')
+          PY
           fi
           python - <<'PY'
           import json
           from datetime import datetime, timezone
           req = json.load(open('.threads-request.json', encoding='utf-8'))
           mode = str(req.get('mode', 'profile')).strip().lower()
-          path = 'data/posts_raw.json' if mode == 'profile' else 'data/search_raw.json'
-          rows = json.load(open(path, encoding='utf-8'))
-          if not isinstance(rows, list):
-              raise SystemExit('threads-cli output was not a JSON list')
           meta = {
               'mode': mode,
               'requested_limit': int(req.get('limit', 50)),
-              'retrieved_count': len(rows),
-              'source': 'threads-cli',
+              'source': 'threads-cli' if mode in {'profile','search'} else 'note-api',
               'generated_at': datetime.now(timezone.utc).isoformat(),
           }
           if mode == 'profile':
+              rows = json.load(open('data/posts_raw.json', encoding='utf-8'))
+              meta['retrieved_count'] = len(rows) if isinstance(rows, list) else None
               meta['username'] = str(req.get('username', '')).lstrip('@')
-          else:
+          elif mode == 'search':
+              rows = json.load(open('data/search_raw.json', encoding='utf-8'))
+              meta['retrieved_count'] = len(rows) if isinstance(rows, list) else None
               meta['query'] = str(req.get('query', ''))
+          else:
+              meta['note_user'] = str(req.get('note_user', ''))
           with open('data/fetch_meta.json', 'w', encoding='utf-8') as f:
               json.dump(meta, f, ensure_ascii=False, indent=2)
               f.write('\n')
@@ -95,10 +116,10 @@ jobs:
         run: |
           git config user.name "threads-fetch-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/posts_raw.json data/search_raw.json data/fetch_meta.json 2>/dev/null || true
+          git add data/posts_raw.json data/search_raw.json data/note_creator.json data/fetch_meta.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."
             exit 0
           fi
-          git commit -m "Fetch Threads data"
+          git commit -m "Fetch external social data"
           git push origin "HEAD:${GITHUB_REF_NAME}"
