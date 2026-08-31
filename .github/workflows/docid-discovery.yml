@@ -18,96 +18,95 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
 
-      - name: Discover persisted query ids
+      - name: Install browser tooling
+        shell: bash
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Capture Threads GraphQL requests
         shell: bash
         run: |
           python - <<'PY'
-          import html as htmllib
           import json
-          import re
-          import urllib.parse
-          import urllib.request
+          from urllib.parse import parse_qs
+          from playwright.sync_api import sync_playwright
 
-          req = json.load(open('.docid-request.json', encoding='utf-8'))
-          profile_url = req.get('profile_url') or 'https://www.threads.com/@zuck'
-          headers = {
-              'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/140 Safari/537.36',
-              'Accept-Language': 'en-US,en;q=0.9',
-          }
+          req_cfg = json.load(open('.docid-request.json', encoding='utf-8'))
+          profile_url = req_cfg.get('profile_url') or 'https://www.threads.com/@zuck'
+          captured = []
+          seen = set()
 
-          def fetch(url):
-              r = urllib.request.Request(url, headers=headers)
-              with urllib.request.urlopen(r, timeout=30) as resp:
-                  return resp.read().decode('utf-8', errors='ignore')
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              context = browser.new_context(
+                  viewport={"width": 1280, "height": 1200},
+                  locale='en-US',
+                  user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+              )
+              page = context.new_page()
 
-          page = fetch(profile_url)
-          scripts = []
-          for m in re.finditer(r'<script[^>]+src=["\']([^"\']+)', page, re.I):
-              u = htmllib.unescape(m.group(1))
-              scripts.append(urllib.parse.urljoin(profile_url, u))
-          scripts = list(dict.fromkeys(scripts))[:120]
+              def capture(request):
+                  if '/api/graphql' not in request.url:
+                      return
+                  body = request.post_data or ''
+                  fields = parse_qs(body)
+                  doc_id = (fields.get('doc_id') or [''])[0]
+                  variables = (fields.get('variables') or [''])[0]
+                  headers = request.headers
+                  friendly = headers.get('x-fb-friendly-name') or headers.get('x-fb-friendly-name'.lower()) or ''
+                  key = (doc_id, variables, friendly)
+                  if key in seen:
+                      return
+                  seen.add(key)
+                  item = {
+                      'url': request.url,
+                      'doc_id': doc_id,
+                      'friendly_name': friendly,
+                      'variables_raw': variables,
+                  }
+                  try:
+                      item['variables'] = json.loads(variables) if variables else None
+                  except Exception:
+                      item['variables'] = None
+                  captured.append(item)
 
-          keywords = [
-              'BarcelonaProfileThreadsTabQuery',
-              'BarcelonaProfileRepliesTabQuery',
-              'BarcelonaProfileRootQuery',
-              'BarcelonaPostPageQuery',
-              'BarcelonaSearch',
-              'ProfileThreadsTabQuery',
-              'ProfileThreads',
-              'ProfileReplies',
-              'PostPageQuery',
-          ]
+              page.on('request', capture)
+              page.goto(profile_url, wait_until='domcontentloaded', timeout=90000)
+              page.wait_for_timeout(5000)
 
-          results = []
-          blobs = [('HTML', profile_url, page)]
-          for i, url in enumerate(scripts):
-              try:
-                  text = fetch(url)
-              except Exception:
-                  continue
-              blobs.append((f'script-{i}', url, text))
+              # Dismiss common logged-out overlays if they appear, then force enough
+              # scrolling to make the profile request its next page.
+              for label in ['Continue without logging in', 'Not now', 'Close']:
+                  try:
+                      page.get_by_text(label, exact=False).first.click(timeout=1000)
+                  except Exception:
+                      pass
 
-          for source, url, text in blobs:
-              for kw in keywords:
-                  start = 0
-                  hits = 0
-                  while True:
-                      pos = text.find(kw, start)
-                      if pos < 0 or hits >= 20:
-                          break
-                      lo = max(0, pos - 1200)
-                      hi = min(len(text), pos + 1200)
-                      snippet = text[lo:hi]
-                      nums = list(dict.fromkeys(re.findall(r'(?<!\d)\d{10,20}(?!\d)', snippet)))
-                      doc_pairs = re.findall(r'(?:doc_id|docId|docID)[^0-9]{0,80}(\d{10,20})', snippet, re.I)
-                      results.append({
-                          'keyword': kw,
-                          'source': source,
-                          'url': url,
-                          'numbers_nearby': nums[:30],
-                          'docid_patterns': list(dict.fromkeys(doc_pairs))[:20],
-                          'snippet': snippet[:2400],
-                      })
-                      hits += 1
-                      start = pos + len(kw)
+              for _ in range(16):
+                  try:
+                      page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
+                  except Exception:
+                      pass
+                  page.wait_for_timeout(1200)
 
-          out = {
-              'profile_url': profile_url,
-              'script_count': len(scripts),
-              'matches': results,
-          }
-          with open('data/docid_candidates.json', 'w', encoding='utf-8') as f:
-              json.dump(out, f, ensure_ascii=False, indent=2)
+              browser.close()
+
+          with open('data/network_docids.json', 'w', encoding='utf-8') as f:
+              json.dump({
+                  'profile_url': profile_url,
+                  'request_count': len(captured),
+                  'requests': captured,
+              }, f, ensure_ascii=False, indent=2)
               f.write('\n')
           PY
 
-      - name: Commit candidates
+      - name: Commit captured ids
         shell: bash
         run: |
           git config user.name "threads-fetch-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/docid_candidates.json
+          git add data/network_docids.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Discover Threads GraphQL doc ids"
+          git commit -m "Capture current Threads GraphQL doc ids"
           git push origin "HEAD:${GITHUB_REF_NAME}"
