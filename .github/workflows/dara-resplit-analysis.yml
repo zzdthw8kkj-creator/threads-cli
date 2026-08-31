@@ -1,0 +1,159 @@
+name: Dara Chronological Corpus Analysis
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .dara-analysis-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Re-split and compare corpora
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, re, statistics, math
+          from collections import Counter, defaultdict
+
+          base='data/corpora/dara_dara_fairy'
+          all323=json.load(open(f'{base}/all_323.json',encoding='utf-8'))
+          profile23=json.load(open(f'{base}/profile_top23.json',encoding='utf-8'))
+          osabori=json.load(open('data/threads_corpus_300.json',encoding='utf-8'))
+
+          chrono=sorted(all323,key=lambda t:(t.get('timestamp') or 0),reverse=True)
+          recent20=chrono[:20]
+          historical300=chrono[20:320]
+          recent_ids={t['root_id'] for t in recent20}
+          pin_candidates=[t for t in profile23 if t['root_id'] not in recent_ids]
+
+          def txt(t): return (t.get('combined_text') or t.get('text') or '').strip()
+          def med(v): return statistics.median(v) if v else 0
+          def mean(v): return round(statistics.mean(v),3) if v else 0
+          def rate(items,fn): return round(sum(bool(fn(txt(t))) for t in items)/len(items),3) if items else 0
+          def lines(s): return [x.strip() for x in s.splitlines() if x.strip()]
+          def sentences(s): return [x.strip() for x in re.split(r'[。！？!?]+',s) if x.strip()]
+
+          FEATURES={
+            'question':lambda s:'？' in s or '?' in s,
+            'exclamation':lambda s:'！' in s or '!' in s,
+            'numbers':lambda s:bool(re.search(r'\d',s)),
+            'dialogue_quotes':lambda s:'「' in s and '」' in s,
+            'parentheses':lambda s:any(c in s for c in ['（','）','(',')']),
+            'bullets':lambda s:bool(re.search(r'(^|\n)[・●◯○\-]',s)),
+            'continuation_arrow':lambda s:'↓' in s,
+            'first_person':lambda s:any(w in s for w in ['僕','俺','自分','ワイ']),
+            'direct_reader':lambda s:any(w in s for w in ['あなた','君','みんな','あんた','フォロワー']),
+            'personal_story':lambda s:any(w in s for w in ['僕は','僕が','俺は','俺が','ワイが','当時','昔','前は','ある日','その時','経験']),
+            'contrast':lambda s:any(w in s for w in ['でも','実は','じゃない','ではなく','むしろ','逆','違う','よりも']),
+            'causal':lambda s:any(w in s for w in ['だから','なぜなら','理由','つまり','というのも','その結果','結果として']),
+            'immediate_action':lambda s:any(w in s for w in ['やってみ','してみ','試して','今日','今すぐ','一回','だけやる','置いてみ','飲んでみ']),
+            'spiritual':lambda s:any(w in s for w in ['引き寄せ','宇宙','潜在意識','願望','波動','周波数','豊かさ','エネルギー']),
+            'science':lambda s:any(w in s for w in ['脳','心理','自律神経','科学','認知','神経','ホルモン','セロトニン','オキシトシン']),
+            'money':lambda s:any(w in s for w in ['円','万円','お金','収入','借金','臨時収入','金運','通帳']),
+            'daily_scene':lambda s:any(w in s for w in ['朝','夜','昼','寝','コーヒー','スマホ','LINE','仕事','予定','家','玄関','財布','通帳','電車','コンビニ','風呂','布団','ご飯','散歩','太陽','川','サイゼ','喫茶店']),
+            'body_feeling':lambda s:any(w in s for w in ['重い','疲','眠','息','呼吸','体','身体','胸','頭','落ち着','焦','不安','気分','心地','楽','苦し']),
+            'abstract_nominals':lambda s:any(w in s for w in ['状態','価値','容量','認識','構造','本質','思考','感情','関係性','負債','余白','選択','能力']),
+            'aphorism_x_is_y':lambda s:bool(re.search(r'[^\n。]{1,18}は、?[^\n。]{1,22}[。\n]',s)),
+            'negation_reframe':lambda s:bool(re.search(r'(じゃない|ではない|んじゃない|違う)[。\n]',s)),
+            'reason_one':lambda s:'理由は1つ' in s or '理由はひとつ' in s,
+          }
+
+          def style_summary(items):
+              texts=[txt(t) for t in items]
+              ls=[lines(s) for s in texts]
+              ss=[sentences(s) for s in texts]
+              char_counts=[len(s) for s in texts]
+              sentence_lengths=[len(x) for arr in ss for x in arr]
+              line_lengths=[len(x) for arr in ls for x in arr]
+              return {
+                'count':len(items),
+                'date_range_utc':[min((t.get('datetime_utc') for t in items if t.get('datetime_utc')),default=None),max((t.get('datetime_utc') for t in items if t.get('datetime_utc')),default=None)],
+                'likes_mean':mean([t.get('like_count',0) or 0 for t in items]),
+                'likes_median':med([t.get('like_count',0) or 0 for t in items]),
+                'likes_max':max([t.get('like_count',0) or 0 for t in items],default=0),
+                'chars_mean':mean(char_counts),'chars_median':med(char_counts),
+                'segments_mean':mean([t.get('segment_count',1) or 1 for t in items]),
+                'nonblank_lines_mean':mean([len(x) for x in ls]),
+                'line_length_mean':mean(line_lengths),'sentence_length_mean':mean(sentence_lengths),
+                'short_line_rate':round(sum(len(x)<=18 for arr in ls for x in arr)/max(1,sum(len(arr) for arr in ls)),3),
+                'features':{k:rate(items,v) for k,v in FEATURES.items()},
+              }
+
+          def period_chunks(items,n=5):
+              out=[]; size=max(1,math.ceil(len(items)/n))
+              for i in range(0,len(items),size):
+                  ch=items[i:i+size]
+                  if ch: out.append(style_summary(ch))
+              return out
+
+          # Historical internal performance: top/bottom quartiles by likes.
+          ordered=sorted(historical300,key=lambda t:t.get('like_count',0) or 0)
+          q=max(1,len(ordered)//4); low=ordered[:q]; high=ordered[-q:]
+          feature_perf=[]
+          for name,fn in FEATURES.items():
+              feature_perf.append({
+                'feature':name,
+                'historical_rate':rate(historical300,fn),
+                'top_quartile_rate':rate(high,fn),
+                'bottom_quartile_rate':rate(low,fn),
+                'top_minus_bottom':round(rate(high,fn)-rate(low,fn),3)
+              })
+          feature_perf.sort(key=lambda x:abs(x['top_minus_bottom']),reverse=True)
+
+          def first_line(t):
+              l=lines(txt(t)); return l[0] if l else ''
+          def last_line(t):
+              l=lines(txt(t)); return l[-1] if l else ''
+          def samples(items,n=20,reverse=True):
+              s=sorted(items,key=lambda t:(t.get('like_count',0) or 0,t.get('reply_count',0) or 0),reverse=reverse)[:n]
+              return [{'id':t['root_id'],'datetime_utc':t.get('datetime_utc'),'likes':t.get('like_count',0),'chars':len(txt(t)),'segments':t.get('segment_count',1),'first_line':first_line(t),'last_line':last_line(t),'text':txt(t)} for t in s]
+
+          # repeated openings/closings in Claude recent 20
+          recent_open=Counter(first_line(t) for t in recent20 if first_line(t))
+          recent_close=Counter(last_line(t) for t in recent20 if last_line(t))
+          hist_open=Counter(first_line(t) for t in historical300 if first_line(t))
+
+          exact_hist=Counter(txt(t) for t in historical300 if txt(t))
+          exact_recent=Counter(txt(t) for t in recent20 if txt(t))
+
+          result={
+            'split':{
+              'source_count':len(all323),'recent20_count':len(recent20),'historical300_count':len(historical300),
+              'profile_top23_count':len(profile23),'pin_candidate_count':len(pin_candidates),
+              'pin_candidates':[{'profile_order':t['profile_order'],'id':t['root_id'],'datetime_utc':t.get('datetime_utc'),'likes':t.get('like_count',0),'first_line':first_line(t)} for t in pin_candidates],
+            },
+            'recent20':style_summary(recent20),
+            'historical300':style_summary(historical300),
+            'osabori300':style_summary(osabori),
+            'historical_feature_performance':feature_perf,
+            'historical_period_chunks_newest_to_oldest':period_chunks(historical300,5),
+            'recent_repeated_openings':recent_open.most_common(20),
+            'recent_repeated_closings':recent_close.most_common(20),
+            'historical_duplicate_groups':sum(1 for n in exact_hist.values() if n>1),
+            'recent_duplicate_groups':sum(1 for n in exact_recent.values() if n>1),
+            'recent20_posts':samples(recent20,20,True),
+            'historical_top20':samples(historical300,20,True),
+            'historical_bottom20':samples(historical300,20,False),
+          }
+
+          with open(f'{base}/claude_recent20.json','w',encoding='utf-8') as f: json.dump(recent20,f,ensure_ascii=False,indent=2); f.write('\n')
+          with open(f'{base}/historical300.json','w',encoding='utf-8') as f: json.dump(historical300,f,ensure_ascii=False,indent=2); f.write('\n')
+          with open(f'{base}/three_corpus_analysis.json','w',encoding='utf-8') as f: json.dump(result,f,ensure_ascii=False,indent=2); f.write('\n')
+          PY
+      - name: Commit corrected split and analysis
+        run: |
+          git config user.name threads-analysis-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/corpora/dara_dara_fairy/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Correct dara chronological split and compare corpora'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
