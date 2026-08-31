@@ -61,6 +61,74 @@ jobs:
               'userID': user_id,
           })
 
+          def text_from_post(post):
+              info = post.get('text_post_app_info') or {}
+              fragments = ((info.get('text_fragments') or {}).get('fragments') or [])
+              parts = []
+              for frag in fragments:
+                  if not isinstance(frag, dict):
+                      continue
+                  val = frag.get('plaintext')
+                  if isinstance(val, str):
+                      parts.append(val)
+              if parts:
+                  return ''.join(parts).strip()
+              caption = post.get('caption')
+              if isinstance(caption, dict) and isinstance(caption.get('text'), str):
+                  return caption['text'].strip()
+              for key in ('text', 'caption_text'):
+                  if isinstance(post.get(key), str):
+                      return post[key].strip()
+              return ''
+
+          def collect_named_scalars(node, wanted, out, prefix=''):
+              if isinstance(node, dict):
+                  for k, v in node.items():
+                      path = f'{prefix}.{k}' if prefix else k
+                      lk = k.lower()
+                      if any(token in lk for token in wanted) and isinstance(v, (str, int, float, bool)):
+                          out.setdefault(path, v)
+                      if isinstance(v, (dict, list)):
+                          collect_named_scalars(v, wanted, out, path)
+              elif isinstance(node, list):
+                  for i, v in enumerate(node):
+                      if isinstance(v, (dict, list)):
+                          collect_named_scalars(v, wanted, out, f'{prefix}[{i}]')
+
+          def normalize_post(post, edge_cursor, page_no, thread_items_count):
+              info = post.get('text_post_app_info') or {}
+              user = post.get('user') or {}
+              self_info = info.get('self_thread_info') or {}
+              pinned = info.get('pinned_post_info') or {}
+              metrics = {}
+              collect_named_scalars(post, ('like_count', 'reply_count', 'repost_count', 'quote_count', 'reshare_count', 'view_count'), metrics)
+              timing = {}
+              collect_named_scalars(post, ('taken_at', 'timestamp', 'created_at', 'published_at'), timing)
+              code = post.get('code') or post.get('shortcode') or ''
+              pk = str(post.get('pk') or post.get('id') or '')
+              return {
+                  'id': pk,
+                  'code': code,
+                  'permalink': f'https://www.threads.com/@{user.get("username")}/post/{code}' if code and user.get('username') else None,
+                  'username': user.get('username'),
+                  'full_name': user.get('full_name'),
+                  'text': text_from_post(post),
+                  'like_count': post.get('like_count'),
+                  'reply_count': info.get('direct_reply_count'),
+                  'repost_count': info.get('repost_count'),
+                  'quote_count': info.get('quote_count'),
+                  'reshare_count': info.get('reshare_count'),
+                  'is_pinned': pinned.get('is_pinned_to_profile'),
+                  'self_thread_length': self_info.get('self_thread_length'),
+                  'self_thread_position': self_info.get('post_position_in_self_thread'),
+                  'self_thread_id': self_info.get('id'),
+                  'thread_items_count': thread_items_count,
+                  'metrics_candidates': metrics,
+                  'timing_candidates': timing,
+                  'page': page_no,
+                  'edge_cursor': edge_cursor,
+              }
+
           result = {
               'doc_id': doc_id,
               'target_count': target_count,
@@ -72,6 +140,7 @@ jobs:
               'pages': [],
               'post_ids': [],
           }
+          posts = []
           seen_ids = set()
           cursor = None
 
@@ -100,12 +169,7 @@ jobs:
                   }
                   res = page.evaluate('''async p=>{const f=new URLSearchParams();f.set('lsd',p.lsd);f.set('doc_id',p.doc_id);f.set('variables',p.variables);const r=await fetch('/api/graphql',{method:'POST',credentials:'include',headers:{'Content-Type':'application/x-www-form-urlencoded','X-FB-LSD':p.lsd,'X-IG-App-ID':'238260118697367','X-FB-Friendly-Name':'BarcelonaProfileThreadsTabRefetchableDirectQuery'},body:f.toString()});return {status:r.status,type:r.headers.get('content-type'),text:await r.text()}}''', payload)
 
-                  page_result = {
-                      'page': page_no,
-                      'status': res.get('status'),
-                      'content_type': res.get('type'),
-                      'after': cursor,
-                  }
+                  page_result = {'page': page_no, 'status': res.get('status'), 'content_type': res.get('type'), 'after': cursor}
                   if res.get('status') != 200:
                       result['stop_reason'] = f'http_{res.get("status")}'
                       result['pages'].append(page_result)
@@ -129,11 +193,12 @@ jobs:
                   ids_this_page = []
                   new_ids = []
                   for edge in edges:
-                      try:
-                          items = edge.get('node', {}).get('thread_items', [])
-                          pk = str(items[0].get('post', {}).get('pk', '')) if items else ''
-                      except Exception:
-                          pk = ''
+                      node = edge.get('node') or {}
+                      items = node.get('thread_items') or []
+                      if not items:
+                          continue
+                      post = (items[0] or {}).get('post') or {}
+                      pk = str(post.get('pk') or post.get('id') or '')
                       if not pk:
                           continue
                       ids_this_page.append(pk)
@@ -141,6 +206,7 @@ jobs:
                           seen_ids.add(pk)
                           new_ids.append(pk)
                           result['post_ids'].append(pk)
+                          posts.append(normalize_post(post, edge.get('cursor'), page_no, len(items)))
 
                   next_cursor = page_info.get('end_cursor')
                   has_next = bool(page_info.get('has_next_page'))
@@ -171,10 +237,9 @@ jobs:
 
               browser.close()
 
-          result['retrieved_unique_count'] = len(seen_ids)
-          if result['retrieved_unique_count'] > target_count:
-              result['post_ids'] = result['post_ids'][:target_count]
-              result['retrieved_unique_count'] = target_count
+          result['retrieved_unique_count'] = min(len(seen_ids), target_count)
+          result['post_ids'] = result['post_ids'][:target_count]
+          posts = posts[:target_count]
           if result['retrieved_unique_count'] >= target_count:
               result['reached_target'] = True
               result['stop_reason'] = 'target_reached'
@@ -182,12 +247,15 @@ jobs:
           with open('data/graphql_auto_probe.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
               f.write('\n')
+          with open('data/posts_analysis.json', 'w', encoding='utf-8') as f:
+              json.dump({'profile_url': profile_url, 'user_id': user_id, 'count': len(posts), 'posts': posts}, f, ensure_ascii=False, indent=2)
+              f.write('\n')
           PY
       - name: Commit result
         run: |
           git config user.name threads-fetch-bot
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/graphql_auto_probe.json
+          git add data/graphql_auto_probe.json data/posts_analysis.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'Probe sequential Threads profile pagination'
+          git commit -m 'Save normalized Threads posts for analysis'
           git push origin "HEAD:${GITHUB_REF_NAME}"
