@@ -1,0 +1,29 @@
+name: Monetization Temporal Sequence Analysis
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .monetization-sequence-request.json
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Analyze monetization sequences
+        run: python scripts/monetization_sequence_analysis.py
+      - name: Commit sequence analysis
+        run: |
+          git config user.name monetization-research-bot
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/monetization_benchmark/sequence_analysis.json data/monetization_benchmark/SEQUENCE_ANALYSIS.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Analyze temporal monetization sequences'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
