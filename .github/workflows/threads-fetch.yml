@@ -59,6 +59,8 @@ jobs:
               if not username or not all(c.isalnum() or c in '._' for c in username):
                   raise SystemExit('profile mode requires a valid username or Threads profile_url')
               print(f'username={username}')
+              hydrate = bool(req.get('hydrate_replies', False))
+              print(f'hydrate_replies={str(hydrate).lower()}')
           elif mode == 'search':
               query = str(req.get('query', '')).strip()
               if not query:
@@ -71,15 +73,59 @@ jobs:
               print(f'note_user={note_user}')
           PY
 
+      - name: Build threads-cli
+        if: steps.request.outputs.mode != 'note_creator'
+        shell: bash
+        run: go build -o /tmp/th ./cmd/th
+
       - name: Fetch data
         shell: bash
         run: |
           mkdir -p data
           MODE="${{ steps.request.outputs.mode }}"
           if [ "$MODE" = "profile" ]; then
-            go run ./cmd/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
+            /tmp/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
+
+            if [ "${{ steps.request.outputs.hydrate_replies }}" = "true" ]; then
+              python - <<'PY'
+          import json, subprocess
+
+          roots = json.load(open('data/posts_raw.json', encoding='utf-8'))
+          bundles = []
+          for root in roots:
+              url = root.get('permalink') or root.get('shortcode') or root.get('id')
+              replies = []
+              error = None
+              if url:
+                  proc = subprocess.run(
+                      ['/tmp/th', 'post', str(url), '--replies', '-n', '50', '-o', 'json'],
+                      text=True,
+                      capture_output=True,
+                      timeout=120,
+                  )
+                  if proc.returncode == 0:
+                      try:
+                          parsed = json.loads(proc.stdout or '[]')
+                          if isinstance(parsed, list):
+                              replies = parsed
+                      except Exception as e:
+                          error = f'json:{e}'
+                  else:
+                      error = (proc.stderr or f'exit {proc.returncode}').strip()[-1000:]
+              self_replies = [r for r in replies if r.get('username') == root.get('username')]
+              bundles.append({
+                  'root': root,
+                  'replies': replies,
+                  'self_replies': self_replies,
+                  'hydrate_error': error,
+              })
+          with open('data/threads_hydrated.json', 'w', encoding='utf-8') as f:
+              json.dump(bundles, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          PY
+            fi
           elif [ "$MODE" = "search" ]; then
-            go run ./cmd/th search "${{ steps.request.outputs.query }}" -n "${{ steps.request.outputs.limit }}" -o json > data/search_raw.json
+            /tmp/th search "${{ steps.request.outputs.query }}" -n "${{ steps.request.outputs.limit }}" -o json > data/search_raw.json
           else
             python - <<'PY'
           import json, urllib.request
@@ -97,7 +143,7 @@ jobs:
           fi
 
           python - <<'PY'
-          import json
+          import json, os
           from datetime import datetime, timezone
           from urllib.parse import urlparse
 
@@ -119,6 +165,12 @@ jobs:
                   first = path.split('/', 1)[0] if path else ''
                   username = first[1:] if first.startswith('@') else first
               meta['username'] = username
+              meta['hydrate_replies'] = bool(req.get('hydrate_replies', False))
+              if os.path.exists('data/threads_hydrated.json'):
+                  bundles = json.load(open('data/threads_hydrated.json', encoding='utf-8'))
+                  meta['hydrated_thread_count'] = len(bundles)
+                  meta['self_reply_count'] = sum(len(x.get('self_replies', [])) for x in bundles)
+                  meta['hydrate_error_count'] = sum(1 for x in bundles if x.get('hydrate_error'))
           elif mode == 'search':
               rows = json.load(open('data/search_raw.json', encoding='utf-8'))
               meta['retrieved_count'] = len(rows) if isinstance(rows, list) else None
