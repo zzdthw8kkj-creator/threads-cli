@@ -1,0 +1,84 @@
+name: Threads Fetch Bridge
+
+on:
+  push:
+    branches:
+      - automation/threads
+    paths:
+      - .threads-request.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: threads-fetch-bridge
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout automation branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Read request
+        id: request
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          req = json.load(open('.threads-request.json', encoding='utf-8'))
+          username = str(req.get('username', '')).lstrip('@').strip()
+          limit = int(req.get('limit', 50))
+          if not username or not all(c.isalnum() or c in '._' for c in username):
+              raise SystemExit('Invalid username')
+          if not 1 <= limit <= 500:
+              raise SystemExit('limit must be between 1 and 500')
+          print(f'username={username}')
+          print(f'limit={limit}')
+          PY
+
+      - name: Fetch Threads posts
+        shell: bash
+        run: |
+          mkdir -p data
+          go run ./cmd/th profile "@${{ steps.request.outputs.username }}" --posts -n "${{ steps.request.outputs.limit }}" -o json > data/posts_raw.json
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          posts = json.load(open('data/posts_raw.json', encoding='utf-8'))
+          if not isinstance(posts, list):
+              raise SystemExit('threads-cli output was not a JSON list')
+          req = json.load(open('.threads-request.json', encoding='utf-8'))
+          meta = {
+              'username': str(req.get('username', '')).lstrip('@'),
+              'requested_limit': int(req.get('limit', 50)),
+              'retrieved_count': len(posts),
+              'source': 'threads-cli',
+              'generated_at': datetime.now(timezone.utc).isoformat(),
+          }
+          with open('data/fetch_meta.json', 'w', encoding='utf-8') as f:
+              json.dump(meta, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          PY
+
+      - name: Commit fetched data
+        shell: bash
+        run: |
+          git config user.name "threads-fetch-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/posts_raw.json data/fetch_meta.json
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git commit -m "Fetch Threads posts for @${{ steps.request.outputs.username }}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
