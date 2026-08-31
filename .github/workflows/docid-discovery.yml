@@ -24,18 +24,29 @@ jobs:
           python -m pip install --quiet playwright
           python -m playwright install --with-deps chromium
 
-      - name: Capture Threads GraphQL requests
+      - name: Discover current Threads GraphQL ids
         shell: bash
         run: |
           python - <<'PY'
           import json
+          import re
           from urllib.parse import parse_qs
           from playwright.sync_api import sync_playwright
 
           req_cfg = json.load(open('.docid-request.json', encoding='utf-8'))
           profile_url = req_cfg.get('profile_url') or 'https://www.threads.com/@zuck'
-          captured = []
-          seen = set()
+          graphql = []
+          js_hits = []
+          seen_graphql = set()
+          seen_js = set()
+          keywords = [
+              'BarcelonaProfileThreadsTabQuery',
+              'ProfileThreadsTabQuery',
+              'BarcelonaProfileThreads',
+              'ProfileThreads',
+              'BarcelonaProfileRepliesTabQuery',
+              'BarcelonaPostPageQuery',
+          ]
 
           with sync_playwright() as p:
               browser = p.chromium.launch(headless=True)
@@ -46,37 +57,68 @@ jobs:
               )
               page = context.new_page()
 
-              def capture(request):
+              def capture_request(request):
                   if '/api/graphql' not in request.url:
                       return
                   body = request.post_data or ''
                   fields = parse_qs(body)
                   doc_id = (fields.get('doc_id') or [''])[0]
                   variables = (fields.get('variables') or [''])[0]
-                  headers = request.headers
-                  friendly = headers.get('x-fb-friendly-name') or headers.get('x-fb-friendly-name'.lower()) or ''
+                  friendly = request.headers.get('x-fb-friendly-name', '')
                   key = (doc_id, variables, friendly)
-                  if key in seen:
+                  if key in seen_graphql:
                       return
-                  seen.add(key)
-                  item = {
-                      'url': request.url,
+                  seen_graphql.add(key)
+                  try:
+                      parsed_vars = json.loads(variables) if variables else None
+                  except Exception:
+                      parsed_vars = None
+                  graphql.append({
                       'doc_id': doc_id,
                       'friendly_name': friendly,
-                      'variables_raw': variables,
-                  }
+                      'variables': parsed_vars,
+                  })
+
+              def capture_response(response):
+                  url = response.url
+                  ctype = (response.headers.get('content-type') or '').lower()
+                  if 'javascript' not in ctype and '.js' not in url:
+                      return
                   try:
-                      item['variables'] = json.loads(variables) if variables else None
+                      text = response.text()
                   except Exception:
-                      item['variables'] = None
-                  captured.append(item)
+                      return
+                  for kw in keywords:
+                      pos = text.find(kw)
+                      if pos < 0:
+                          continue
+                      lo = max(0, pos - 2500)
+                      hi = min(len(text), pos + 2500)
+                      snippet = text[lo:hi]
+                      nums = list(dict.fromkeys(re.findall(r'(?<!\d)\d{10,20}(?!\d)', snippet)))
+                      patterns = []
+                      for pat in [
+                          r'(?:id|doc_id|docId|docID)\s*[:=]\s*["\'](\d{10,20})["\']',
+                          r'["\']id["\']\s*:\s*["\'](\d{10,20})["\']',
+                      ]:
+                          patterns.extend(re.findall(pat, snippet, re.I))
+                      key = (kw, url, tuple(nums[:20]))
+                      if key in seen_js:
+                          continue
+                      seen_js.add(key)
+                      js_hits.append({
+                          'keyword': kw,
+                          'url': url,
+                          'numbers_nearby': nums[:30],
+                          'id_patterns': list(dict.fromkeys(patterns))[:20],
+                          'snippet': snippet[:5000],
+                      })
 
-              page.on('request', capture)
+              page.on('request', capture_request)
+              page.on('response', capture_response)
               page.goto(profile_url, wait_until='domcontentloaded', timeout=90000)
-              page.wait_for_timeout(5000)
+              page.wait_for_timeout(7000)
 
-              # Dismiss common logged-out overlays if they appear, then force enough
-              # scrolling to make the profile request its next page.
               for label in ['Continue without logging in', 'Not now', 'Close']:
                   try:
                       page.get_by_text(label, exact=False).first.click(timeout=1000)
@@ -95,8 +137,10 @@ jobs:
           with open('data/network_docids.json', 'w', encoding='utf-8') as f:
               json.dump({
                   'profile_url': profile_url,
-                  'request_count': len(captured),
-                  'requests': captured,
+                  'graphql_request_count': len(graphql),
+                  'graphql_requests': graphql,
+                  'js_hit_count': len(js_hits),
+                  'js_hits': js_hits,
               }, f, ensure_ascii=False, indent=2)
               f.write('\n')
           PY
@@ -108,5 +152,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/network_docids.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Capture current Threads GraphQL doc ids"
+          git commit -m "Discover current Threads GraphQL ids"
           git push origin "HEAD:${GITHUB_REF_NAME}"
