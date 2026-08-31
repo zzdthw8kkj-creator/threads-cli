@@ -116,7 +116,7 @@ jobs:
         run: |
           git config user.name "threads-fetch-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/posts_raw.json data/search_raw.json data/note_creator.json data/fetch_meta.json 2>/dev/null || true
+          git add -A data/
           if git diff --cached --quiet; then
             echo "No data changes to commit."
             exit 0
