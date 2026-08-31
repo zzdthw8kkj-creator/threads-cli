@@ -46,7 +46,7 @@ jobs:
                   vars[k]=True
           vars.update({
               'after':None,
-              'allow_page_info_for_lox_user':False,
+              'allow_page_info_for_lox_user':True,
               'before':None,
               'first':24,
               'last':None,
