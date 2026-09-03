@@ -138,15 +138,12 @@ jobs:
 
           threads=threads[:target_count]
           profile23=threads[:23]
-          current20=[]
-          for t in threads:
-              if not t['is_pinned']:
-                  current20.append(t)
-              if len(current20)>=20: break
-          current_ids={t['root_id'] for t in current20}
-          historical_candidates=[t for t in threads if t['root_id'] not in current_ids]
-          historical_candidates.sort(key=lambda t:(t['timestamp'] or 0),reverse=True)
-          historical300=historical_candidates[:300]
+          # The Threads response did not expose a reliable pin flag in the
+          # captured payload. Split by timestamp so profile-pinned posts do not
+          # get mistaken for the newest Claude-generated posts.
+          chronological=sorted(threads,key=lambda t:(t['timestamp'] or 0),reverse=True)
+          current20=chronological[:20]
+          historical300=chronological[20:320]
 
           FEATURES={
               'question':lambda x:'？' in x or '?' in x,
@@ -181,6 +178,7 @@ jobs:
           bottom_hist=sorted(historical300,key=lambda t:(t['like_count'],t['reply_count']))[:20]
           meta={
               'username':username,'requested':target_count,'retrieved':len(threads),
+              'split_strategy':'timestamp_desc_recent20_then_historical300',
               'profile23_count':len(profile23),'profile23_pinned_count':sum(t['is_pinned'] for t in profile23),
               'claude_recent20_count':len(current20),'historical300_count':len(historical300),
               'pages':pages,
